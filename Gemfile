@@ -66,4 +66,4 @@ group :test do
 end
 
 # add pg gem for PostgreSQL support
-gem 'pg'
+gem "pg"
