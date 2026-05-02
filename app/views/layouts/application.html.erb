@@ -22,6 +22,18 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
+  
+  <script>
+  window.addEventListener("scroll", function () {
+    const navbar = document.querySelector(".shopify-navbar");
+
+    if (window.scrollY > 50) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+  });
+</script>
 
   <body>
     <%= yield %>
