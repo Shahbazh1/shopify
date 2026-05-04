@@ -67,3 +67,15 @@ end
 
 # add pg gem for PostgreSQL support
 gem "pg"
+
+# add the devise gem for authentication
+gem "devise", "~> 5.0"
+
+# add the omniauth for authentication
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-facebook"
+gem "omniauth-rails_csrf_protection"
+
+# add the env file
+gem "dotenv-rails"

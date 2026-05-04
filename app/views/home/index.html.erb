@@ -14,7 +14,7 @@
 
     <!-- RIGHT: Actions -->
     <div class="nav-right">
-      <a href="#" class="btn-primary">Start for free</a>
+      <%= link_to "Start for free", new_user_registration_path, class: "btn-primary" %>
     </div>
 
   </div>
@@ -29,10 +29,13 @@
       Start free, then get 3 months for US$1/month
     </p>
 
-    <div class="cta-box">
-      <input type="email" placeholder="Enter your email address">
-      <button>Start free trial</button>
-    </div>
+    <%= form_with url: check_email_path, method: :post, local: true, class: "cta-box" do |f| %>
+
+      <%= f.email_field :email, placeholder: "Enter your email address", class: "hero-cta-input" %>
+
+      <%= f.submit "Start free trial", class: "hero-cta-button" %>
+
+    <% end %>
 
     <p class="note">
       You agree to receive Shopify marketing emails.
@@ -118,17 +121,13 @@
       Join millions growing with Shopify
     </h2>
 
-    <form class="cta-form">
-      <input 
-        type="email" 
-        placeholder="Enter your email address" 
-        class="cta-input"
-      />
+    <%= form_with url: check_email_path, method: :post, local: true, class: "cta-form" do |f| %>
 
-      <button type="submit" class="cta-button">
-        Start free trial
-      </button>
-    </form>
+      <%= f.email_field :email, placeholder: "Enter your email address", class: "cta-input" %>
+
+      <%= f.submit "Start free trial", class: "cta-button" %>
+
+    <% end %>
 
     <p class="cta-subtext">
       You agree to receive Shopify marketing emails.
@@ -311,12 +310,11 @@
   <div class="cta-container-new">
     <h2 class="cta-heading-new">Your ideas. Our platform.</h2>
     
-    <%= form_with url: "#", method: :post, class: "cta-form-new" do |f| %>
+    <%= form_with url: check_email_path, method: :post, class: "cta-form-new" do |f| %>
       <div class="input-group">
         <%= f.email_field :email, 
             placeholder: "Enter your email address", 
-            class: "cta-input-new",
-            required: true %>
+            class: "cta-input-new" %>
         <%= f.submit "Start free trial", class: "cta-button-new" %>
       </div>
     <% end %>

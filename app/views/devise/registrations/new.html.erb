@@ -1,0 +1,245 @@
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #0b0f0e;
+  color: white;
+}
+
+/* Center wrapper */
+.signup-page {
+  padding: clamp(30px, 6vh, 60px) 20px;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px; /* balanced spacing between sections */
+  box-sizing: border-box;
+}
+
+/* Logo */
+.logo {
+  margin-bottom: 40px;
+}
+
+.logo img {
+  width: clamp(55px, 10vw, 80px);
+}
+
+/* Title */
+.title {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  text-align: center;
+
+  font-size: clamp(22px, 4vw, 32px);
+  margin: 10px 0 6px;
+}
+
+/* Subtitle */
+.subtitle {
+  color: #b5b5b5;
+  text-align: center;
+
+  font-size: clamp(12px, 2.5vw, 14px);
+  margin: 0 0 18px;
+}
+
+/* Card */
+.card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  color: #111;
+
+  padding: clamp(18px, 4vw, 28px);
+  border-radius: 14px;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+
+  box-sizing: border-box;
+}
+
+/* Input */
+.field input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px 12px;
+
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+
+  margin-bottom: 14px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.field input:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+}
+
+/* Primary Button */
+.primary-btn {
+  width: 100%;
+  padding: 14px;
+  background: #111;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  margin: 18px 0;
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e6e6e6;
+}
+
+.divider span {
+  padding: 0 10px;
+}
+
+/* OAuth buttons */
+.oauth {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  padding: 12px;
+
+  margin-bottom: 10px;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+
+  background: #f6f7f8;
+  font-size: 14px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.oauth img {
+  width: 20px;
+  position: absolute;
+  left: 16px;
+}
+
+/* Login text */
+.login-text {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 14px;
+  color: #555;
+}
+
+/* Footer */
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  color: #aaa;
+  font-size: 12px;
+  width: 100%;
+}
+
+/* Small screens fine tuning */
+@media (max-width: 480px) {
+  .title {
+    font-size: 22px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+}
+</style>
+
+<div class="signup-page">
+  <div class="logo">
+    <img src="https://shopify-assets.shopifycdn.com/shopifycloud/identity/assets/logo/shopify_icon-3ec3196fc21ccd335e623091378b9da827ad0032b2e987dcd2fe6cfc32cd3c5c.svg" />
+  </div>
+
+  <h1 class="title">Start your free trial</h1>
+  <p class="subtitle">3 days free, then 3 months for $1/month</p>
+
+  <div class="card">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+
+      <div class="field">
+        <%= f.email_field :email, autofocus: true, placeholder: "Email address" %>
+      </div>
+
+      <%= f.submit "Continue with email", class: "primary-btn" %>
+
+    <% end %>
+
+    <div class="divider"><span>or</span></div>
+
+    <% if devise_mapping.omniauthable? %>
+
+  <% resource_class.omniauth_providers.each do |provider| %>
+
+    <%= button_to send("#{resource_name}_#{provider}_omniauth_authorize_path"),
+      data: { turbo: false },
+      class: "oauth" do %>
+
+      <% if provider == :google_oauth2 %>
+        <img src="https://www.svgrepo.com/show/355037/google.svg" />
+        Continue with Google
+
+      <% elsif provider == :facebook %>
+        <img src="https://www.svgrepo.com/show/452196/facebook-1.svg" />
+        Continue with Facebook
+      <% end %>
+
+    <% end %>
+
+  <% end %>
+
+<% end %>
+
+    <button class="oauth">
+      <img src="https://shopify-assets.shopifycdn.com/shopifycloud/identity/assets/external/apple-7ddeaf08016f8cb19bed914ba94ecdca365c63c275340ec1c4d037f58e68bc04.svg" />
+      Continue with Apple
+    </button>
+
+    <p class="login-text">
+      Already have an account?
+      <%= link_to "Log in", new_session_path(resource_name) %>
+    </p>
+  </div>
+
+  <div class="footer">
+    <select>
+      <option>Pakistan</option>
+      <option>USA</option>
+      <option>UK</option>
+    </select>
+
+    <p>Need help?</p>
+    <small>By continuing, you agree to the Terms and Privacy Policy.</small>
+  </div>
+</div>
