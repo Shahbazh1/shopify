@@ -1,357 +1,407 @@
-<nav class="shopify-navbar">
-  <div class="nav-wrapper">
+<style>
+body {
+  background: #f6f6f7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+}
 
-    <!-- LEFT: Logo -->
-    <div class="nav-left">
-      <%= link_to root_path do %>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg" class="logo">
-      <% end %>
+.dashboard {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Header */
+.header h2 {
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.search-bar {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  border: 1px solid #e1e3e5;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.icons span {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.suggestions button {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+/* Card */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #e1e3e5;
+}
+
+.card-header {
+  margin-bottom: 20px;
+}
+
+/* Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Boxes */
+.box {
+  border-radius: 10px;
+  padding: 15px;
+  background: #fafafa;
+}
+
+.small-box {
+  border-radius: 10px;
+  padding: 15px;
+  background: #fafafa;
+}
+
+.image-placeholder {
+  height: 120px;
+  background: #eaeaea;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+.primary {
+  background: #000;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.secondary {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.link {
+  background: none;
+  border: none;
+  color: #555;
+  margin-left: 10px;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+/* Misc */
+.payment-icons span {
+  margin-right: 10px;
+}
+
+.flag {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.price {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+input {
+  width: 100%;
+  padding: 6px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.shipping-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+}
+
+/* Keep content grouped */
+.box-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Flag + Country */
+.shipping-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shipping-info img {
+  object-fit: cover;
+  border: 1px solid #ccc;
+  width: 48px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+/* Improve button placement */
+.shipping-box .secondary {
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+.payment-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.payment-icons img {
+  width: 40px;
+  height: 26px;
+  object-fit: contain;
+
+  border-radius: 6px;
+  border: 1px solid #e1e3e5;
+  background: #fff;
+
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  padding: 3px;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .dashboard {
+    padding: 15px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .icons {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  .header h2 {
+    font-size: 18px;
+  }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .icons {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .suggestions button {
+    width: 100%;
+  }
+
+  .payment-icons {
+    flex-wrap: wrap;
+  }
+
+  .small-box,
+  .box {
+    padding: 12px;
+  }
+
+  input {
+    font-size: 14px;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .header h2 {
+    font-size: 16px;
+  }
+
+  .icons span {
+    font-size: 14px;
+  }
+
+  .payment-icons img {
+    width: 32px;
+    height: 22px;
+  }
+}
+</style>
+
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="header">
+    <h2>Good afternoon, let's get started.</h2>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Ask anything..." />
+      <div class="icons">
+        <span>+</span>
+        <span>↑</span>
+      </div>
     </div>
 
-    <!-- CENTER: Menu -->
-    <ul class="nav-menu">
-    </ul>
-
-    <!-- RIGHT: Actions -->
-    <div class="nav-right">
-      <%= link_to "Start for free", new_user_registration_path, class: "btn-primary" %>
-    </div>
-
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="hero-left">
-    <h1>Start an online store for free</h1>
-    
-    <p class="subtitle">
-      Shopify is the all-in-one platform to build, run, and grow your online boutique.
-      Start free, then get 3 months for US$1/month
-    </p>
-
-    <%= form_with url: check_email_path, method: :post, local: true, class: "cta-box" do |f| %>
-
-      <%= f.email_field :email, placeholder: "Enter your email address", class: "hero-cta-input" %>
-
-      <%= f.submit "Start free trial", class: "hero-cta-button" %>
-
-    <% end %>
-
-    <p class="note">
-      You agree to receive Shopify marketing emails.
-    </p>
-  </div>
-
-  <div class="hero-right">
-    <%= image_tag "https://cdn.shopify.com/b/shopify-brochure2-assets/ae3bb5026b18f6e9246facb6adaba75e.png?originalWidth=1680&originalHeight=1260", alt: "Shop UI" %>  
-  </div>
-</section>
-
-<section class="brands">
-  <h3>Powering millions of businesses worldwide</h3>
-
-  <div class="brand-slider">
-    <div class="brand-track">
-      <% 2.times do %>
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/d7d665c21caba6bf4e58aea093f60a0c.svg" />
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/4a6ab9bbbf33ac29cf1747e48492a14e.svg" />
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/f000a563db2c785b97ea90a1a2695c1e.svg" />
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/2075ad1e1e60e6fa121f54a1bfe4185c.svg" />
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/bb1480775c17a84b2787e71d4b8b5c72.svg" />
-      <% end %>
+    <div class="suggestions">
+      <button>Write product descriptions for me</button>
+      <button>Is my store ready to launch?</button>
+      <button>Brainstorm business ideas with me</button>
     </div>
   </div>
-</section>
 
-<section class="smart-selling">
-  <div class="container">
+  <!-- Main Card -->
+  <div class="card">
 
-    <h2 class="heading">Smarter selling starts here</h2>
+    <!-- Store Name -->
+    <div class="card-header">
+      <h3>Add store name ✏️</h3>
+    </div>
 
-    <div class="cards">
+    <!-- Top Grid -->
+    <div class="grid-2">
 
-      <!-- Card 1 -->
-      <div class="card">
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/4f40535cf7d14b8acf660db59210cf5e.png?originalWidth=640&originalHeight=380" class="card-img" />
-        <h3>World's best checkout</h3>
+      <!-- Product -->
+      <div class="box">
+        <div class="image-placeholder"></div>
+        <h4>Add your first product</h4>
         <p>
-          Fast, flexible, and converts 15% better than other platforms, on average.
+          Start by adding a product and a few key details.
+          Not ready? <a href="#">Start with a sample product</a>
         </p>
+        <div class="actions">
+          <button class="primary">Add product</button>
+          <button class="link">Import</button>
+        </div>
       </div>
 
-      <!-- Card 2 -->
-      <div class="card">
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/528da6ade6449e40e8d6d06426934b7d.png" class="card-img" />
-        <h3>Built-in AI tools</h3>
+      <!-- Customize Store -->
+      <div class="box">
+        <div class="image-placeholder"></div>
+        <h4>Customize your online store</h4>
         <p>
-          Get more done with AI functionality that's built into every store.
+          Choose or generate a custom theme, then add your logo, colors, and images.
         </p>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="card">
-        <img src="https://cdn.shopify.com/b/shopify-brochure2-assets/8f6a2d3265162c013e9b54753b2a3f0d.png?originalWidth=1280&originalHeight=760" class="card-img" />
-        <h3>Fast, reliable hosting</h3>
-        <p>
-          Our 99.9% uptime keeps your store running smoothly, day and night.
-        </p>
+        <button class="secondary">Customize theme</button>
       </div>
 
     </div>
 
-    <!-- Quote -->
-    <div class="quote">
-      <p>
-        “Every Shopify plan comes with unlimited storage...and products, which means Shopify scales beautifully as your business grows.”
-      </p>
+    <!-- Bottom Grid -->
+    <div class="grid-3">
 
-      <div class="quote-footer">
-        <strong>Forbes</strong><br>
-        <span>Janette Novak — Advisor</span>
+      <!-- Payment -->
+      <div class="small-box">
+        <h4>Set up a payment provider</h4>
+        <div class="payment-icons">
+  <img src="https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/4e117.svg" alt="Card 1" />
+  <img src="https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/2c2bf.svg" alt="Card 2" />
+  <img src="https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/cd169.svg" alt="Card 3" />
+</div>
+        <button class="secondary">Activate</button>
       </div>
+
+      <!-- Shipping -->
+      <div class="small-box shipping-box">
+  <div class="box-content">
+    <h4>Review your shipping rates</h4>
+
+    <div class="shipping-info">
+      <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/pk-ba18a7da7bb4.svg" alt="Pakistan Flag" />
     </div>
-
   </div>
-</section>
 
-<section class="cta-section">
-  <div class="cta-container">
+  <button class="secondary">Review</button>
+</div>
 
-    <h2 class="cta-heading">
-      Join millions growing with Shopify
-    </h2>
-
-    <%= form_with url: check_email_path, method: :post, local: true, class: "cta-form" do |f| %>
-
-      <%= f.email_field :email, placeholder: "Enter your email address", class: "cta-input" %>
-
-      <%= f.submit "Start free trial", class: "cta-button" %>
-
-    <% end %>
-
-    <p class="cta-subtext">
-      You agree to receive Shopify marketing emails.
-    </p>
-
-  </div>
-</section>
-
-<section class="commerce-section">
-  <div class="commerce-container">
-    
-    <h1 class="commerce-container-heading">
-      The global platform for commerce
-    </h1>
-
-    <div class="commerce-container-stats-wrapper">
-      
-      <div class="stat-card">
-        <h2>$11+ trillion</h2>
-        <p>Total sales through Shopify worldwide.</p>
-      </div>
-
-      <div class="stat-card">
-        <h2>175+ countries</h2>
-        <p>With businesses powered by Shopify.</p>
+      <!-- Domain -->
+      <div class="small-box">
+        <h4>Customize domain <span class="price">Get $20</span></h4>
+        <input type="text" value="ibqb5l-5m.myshopify.com" readonly />
+        <button class="secondary">Customize</button>
       </div>
 
     </div>
 
   </div>
-</section>
 
-<section class="help-section">
-  <div class="help-container">
+</div>
 
-    <h2 class="help-title">
-      Build with help by your side
-    </h2>
-
-    <div class="help-items">
-
-      <div class="help-box">
-        <div class="help-icon">
-          <!-- Headset Icon -->
-          <svg fill="none" viewBox="0 0 20 20" aria-hidden="true" class="text-component-icon w-11 h-11" height="32" width="32" data-component-name="icon"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M1.5 11v-1c0-1.1.9-2 2-2H5c.28 0 .5.22.5.5v4a.5.5 0 0 1-.5.5H3.5a2 2 0 0 1-2-2ZM14.5 12.5v-4c0-.28.22-.5.5-.5h1.5a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H15a.5.5 0 0 1-.5-.5ZM4.5 8V7a5 5 0 0 1 5-5h1a5 5 0 0 1 5 5v1M15.5 13v2.5c0 .83-.67 1.5-1.5 1.5h-1.5M12.5 18h-2a1 1 0 1 1 0-2h2v2Z"></path></svg>
-        </div>
-        <h3>24/7 support</h3>
-        <p>Our support staff and virtual help assistant are here to help.</p>
-      </div>
-
-      <div class="help-box">
-        <div class="help-icon">
-          <!-- Apps Icon -->
-          <svg fill="none" viewBox="0 0 20 20" aria-hidden="true" class="text-component-icon w-11 h-11" height="32" width="32" data-component-name="icon"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.5 5.5h6m-3-3v6M16.5 11.5h-4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1ZM7.5 11.5h-4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1ZM7.5 2.5h-4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Z"></path></svg>
-        </div>
-        <h3>16K+ apps</h3>
-        <p>For whatever extra functionality your business might need.</p>
-      </div>
-
-      <div class="help-box">
-        <div class="help-icon">
-          <!-- Tools Icon -->
-          <svg fill="none" viewBox="0 0 20 20" aria-hidden="true" class="text-component-icon w-11 h-11" height="32" width="32" data-component-name="icon"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.41 5A1 1 0 1 1 15 3.59l1.67-1.67a3.5 3.5 0 0 0-5.06 3.97L5.9 11.6a3.5 3.5 0 0 0-3.97 5.06L3.59 15A1 1 0 0 1 5 16.41L3.37 18.1A3.5 3.5 0 0 0 8.4 14.1L14.1 8.4a3.5 3.5 0 0 0 3.97-5.06L16.4 5Z"></path><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M7.75 9.75 5.5 7.5h-2l-2-4 2-2 4 2v2l2.25 2.25M9.75 12.75l5.04 5.04a1 1 0 0 0 1.42 0l1.58-1.58a1 1 0 0 0 0-1.42l-5.04-5.04"></path><path fill="currentColor" d="M10.9 11.6L11.6 10.9 17.35 16.65 16.65 17.35z"></path></svg>
-        </div>
-        <h3>Online courses</h3>
-        <p>Lessons and tips from experts to help you succeed.</p>
-      </div>
-
-      <div class="help-box">
-        <div class="help-icon">
-          <!-- Users Icon -->
-          <svg fill="none" viewBox="0 0 20 20" aria-hidden="true" class="text-component-icon w-11 h-11" height="32" width="32" data-component-name="icon"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M7.5 15a3.5 3.5 0 0 1 3.5-3.5h4a3.5 3.5 0 0 1 3.5 3.5v2a.5.5 0 0 1-.5.5H8a.5.5 0 0 1-.5-.5v-2ZM6.5 11.5H5A3.5 3.5 0 0 0 1.5 15v2c0 .28.22.5.5.5h3.5"></path><circle cx="13" cy="6" r="3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></circle><circle cx="5.5" cy="7" r="2.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></circle></svg>        </div>
-        <h3>Shopify Partners</h3>
-        <p>Do more with commerce's largest network of partners.</p>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-<section class="faq-section">
-  <div class="faq-container">
-    <h2 class="faq-title">Frequently asked questions</h2>
-
-    <div class="faq-list">
-      <%
-        faqs = [
-          {
-            question: "How can I start my own online business?",
-            answer: [
-              "Choose a product or service to sell",
-              "Research your target market",
-              "Create an online store (Shopify, etc.)",
-              "Set up payment methods",
-              "Start marketing through social media and ads"
-            ]
-          },
-          {
-            question: "Can you start a business with no money?",
-            answer: [
-              "Yes, using dropshipping or service-based business",
-              "Use free platforms like Instagram or Facebook",
-              "Start with skills you already have",
-              "Reinvest early profits into growth"
-            ]
-          },
-          {
-            question: "When should you start a business?",
-            answer: [
-              "Start when you have a clear idea",
-              "When you are ready to learn and take risks",
-              "No perfect time exists — start small and improve",
-              "When you can commit consistent effort"
-            ]
-          },
-          {
-            question: "How can I get a business license for my online store?",
-            answer: [
-              "Check your local government requirements",
-              "Register your business name",
-              "Apply online or through business registration office",
-              "Pay required fees and complete documentation"
-            ]
-          },
-          {
-            question: "What are the most successful small businesses?",
-            answer: [
-              "E-commerce stores (Shopify, Amazon)",
-              "Digital marketing agencies",
-              "Freelancing services (design, dev, writing)",
-              "Online coaching or courses"
-            ]
-          },
-          {
-            question: "What is Shopify and how does it work?",
-            answer: [
-              "Shopify is an e-commerce platform",
-              "It helps you create an online store easily",
-              "You can add products, manage orders, and payments",
-              "It handles hosting, security, and checkout system"
-            ]
-          }
-        ]
-      %>
-
-      <% faqs.each do |question| %>
-        <details class="faq-item">
-          <summary class="faq-question">
-            <span><%= question[:question] %></span>
-
-            <div class="faq-icon-wrapper">
-              <svg xmlns="http://www.w3.org/2000/svg"
-                   class="faq-icon"
-                   fill="none"
-                   viewBox="0 0 24 24"
-                   stroke="currentColor">
-                <path stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4v16m8-8H4" />
-              </svg>
-            </div>
-          </summary>
-
-          <div class="faq-answer">
-            <ul>
-              <% question[:answer].each do |point| %>
-                <li><%= point %></li>
-              <% end %>
-            </ul>
-          </div>
-        </details>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<section class="cta-section-new">
-  <div class="cta-container-new">
-    <h2 class="cta-heading-new">Your ideas. Our platform.</h2>
-    
-    <%= form_with url: check_email_path, method: :post, class: "cta-form-new" do |f| %>
-      <div class="input-group">
-        <%= f.email_field :email, 
-            placeholder: "Enter your email address", 
-            class: "cta-input-new" %>
-        <%= f.submit "Start free trial", class: "cta-button-new" %>
-      </div>
-    <% end %>
-
-    <p class="cta-disclaimer">
-      You agree to receive Shopify marketing emails.
-    </p>
-  </div>
-</section>
-
-<footer class="main-footer-black">
-  <div class="footer-container">
-
-    <div class="footer-left">
-      <div class="footer-logo">
-        <svg viewBox="0 0 44 50" xmlns="http://www.w3.org/2000/svg" class="shopify-svg">
-          <path fill="currentColor" d="m30.02 5.94-1.49.44a11.7 11.7 0 0 0-.72-1.76c-1.05-2.01-2.62-3.1-4.46-3.1-.12 0-.25 0-.4.05-.05-.08-.13-.12-.17-.2a3.82 3.82 0 0 0-3.1-1.25c-2.4.08-4.81 1.8-6.74 4.9a19.06 19.06 0 0 0-2.7 7.03c-2.77.84-4.7 1.44-4.73 1.48-1.41.45-1.45.49-1.61 1.81-.24 1-3.9 29.32-3.9 29.32l30.38 5.26V5.86c-.16.04-.28.04-.36.08Zm-7.04 2.17c-1.6.48-3.37 1.05-5.1 1.57a12.4 12.4 0 0 1 2.57-5.02 6.46 6.46 0 0 1 1.73-1.29c.68 1.45.84 3.42.8 4.74Zm-3.25-6.38c.56 0 1.04.12 1.45.36a7.7 7.7 0 0 0-1.9 1.44 14.33 14.33 0 0 0-3.17 6.67l-4.22 1.29c.85-3.82 4.1-9.64 7.84-9.76Zm-4.7 22.08c.16 2.58 6.95 3.14 7.35 9.2.28 4.78-2.53 8.03-6.59 8.27a9.85 9.85 0 0 1-7.6-2.57l1.05-4.41s2.7 2.04 4.86 1.88a1.94 1.94 0 0 0 1.9-2.04c-.2-3.38-5.75-3.18-6.12-8.72-.32-4.62 2.74-9.32 9.49-9.76 2.61-.16 3.94.48 3.94.48l-1.53 5.79s-1.73-.8-3.78-.65c-2.97.2-3.01 2.1-2.97 2.53Zm9.56-16.18c0-1.2-.16-2.93-.72-4.38 1.85.36 2.73 2.41 3.13 3.66-.72.2-1.52.44-2.4.72Zm6.79 42.13L44 46.63 38.54 9.72a.47.47 0 0 0-.45-.4l-3.73-.08-2.98-2.9v43.42Z"></path>
-        </svg>
-      </div>
-    </div>
-
-    <div class="footer-right">
-
-      <div class="footer-region-picker">
-        <span class="globe-icon">🌐</span>
-        <span class="region-text">Pakistan | English</span>
-        <span class="chevron-down">▾</span>
-      </div>
-
-      <nav class="footer-nav">
-        <%= link_to "Terms of Service", "#", class: "footer-link" %>
-        <%= link_to "Privacy Policy", "#", class: "footer-link" %>
-        <%= link_to "Sitemap", "#", class: "footer-link" %>
-        <%= link_to "Your Privacy Choices", "#", class: "footer-link" %>
-      </nav>
-
-    </div>
-
-  </div>
-</footer>

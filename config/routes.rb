@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
-  get "dashboard/index"
+  get "checkouts/index"
+  get "draft_orders/index"
   devise_for :users, controllers: {
   omniauth_callbacks: 'users/omniauth_callbacks'
 }
-  root "home#index"
+  root "welcome#index"
   get "up" => "rails/health#show", as: :rails_health_check
   post "/check_email", to: "auth_checks#check_email"
-  get "/dashboard", to: "dashboard#index", as: :dashboard
+  get "/home", to: "home#index", as: :home
+  resources :orders
+  resources :draft_orders
+  resources :checkouts
 
 end
