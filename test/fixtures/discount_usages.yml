@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  discount_code: one
+  customer: one
+  order: one
+  used_at: 2026-05-05 12:26:09
+
+two:
+  discount_code: two
+  customer: two
+  order: two
+  used_at: 2026-05-05 12:26:09

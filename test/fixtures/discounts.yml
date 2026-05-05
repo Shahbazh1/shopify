@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  value: 9.99
+  start_date: 2026-05-05 12:25:04
+  end_date: 2026-05-05 12:25:04
+
+two:
+  type: 
+  value: 9.99
+  start_date: 2026-05-05 12:25:04
+  end_date: 2026-05-05 12:25:04
