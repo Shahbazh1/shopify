@@ -1,0 +1,157 @@
+<style>
+.products-page {
+  padding: 32px;
+  background: #f6f6f7;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #202223;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 20px;
+  border: 1px solid #e1e3e5;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Text */
+.text-section {
+  max-width: 480px;
+}
+
+.text-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #202223;
+}
+
+.text-section p {
+  font-size: 14px;
+  color: #6d7175;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.btn.primary {
+  background: #1c1c1c;
+  color: #ffffff;
+}
+
+.btn.primary:hover {
+  background: #000;
+}
+
+.btn.secondary {
+  background: #f1f2f3;
+  color: #202223;
+}
+
+.btn.secondary:hover {
+  background: #e7e9eb;
+}
+
+/* Image section */
+.image-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Placeholder card */
+.placeholder-card {
+  width: 140px;
+  height: 160px;
+  border: 2px dashed #d2d5d8;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafbfb;
+}
+
+.placeholder-card img {
+  max-width: 80%;
+  opacity: 0.9;
+}
+
+/* Collage image */
+.collage img {
+  width: 220px;
+  border-radius: 10px;
+  opacity: 0.95;
+}
+</style>
+
+<div class="products-page">
+  <h2 class="page-title">Products</h2>
+
+  <!-- Add Products कार्ड -->
+  <div class="card">
+    <div class="card-content">
+      <div class="text-section">
+        <h3>Add your products</h3>
+        <p>Start by stocking your store with products your customers will love</p>
+
+        <div class="actions">
+          <%= link_to "Add product", new_product_path, class: "btn primary" %>
+          <%= link_to "Import", "#", class: "btn secondary" %>
+        </div>
+      </div>
+
+      <div class="image-section">
+        <div class="placeholder-card">
+          <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/onboarding-product-template-f32b13b51d86.svg" alt="Add product">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Find Products कार्ड -->
+  <div class="card">
+    <div class="card-content">
+      <div class="text-section">
+        <h3>Find new products</h3>
+        <p>Install a sourcing app to find products to sell without holding inventory</p>
+
+        <div class="actions">
+          <%= link_to "Discover products to sell", "#", class: "btn secondary" %>
+        </div>
+      </div>
+
+      <div class="image-section collage">
+        <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/product-collage-4dda06f416aa.png" alt="Product collage">
+      </div>
+    </div>
+  </div>
+</div>

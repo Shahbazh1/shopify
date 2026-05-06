@@ -1,0 +1,201 @@
+<style>
+.customers-page {
+  background: #f1f1f1;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #202223;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e1e3e5;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Hero Section */
+.hero {
+  padding: 40px;
+}
+
+.hero-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Text */
+.hero-text {
+  max-width: 520px;
+}
+
+.hero-text h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #202223;
+  margin-bottom: 10px;
+}
+
+.hero-text p {
+  font-size: 14px;
+  color: #6d7175;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.15s ease;
+}
+
+.btn.primary {
+  background: #1c1c1c;
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: #000;
+}
+
+.btn.secondary {
+  background: #f1f2f3;
+  color: #202223;
+}
+
+.btn.secondary:hover {
+  background: #e7e9eb;
+}
+
+/* Image */
+.hero-image img {
+  width: 240px;
+  opacity: 0.95;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: #e1e3e5;
+  margin: 32px 0 24px;
+}
+
+/* Bottom Section */
+.sub-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sub-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #202223;
+}
+
+.sub-section p {
+  font-size: 14px;
+  color: #6d7175;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #5c5f62;
+}
+
+.page-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+</style>
+<div class="customers-page">
+  <!-- Page Title -->
+  <div class="page-header">
+  <div class="page-title">
+    
+    <!-- Icon -->
+    <span class="page-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 1a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7m-2 3.5a2 2 0 1 1 3.999-.001 2 2 0 0 1-3.999.001"></path>
+        <path fill-rule="evenodd" d="M13.484 12.227a6.274 6.274 0 0 0-10.968 0l-.437.786a1.338 1.338 0 0 0 1.17 1.987h9.502a1.338 1.338 0 0 0 1.17-1.987zm-9.657.728a4.775 4.775 0 0 1 8.346 0l.302.545h-8.95z"></path>
+      </svg>
+    </span>
+
+    <!-- Title -->
+    <h2>Customers</h2>
+  </div>
+</div>
+
+  <!-- Main Card -->
+  <div class="card hero">
+    <div class="hero-content">
+      
+      <!-- Left -->
+      <div class="hero-text">
+        <h3>Everything customers-related in one place</h3>
+        <p>
+          Manage customer details, see customer order history, and group customers into segments.
+        </p>
+
+        <div class="actions">
+          <%= link_to "Add customer", "#", class: "btn primary" %>
+          <%= link_to "Import customers", "#", class: "btn secondary" %>
+        </div>
+      </div>
+
+      <!-- Right Image -->
+      <div class="hero-image">
+        <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/empty-state-customers-8bd2f4d3e8b0.svg" alt="Customers">
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Bottom Section -->
+    <div class="sub-section">
+      <div>
+        <h4>Get customers with apps</h4>
+        <p>
+          Grow your customer list by adding a lead capture form to your store and marketing.
+        </p>
+      </div>
+
+      <%= link_to "See app recommendations", "#", class: "btn secondary" %>
+    </div>
+  </div>
+</div>

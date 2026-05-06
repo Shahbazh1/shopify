@@ -1,0 +1,182 @@
+<style>
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-create {
+  background-color: #111827;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-create:hover {
+  background-color: #1f2937;
+}
+
+/* Search bar */
+.search-bar {
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-bar input:focus {
+  border-color: #9ca3af;
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #f3f4f6;
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+th input {
+  width: 16px;
+  height: 16px;
+}
+
+/* Created by column */
+.created-by {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shopify-icon {
+  color: #22c55e;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.actions button:hover {
+  color: #6b7280;
+}
+
+/* Footer */
+.footer {
+  margin-top: 24px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: #6b7280;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+</style>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="title">
+      <span class="icon">🗂️</span> Segments
+    </h1>
+    <%= link_to 'Create segment', new_segment_path, class: "btn-create" %>
+  </div>
+
+  <!-- Search -->
+  <div class="search-bar">
+    <input type="text" placeholder="Search segments" />
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" /></th>
+          <th>Name</th>
+          <th>% of customers</th>
+          <th>Last activity</th>
+          <th>Created by</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @segments.each do |segment| %>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td><%= segment.name %></td>
+            <td><%= segment.customer_percentage %>%</td>
+            <td>Created on <%= segment.created_at.strftime("%B %-d, %Y") %></td>
+            <td>
+              <div class="created-by">
+                <span class="shopify-icon">🛍️</span>
+                <span class="shopify-text">Shopify</span>
+              </div>
+            </td>
+            <td class="actions">
+              <button class="btn-actions">⋮</button>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <%= link_to 'Learn more about segments', '#', class: "footer-link" %>
+  </div>
+</div>

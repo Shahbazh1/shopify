@@ -185,7 +185,6 @@ body, html {
 .sidebar {
   width: 260px;
   background: var(--shopify-sidebar);
-  border-right: 1px solid var(--shopify-border);
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -472,22 +471,44 @@ document.addEventListener("DOMContentLoaded", function () {
       <i class="fa-solid fa-house"></i> Home
     </a>
 
-    <!-- PRODUCTS (has submenu) -->
-    <div class="menu-group">
-      <div class="nav-item has-submenu">
+    <!-- ORDERS (has submenu) -->
+    <div class="menu-group <%= 'active' if request.path.include?('orders') || request.path.include?('checkouts') %>">
+      <%= link_to orders_path, class: "nav-item has-submenu" do %>
         <i class="fa-solid fa-box"></i> Orders
-      </div>
+      <% end %>
 
       <div class="submenu">
-        <a href="#" class="submenu-item">Drafts</a>
-        <a href="#" class="submenu-item">Abandoned checkouts</a>
+        <%= link_to "Drafts", draft_orders_path, class: "submenu-item" %>
+        <%= link_to "Abandoned checkouts", checkouts_path, class: "submenu-item" %>
       </div>
+
     </div>
 
-    <!-- ORDERS (no submenu) -->
-    <a href="#" class="nav-item">
-      <i class="fa-solid fa-cart-shopping"></i> Orders
-    </a>
+    <!-- PRODUCTS (no submenu) -->
+    <div class="menu-group <%= 'active' if request.path.include?('products') || request.path.include?('collections') || request.path.include?('inventories') %> ">
+      <%= link_to products_path, class: "nav-item has-submenu" do %>
+        <i class="fa-solid fa-box"></i> Products
+      <% end %>
+
+      <div class="submenu">
+        <%= link_to "Collections", collections_path, class: "submenu-item" %>
+        <%= link_to "Inventories", inventories_path, class: "submenu-item" %>
+      </div>
+
+    </div>
+
+    <!-- CUSTOMERS (no submenu) -->
+    <div class="menu-group <%= 'active' if request.path.include?('segments') || request.path.include?('companies')  || request.path.include?('customers')%>">
+      <%= link_to customers_path, class: "nav-item has-submenu" do %>
+        <i class="fa-solid fa-box"></i> Customers
+      <% end %>
+
+      <div class="submenu">
+        <%= link_to "Segments", segments_path, class: "submenu-item" %>
+        <%= link_to "Companies", checkouts_path, class: "submenu-item" %>
+      </div>
+
+    </div>
 
   </nav>
 

@@ -348,8 +348,8 @@ input {
           Not ready? <a href="#">Start with a sample product</a>
         </p>
         <div class="actions">
-          <button class="primary">Add product</button>
-          <button class="link">Import</button>
+          <%= link_to "Add product", new_product_path, class: "btn primary" %>
+          <%= link_to "Import", "#", class: "btn secondary" %>
         </div>
       </div>
 

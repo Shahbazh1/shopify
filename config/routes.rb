@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get "checkouts/index"
-  get "draft_orders/index"
   devise_for :users, controllers: {
   omniauth_callbacks: 'users/omniauth_callbacks'
 }
@@ -11,5 +9,10 @@ Rails.application.routes.draw do
   resources :orders
   resources :draft_orders
   resources :checkouts
-
+  resources :collections
+  resources :customers
+  resources :products
+  resources :product_variants
+  resources :segments, only: [:index, :show]
+  resources :inventories, only: [:index, :show, :edit]
 end
