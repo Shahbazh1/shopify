@@ -1,53 +1,64 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_user_store
+  before_action :set_product, only: [:show, :edit, :update]
 
   def index
-    @products = Product.all
-  end
-
-  def show
+    @products = @store.products
+    Rails.logger.info "Products: #{@products.inspect}"
   end
 
   def new
-    @product = Product.new
+    @product = @store.products.new
+    @product.product_variants.build
+    @product.product_images.build
   end
 
-  def create
-    @product = Product.new(product_params)
+  def show; end
+  def edit; end
 
-    # IMPORTANT: store_id must be set (since DB requires it)
-    @product.store_id = current_store.id if defined?(current_store)
+  def create
+    @product = @store.products.new(product_params)
 
     if @product.save
       redirect_to @product, notice: "Product created successfully"
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
-  end
-
-  def edit
   end
 
   def update
     if @product.update(product_params)
       redirect_to @product, notice: "Product updated successfully"
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
-  end
-
-  def destroy
-    @product.destroy
-    redirect_to products_path, notice: "Product deleted successfully"
   end
 
   private
 
+  def set_user_store
+    @user = User.first
+    @store = Store.first
+
+    redirect_to root_path, alert: "Store not found" unless @store
+  end
+
   def set_product
-    @product = Product.find(params[:id])
+    @product = @store.products.find(params[:id])
   end
 
   def product_params
-    params.require(:product).permit(:title, :description, :slug)
+    params.require(:product).permit(
+      :title,
+      :description,
+      :category,
+      :price,
+      :inventory_quantity,
+      :status,
+      :published_online_store,
+      :published_pos,
+      product_variants_attributes: [:id, :color, :size, :price, :stock_quantity, :_destroy],
+      product_images_attributes: [:id, :image_url, :alt_text, :_destroy]
+    )
   end
 end

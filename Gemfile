@@ -79,3 +79,7 @@ gem "omniauth-rails_csrf_protection"
 
 # add the env file
 gem "dotenv-rails"
+
+# add the cloudinary gems for image upload
+gem "cloudinary"
+gem "activestorage-cloudinary-service"

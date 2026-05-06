@@ -1,2 +1,49 @@
-<h1>Products#show</h1>
-<p>Find me in app/views/products/show.html.erb</p>
+<h1><%= @product.title %></h1>
+
+<hr>
+
+<p><strong>Description:</strong></p>
+<p><%= @product.description %></p>
+
+<p><strong>Category:</strong> <%= @product.category %></p>
+<p><strong>Price:</strong> Rs <%= @product.price %></p>
+<p><strong>Status:</strong> <%= @product.status %></p>
+<p><strong>Stock:</strong> <%= @product.inventory_quantity %></p>
+
+<hr>
+
+<h2>Variants</h2>
+
+<% if @product.product_variants.any? %>
+  <table border="1" cellpadding="5">
+    <tr>
+      <th>Color</th>
+      <th>Size</th>
+      <th>Price</th>
+      <th>Stock</th>
+    </tr>
+
+    <% @product.product_variants.each do |v| %>
+      <tr>
+        <td><%= v.color %></td>
+        <td><%= v.size %></td>
+        <td><%= v.price %></td>
+        <td><%= v.stock_quantity %></td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p>No variants available</p>
+<% end %>
+
+<hr>
+
+<h2>Images</h2>
+
+<% if @product.product_images.any? %>
+  <% @product.product_images.each do |img| %>
+    <img src="<%= img.image_url %>" width="120" style="margin:5px;">
+  <% end %>
+<% else %>
+  <p>No images uploaded</p>
+<% end %>
