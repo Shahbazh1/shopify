@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   post "/check_email", to: "auth_checks#check_email"
   get "/home", to: "home#index", as: :home
+  resources :stores
   resources :orders
   resources :draft_orders
   resources :checkouts

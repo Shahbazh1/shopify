@@ -172,22 +172,28 @@ th input {
       </thead>
       <tbody>
         <% @segments.each do |segment| %>
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td><%= segment.name %></td>
-            <td><%= segment.customer_percentage %>%</td>
-            <td>Created on <%= segment.created_at.strftime("%B %-d, %Y") %></td>
-            <td>
-              <div class="created-by">
-                <span class="shopify-icon">🛍️</span>
-                <span class="shopify-text">Shopify</span>
-              </div>
-            </td>
-            <td class="actions">
-              <button class="btn-actions">⋮</button>
-            </td>
-          </tr>
-        <% end %>
+  <tr>
+    <td><%= segment.name %></td>
+
+    <td>
+      <%= Customer.count %>
+    </td>
+
+    <td>
+      Created recently
+    </td>
+
+    <!-- Last activity -->
+      <td>
+        <%= segment.updated_at.strftime("%d %b %Y") if segment.updated_at %>
+      </td>
+
+      <!-- Created by -->
+      <td>
+        System
+      </td>
+  </tr>
+<% end %>
       </tbody>
     </table>
   </div>

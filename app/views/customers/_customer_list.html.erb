@@ -1,0 +1,298 @@
+<%# app/views/customers/index.html.erb %>
+
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  body {
+    background: #f1f2f4;
+    color: #202223;
+    font-size: 14px;
+  }
+
+  .page {
+    padding: 24px;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: white;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .btn.dark {
+    background: #111827;
+    color: white;
+    border: none;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  .stats-left {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .badge {
+    background: #eef2ff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+
+  .dropdown {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+  }
+
+  /* SEARCH */
+  .search-bar {
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  .search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+  }
+
+  /* TABLE */
+  .table {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: #f9fafb;
+    text-align: left;
+  }
+
+  th, td {
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+
+  th {
+    color: #6b7280;
+    font-weight: 600;
+  }
+
+  tr {
+    border-bottom: 1px solid #eef0f2;
+  }
+
+  .customer-name {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: #dcfce7;
+    color: #166534;
+    font-weight: 500;
+  }
+
+  .muted {
+    color: #6b7280;
+  }
+
+  .checkbox {
+    width: 16px;
+    height: 16px;
+  }
+
+  .footer-note {
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+    font-size: 13px;
+  }
+  .clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background: #f9fafb;
+}
+</style>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="title">
+      👤 Customers
+    </div>
+
+    <div class="actions">
+      <button class="btn">Export</button>
+      <button class="btn">Import</button>
+      <button class="btn dark">Add customer</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-left">
+      <strong><%= @customers.size %> customer<%= "s" if @customers.size != 1 %></strong>
+      <span class="muted">100% of your customer base</span>
+    </div>
+
+    <div class="dropdown">⌄</div>
+  </div>
+
+
+  <!-- TABLE -->
+  <div class="table">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" class="checkbox"></th>
+          <th>Customer name</th>
+          <th>Email subscription</th>
+          <th>Location</th>
+          <th>Orders</th>
+          <th>Amount spent</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <% if @customers.present? %>
+          <% @customers.each do |customer| %>
+
+            <% full_name = [customer.first_name, customer.last_name].compact.join(" ") %>
+
+            <tr class="clickable-row" data-href="<%= (customer) %>">
+              <td><input type="checkbox" class="checkbox"></td>
+
+              <!-- NAME -->
+              <td class="customer-name">
+                <%= full_name.present? ? full_name : "—" %>
+              </td>
+
+              <!-- EMAIL SUBSCRIPTION (STATIC since no column exists) -->
+              <td>
+                <span class="tag">
+                  Subscribed
+                </span>
+              </td>
+
+              <!-- LOCATION (CITY + COUNTRY) -->
+              <td class="muted">
+                <%= [customer.city, customer.country].compact.join(", ").presence || "—" %>
+              </td>
+
+              <!-- ORDERS (NOT IN DB → STATIC) -->
+              <td>
+                0
+              </td>
+
+              <!-- AMOUNT SPENT (NOT IN DB → STATIC) -->
+              <td class="muted">
+                Rs 0.00
+              </td>
+            </tr>
+
+          <% end %>
+        <% else %>
+
+          <!-- fallback demo row -->
+          <tr>
+            <td><input type="checkbox" class="checkbox"></td>
+            <td class="customer-name">Susan Goff</td>
+            <td><span class="tag">Subscribed</span></td>
+            <td class="muted">Pakistan</td>
+            <td>0</td>
+            <td class="muted">Rs 0.00</td>
+          </tr>
+
+        <% end %>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    Learn more about customers
+  </div>
+
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".clickable-row").forEach(row => {
+      row.addEventListener("click", function (e) {
+        // prevent checkbox click from triggering navigation
+        if (e.target.type !== "checkbox") {
+          window.location = this.dataset.href;
+        }
+      });
+    });
+  });
+</script>

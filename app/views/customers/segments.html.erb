@@ -1,3 +1,13 @@
+<% 
+  # Static data for demonstration
+  @segments = [
+    { name: "All customers", customer_percentage: 100, created_at: Date.new(2023, 1, 15) },
+    { name: "Abandoned checkouts in the last 30 days", customer_percentage: 12, created_at: Date.new(2024, 3, 10) },
+    { name: "New customers in the last 30 days", customer_percentage: 8, created_at: Date.new(2024, 5, 2) },
+    { name: "High-value customers", customer_percentage: 5, created_at: Date.new(2023, 11, 20) },
+    { name: "Returning customers", customer_percentage: 45, created_at: Date.new(2024, 1, 5) }
+  ]
+%>
 <style>
 /* Container */
 .container {
@@ -132,7 +142,7 @@ th input {
     <h1 class="title">
       <span class="icon">🗂️</span> Segments
     </h1>
-    <%= link_to 'Create segment', new_segment_path, class: "btn-create" %>
+    <%= link_to 'Create segment', "#", class: "btn-create" %>
   </div>
 
   <!-- Search -->
@@ -157,9 +167,9 @@ th input {
         <% @segments.each do |segment| %>
           <tr>
             <td><input type="checkbox" /></td>
-            <td><%= segment.name %></td>
-            <td><%= segment.customer_percentage %>%</td>
-            <td>Created on <%= segment.created_at.strftime("%B %-d, %Y") %></td>
+            <td><%= segment[:name] %></td>
+            <td><%= segment[:customer_percentage] %>%</td>
+            <td>Created on <%= segment[:created_at].strftime("%B %-d, %Y") %></td>
             <td>
               <div class="created-by">
                 <span class="shopify-icon">🛍️</span>

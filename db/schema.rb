@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_06_115309) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_07_083849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,23 +72,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_115309) do
     t.index ["store_id"], name: "index_collections_on_store_id"
   end
 
-  create_table "customer_addresses", force: :cascade do |t|
-    t.text "address"
-    t.string "city"
-    t.datetime "created_at", null: false
-    t.bigint "customer_id", null: false
-    t.boolean "is_default"
-    t.string "postal_code"
-    t.datetime "updated_at", null: false
-    t.index ["customer_id"], name: "index_customer_addresses_on_customer_id"
-  end
-
   create_table "customers", force: :cascade do |t|
+    t.text "address"
+    t.string "apartment"
+    t.string "city"
+    t.string "company"
+    t.string "country"
     t.datetime "created_at", null: false
     t.string "email"
-    t.string "name"
+    t.string "first_name"
+    t.boolean "is_default", default: false
+    t.string "language", default: "en"
+    t.string "last_name"
     t.string "phone"
+    t.string "postal_code"
+    t.bigint "store_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_customers_on_store_id"
   end
 
   create_table "discount_codes", force: :cascade do |t|
@@ -214,6 +214,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_115309) do
     t.index ["payment_id"], name: "index_refunds_on_payment_id"
   end
 
+  create_table "segments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.string "rule_type"
+    t.string "rule_value"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "shipments", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "delivered_at"
@@ -237,7 +245,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_115309) do
   create_table "stores", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency"
-    t.string "domain" 
+    t.string "domain"
     t.string "name"
     t.string "slug"
     t.datetime "updated_at", null: false
@@ -267,7 +275,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_115309) do
   add_foreign_key "carts", "customers"
   add_foreign_key "carts", "stores"
   add_foreign_key "collections", "stores"
-  add_foreign_key "customer_addresses", "customers"
+  add_foreign_key "customers", "stores"
   add_foreign_key "discount_codes", "discounts"
   add_foreign_key "discount_usages", "customers"
   add_foreign_key "discount_usages", "discount_codes"

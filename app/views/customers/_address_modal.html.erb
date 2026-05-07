@@ -1,0 +1,384 @@
+<%# app/views/customers/_address_modal.html.erb
+    Rendered inside new.html.erb — shares the parent form's `f` builder
+    via `fields_for`, so all inputs are named:
+      customer[customer_address_attributes][field_name]
+    Rails will pass these through accepts_nested_attributes_for and
+    save/update the CustomerAddress record automatically.
+%>
+
+<style>
+  /* ── Overlay ── */
+  .addr-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .addr-overlay.open { display: flex; }
+
+  /* ── Modal box ── */
+  .addr-modal {
+    background: #fff;
+    border-radius: 10px;
+    width: 720px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Modal header ── */
+  .addr-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #e1e3e5;
+  }
+  .addr-modal-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #202223;
+  }
+  .addr-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6d7175;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+  }
+  .addr-close-btn:hover { background: #f1f1f1; color: #202223; }
+
+  /* ── Modal body ── */
+  .addr-modal-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── Form rows ── */
+  .addr-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .addr-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #202223;
+    margin-bottom: 4px;
+  }
+  .addr-field input[type="text"],
+  .addr-field input[type="tel"],
+  .addr-field select {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #8c9196;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #202223;
+    background: #fff;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .addr-field input:focus,
+  .addr-field select:focus {
+    border-color: #458fff;
+    box-shadow: 0 0 0 3px rgba(69,143,255,.25);
+  }
+
+  /* Select chevron */
+  .addr-select-wrap { position: relative; }
+  .addr-select-wrap::after {
+    content: "";
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #6d7175;
+    pointer-events: none;
+  }
+  .addr-select-wrap select { padding-right: 32px; cursor: pointer; }
+
+  /* Address field with search icon */
+  .addr-search-wrap { position: relative; }
+  .addr-search-wrap svg {
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    color: #8c9196;
+    pointer-events: none;
+  }
+  .addr-search-wrap input { padding-left: 34px !important; }
+
+  /* Phone with flag picker */
+  .addr-phone-wrap {
+    display: flex;
+    border: 1px solid #8c9196;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .addr-phone-wrap:focus-within {
+    border-color: #458fff;
+    box-shadow: 0 0 0 3px rgba(69,143,255,.25);
+  }
+  .addr-flag-picker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 0 8px;
+    background: #f6f6f7;
+    border-right: 1px solid #8c9196;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .addr-flag-picker .flag { font-size: 16px; line-height: 1; }
+  .addr-flag-picker .mini-chevron {
+    width: 0; height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 4px solid #6d7175;
+  }
+  .addr-flag-picker select {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    border: none; background: transparent;
+    width: 100%; height: 100%;
+  }
+  .addr-phone-wrap input[type="tel"] {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    height: 34px;
+    box-shadow: none !important;
+  }
+  .addr-phone-wrap input[type="tel"]:focus { box-shadow: none !important; }
+
+  /* ── Modal footer ── */
+  .addr-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px 24px;
+    border-top: 1px solid #e1e3e5;
+  }
+  .addr-btn {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background .15s;
+  }
+  .addr-btn-cancel {
+    background: #fff;
+    border: 1px solid #8c9196;
+    color: #202223;
+  }
+  .addr-btn-cancel:hover { background: #f6f6f7; }
+  .addr-btn-save {
+    background: #202223;
+    color: #fff;
+  }
+  .addr-btn-save:hover { background: #3a3a3a; }
+</style>
+
+<%# ── Overlay (toggled via JS) ── %>
+<div class="addr-overlay" id="address-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="addr-modal-title">
+  <div class="addr-modal">
+
+    <%# Header %>
+    <div class="addr-modal-header">
+      <h2 id="addr-modal-title">Add default address</h2>
+      <button type="button" class="addr-close-btn" onclick="closeAddressModal()" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <%# Body — direct f.* helpers, all map to flat columns on the customers table %>
+    <div class="addr-modal-body">
+
+      <%# :country → customers.country %>
+      <div class="addr-field">
+        <%= f.label :country, "Country/region" %>
+        <div class="addr-select-wrap">
+          <%= f.select :country,
+                options_for_select([
+                  ["Pakistan",             "PK"],
+                  ["United States",        "US"],
+                  ["United Kingdom",       "GB"],
+                  ["India",                "IN"],
+                  ["United Arab Emirates", "AE"],
+                  ["Saudi Arabia",         "SA"],
+                  ["Australia",            "AU"],
+                  ["Canada",               "CA"],
+                  ["Germany",              "DE"],
+                  ["France",               "FR"],
+                  ["Turkey",               "TR"],
+                ], @customer.country || "PK"),
+                {},
+                { id: "addr_country_select", onchange: "updateAddressFlag(this)" } %>
+        </div>
+      </div>
+
+      <%# :first_name / :last_name → customers.first_name / last_name %>
+      <div class="addr-row-2">
+        <div class="addr-field">
+          <%= f.label :first_name, "First name" %>
+          <%= f.text_field :first_name, autocomplete: "given-name" %>
+        </div>
+        <div class="addr-field">
+          <%= f.label :last_name, "Last name" %>
+          <%= f.text_field :last_name, autocomplete: "family-name" %>
+        </div>
+      </div>
+
+      <%# :company → customers.company %>
+      <div class="addr-field">
+        <%= f.label :company, "Company" %>
+        <%= f.text_field :company, autocomplete: "organization" %>
+      </div>
+
+      <%# :address → customers.address (text column) %>
+      <div class="addr-field">
+        <%= f.label :address, "Address" %>
+        <div class="addr-search-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+          </svg>
+          <%= f.text_field :address, placeholder: "", autocomplete: "street-address" %>
+        </div>
+      </div>
+
+      <%# :apartment → customers.apartment %>
+      <div class="addr-field">
+        <%= f.label :apartment, "Apartment, suite, etc" %>
+        <%= f.text_field :apartment, autocomplete: "address-line2" %>
+      </div>
+
+      <%# :city / :postal_code → customers.city / customers.postal_code %>
+      <div class="addr-row-2">
+        <div class="addr-field">
+          <%= f.label :city, "City" %>
+          <%= f.text_field :city, autocomplete: "address-level2" %>
+        </div>
+        <div class="addr-field">
+          <%= f.label :postal_code, "Postal code" %>
+          <%= f.text_field :postal_code, autocomplete: "postal-code" %>
+        </div>
+      </div>
+
+      <%# :is_default → customers.is_default (boolean) — hidden, always true when address filled %>
+      <%= f.hidden_field :is_default, value: true %>
+
+    </div><%# /addr-modal-body %>
+
+    <%# Footer — Cancel just closes; Save submits the whole page form %>
+    <div class="addr-modal-footer">
+      <button type="button" class="addr-btn addr-btn-cancel" onclick="closeAddressModal()">Cancel</button>
+      <button type="button" class="addr-btn addr-btn-save"   onclick="saveAddressModal()">Save</button>
+    </div>
+
+  </div><%# /addr-modal %>
+</div><%# /addr-overlay %>
+
+<script>
+  /* Country → flag emoji map */
+  const COUNTRY_FLAGS = {
+    PK:"🇵🇰", US:"🇺🇸", GB:"🇬🇧", IN:"🇮🇳",
+    AE:"🇦🇪", SA:"🇸🇦", AU:"🇦🇺", CA:"🇨🇦",
+    DE:"🇩🇪", FR:"🇫🇷", TR:"🇹🇷"
+  };
+  const COUNTRY_DIALS = {
+    PK:"+92", US:"+1", GB:"+44", IN:"+91",
+    AE:"+971", SA:"+966", AU:"+61", CA:"+1",
+    DE:"+49", FR:"+33", TR:"+90"
+  };
+
+  function openAddressModal() {
+    document.getElementById("address-modal-overlay").classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeAddressModal() {
+    document.getElementById("address-modal-overlay").classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  /* Close on backdrop click */
+  document.getElementById("address-modal-overlay").addEventListener("click", function(e) {
+    if (e.target === this) closeAddressModal();
+  });
+
+  /* Close on Escape key */
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") closeAddressModal();
+  });
+
+  /* "Save" inside modal just closes it — data is already in the main form's
+     hidden inputs and will be submitted when the user clicks "Save customer". */
+  function saveAddressModal() {
+    // Optionally validate address fields here before closing
+    updateAddressSummary();
+    closeAddressModal();
+  }
+
+  /* When country/region changes, sync the phone dial code & flag */
+  function updateAddressFlag(select) {
+    const code = select.value;
+    const flagEl = document.getElementById("addr-flag-emoji");
+    if (flagEl && COUNTRY_FLAGS[code]) flagEl.textContent = COUNTRY_FLAGS[code];
+
+    /* Also update the phone country picker to match */
+    const dialSelect = document.getElementById("addr_phone_country");
+    const dial = COUNTRY_DIALS[code];
+    if (dialSelect && dial) {
+      for (let opt of dialSelect.options) {
+        if (opt.value === dial) { opt.selected = true; break; }
+      }
+    }
+  }
+
+  /* When phone country picker changes, just update the flag */
+  function updateAddressPhoneFlag(select) {
+    const flags = {"+92":"🇵🇰","+1":"🇺🇸","+44":"🇬🇧","+91":"🇮🇳",
+                   "+971":"🇦🇪","+966":"🇸🇦","+61":"🇦🇺","+49":"🇩🇪",
+                   "+33":"🇫🇷","+90":"🇹🇷"};
+    const flagEl = document.getElementById("addr-flag-emoji");
+    if (flagEl) flagEl.textContent = flags[select.value] || "🌐";
+  }
+
+  /* Show a brief summary on the "Add address" button after modal is saved */
+  function updateAddressSummary() {
+    const city    = document.querySelector("[name='customer[city]']")?.value;
+    const country = document.querySelector("[name='customer[country]']")?.value;
+    const btn     = document.getElementById("add-address-btn");
+    if (btn && (city || country)) {
+      btn.querySelector(".btn-label").textContent =
+        [city, country].filter(Boolean).join(", ");
+    }
+  }
+</script>
