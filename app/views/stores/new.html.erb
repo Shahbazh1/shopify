@@ -1,10 +1,173 @@
-<h1>Create Store</h1>
+<div class="onboarding-wrapper">
+  <div class="onboarding-container">
+    
+    <%= link_to stores_path, class: "back-button" do %>
+      <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor">
+        <path d="M19 9H4.414l4.293-4.293-1.414-1.414L1.586 10l5.707 5.707 1.414-1.414L4.414 11H19V9z"/>
+      </svg>
+    <% end %>
 
-<%= form_with model: @store do |f| %>
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+    <header class="onboarding-header">
+      <div class="shopify-logo">
+        <svg viewBox="0 0 150 43" width="100" height="30" fill="white">
+          <text x="0" y="30" font-family="Arial, sans-serif" font-weight="bold" font-size="24">shopify</text>
+        </svg>
+      </div>
+      <h1>Let's get started</h1>
+      <p>Add some details to customize your setup</p>
+    </header>
+
+    <main class="onboarding-card">
+      <%= form_with model: @store, local: true do |f| %>
+        <div class="form-group">
+          <label class="section-label">What should we call your store?</label>
+          <%= f.text_field :name, 
+              placeholder: "My Store (you can change this later)", 
+              class: "custom-input",
+              required: true %>
+        </div>
+
+        <%= f.submit "Continue", class: "btn-primary" %>
+
+    
+      <% end %>
+    </main>
   </div>
+</div>
 
-  <%= f.submit "Create Store" %>
-<% end %>
+<style>
+  :root {
+    --bg-dark: #0a0a0a;
+    --card-bg: #ffffff;
+    --text-main: #1a1a1a;
+    --text-muted: #616161;
+    --btn-black: #121212;
+    --input-border: #d1d1d1;
+  }
+
+  body {
+    background-color: var(--bg-dark);
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: white;
+  }
+
+  .onboarding-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+  }
+
+  .onboarding-container {
+    width: 100%;
+    max-width: 540px; /* Matching the narrow card width from design */
+    text-align: center;
+    position: relative;
+  }
+
+  .back-button {
+    position: absolute;
+    left: -60px;
+    top: 140px; /* Aligned with the card top */
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .onboarding-header h1 {
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .onboarding-header p {
+    color: #cccccc;
+    margin-bottom: 30px;
+    font-size: 16px;
+  }
+
+  .onboarding-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 32px;
+    color: var(--text-main);
+    text-align: left;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .section-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+
+  .custom-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .custom-input:focus {
+    border-color: var(--btn-black);
+    box-shadow: 0 0 0 1px var(--btn-black);
+  }
+
+  .btn-primary {
+    width: 100%;
+    background-color: var(--btn-black);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+
+  .action-footer {
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .secondary-link {
+    color: var(--text-main);
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* Responsive Fix for the Back Button */
+  @media (max-width: 768px) {
+    .back-button {
+      position: static;
+      margin: 0 auto 20px auto;
+    }
+  }
+</style>

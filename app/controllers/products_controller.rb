@@ -20,7 +20,7 @@ class ProductsController < ApplicationController
     @product = @store.products.new(product_params)
 
     if @product.save
-      redirect_to @product, notice: "Product created successfully"
+      redirect_to edit_product_path(@store, @product), notice: "Product created successfully"
     else
       render :new, status: :unprocessable_entity
     end
@@ -38,7 +38,7 @@ class ProductsController < ApplicationController
 
   def set_user_store
     @user = User.first
-    @store = Store.first
+    @store = current_user.stores.find_by!(id: params[:store_id])
 
     redirect_to root_path, alert: "Store not found" unless @store
   end

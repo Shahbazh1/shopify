@@ -347,7 +347,7 @@
         </thead>
         <tbody>
   <% products.each do |product| %>
-    <tr class="clickable-row" data-href="<%= edit_product_path(product) %>">
+    <tr class="clickable-row" data-href="<%= edit_product_path(@store, product) %>">
       <td><input type="checkbox" class="cb" /></td>
 
       <!-- Product -->

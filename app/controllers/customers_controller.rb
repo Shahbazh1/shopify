@@ -1,11 +1,11 @@
 class CustomersController < ApplicationController
   def index
-    @store= Store.first
+    @store = current_user.stores.find_by!(id: params[:store_id])
     @customers = @store.customers
   end
 
   def create
-    @store = Store.first
+    @store = current_user.stores.find_by!(id: params[:store_id])
     @customer = @store.customers.new(customer_params)
  
     if @customer.save
@@ -16,12 +16,12 @@ class CustomersController < ApplicationController
   end
 
   def new
-    @store = Store.first
+    @store = current_user.stores.find_by!(id: params[:store_id])
     @customer = @store.customers.new
   end
  
   def show
-    @store = Store.first
+    @store = current_user.stores.find_by!(id: params[:store_id])
     @customer = @store.customers.find(params[:id])
   end
  
