@@ -523,18 +523,23 @@ document.addEventListener("DOMContentLoaded", function () {
     Sales channels
   </div>
 
-  <!-- Online Store (no submenu) -->
-    <div class="menu-group <%= 'active' if request.path.include?('segments') || request.path.include?('companies')  || request.path.include?('customers')%>">
-      <%= link_to customers_path, class: "nav-item has-submenu" do %>
-        <i class="fa-solid fa-box"></i> Online Store
-      <% end %>
+  <!-- Online Store (Sales Channel) -->
+<div class="menu-group <%= 'active' if request.path.include?('themes') || request.path.include?('pages') %>">
+  
+  <%# Online Store main link points to themes index %>
+  <%= link_to store_themes_path(store_id: params[:store_id]), class: "nav-item has-submenu" do %>
+    <i class="fa-solid fa-store"></i> Online Store
+  <% end %>
 
-      <div class="submenu">
-        <%= link_to "Themes", segments_path, class: "submenu-item" %>
-        <%= link_to "Pages", checkouts_path, class: "submenu-item" %>
-      </div>
+  <div class="submenu">
+    <%# Link to Themes %>
+    <%= link_to "Themes", store_themes_path(store_id: params[:store_id]), class: "submenu-item" %>
+    
+    <%# Note: You'll need a route for pages, but here is the link structure %>
+    <%= link_to "Pages", "#", class: "submenu-item" %>
+  </div>
 
-    </div>
+</div>
 
   <a href="#" class="nav-item" style="margin-top: 8px;">
     <i class="fa-solid fa-gear"></i> Settings

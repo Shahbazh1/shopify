@@ -1,0 +1,296 @@
+<%# themes/index.html.erb %>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Themes</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f6f6f7;
+      color: #202223;
+    }
+
+    .page-wrapper {
+      padding: 24px;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .topbar h1 {
+      font-size: 22px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .topbar-actions button {
+      margin-left: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #c9cccf;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background: #008060;
+      color: white;
+      border: none;
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e1e3e5;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      padding: 14px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .theme-preview {
+      width: 100%;
+      height: 280px;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .notice {
+      background: #fff4ce;
+      padding: 10px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      background: #eafaf3;
+      color: #008060;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #c9cccf;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      margin-left: 6px;
+    }
+
+    .btn-green {
+      background: #008060;
+      color: white;
+      border: none;
+    }
+
+    /* Sections */
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 20px 0 10px;
+    }
+
+    .draft-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+    }
+
+    .small-preview {
+      width: 80px;
+      height: 50px;
+      background: #ddd;
+      border-radius: 6px;
+    }
+
+    /* design box */
+    .design-box {
+      background: white;
+      border: 1px solid #e1e3e5;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .design-box input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
+    /* grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .theme-card {
+      background: white;
+      border: 1px solid #e1e3e5;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .theme-img {
+      height: 140px;
+      background: #ddd;
+    }
+
+    .theme-info {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .add-btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #008060;
+      color: #008060;
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .theme-preview {
+  width: 100%;
+  height: 320px;
+  background-image: url('/assets/images/store_front_hero.png');
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #666;
+  position: relative;
+}
+  </style>
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <div class="topbar">
+  <h1>🧩 Themes</h1>
+  <div class="topbar-actions">
+    <%# Use _url and pass the specific subdomain from your store object %>
+    <%= link_to "View store", storefront_root_url(subdomain: @store.slug), class: "btn", target: "_blank" %>
+    <button>Import theme</button>
+  </div>
+</div>
+
+  <!-- Current Theme -->
+  <div class="card">
+    <div class="card-header">
+      Horizon <span style="font-weight:400;color:#666">Current theme</span>
+    </div>
+
+    <div class="notice">
+      Password protected: to remove the password, pick a plan
+    </div>
+
+    <div class="theme-preview" style="background-image: url('<%= asset_path("store_front_hero.png") %>');">
+  Theme Preview Image
+</div>
+
+    <div class="card-body">
+      <div>
+        <div class="badge">Online Store 2.0</div>
+        <div style="font-size:12px;color:#666">Version 3.5.1</div>
+      </div>
+      <div>
+        <button class="btn">Edit theme</button>
+        <button class="btn-green btn">Pick a plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Draft Themes -->
+  <div class="section-title">Draft themes</div>
+  <div class="card">
+    <div class="draft-card">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="small-preview"></div>
+        <div>
+          <strong>Horizon</strong><br>
+          <span style="font-size:12px;color:#666">Version 3.5.1</span>
+        </div>
+      </div>
+      <div>
+        <button class="btn">Publish</button>
+        <button class="btn">Edit theme</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Design Section -->
+  <div class="section-title">Design your store in seconds</div>
+  <div class="design-box">
+    <div style="font-size:13px;color:#666">
+      Describe your business to create unique themes with personalized content
+    </div>
+    <input type="text" placeholder="e.g. modern handmade jewelry" />
+  </div>
+
+  <!-- Popular Themes -->
+  <div class="section-title">Popular free themes</div>
+  <div class="grid">
+
+    <% 6.times do %>
+      <div class="theme-card">
+        <div class="theme-img"></div>
+        <div class="theme-info">
+          <div>
+            <strong>Horizon</strong><br>
+            <span style="font-size:12px;color:#666">by Shopify</span>
+          </div>
+          <button class="add-btn">Add</button>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+
+</div>
+</body>
+</html>

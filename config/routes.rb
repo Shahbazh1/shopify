@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     resources :segments,    only: [:index, :show]
     resources :inventories, only: [:index, :show, :edit]
     resources :discounts
+    resources :themes, only: [:index, :show], as: :store_themes
   end
 
   # Admin routes
