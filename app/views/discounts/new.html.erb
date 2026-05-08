@@ -1,0 +1,530 @@
+<!-- app/views/discounts/new.html.erb -->
+
+<%= form_with model: @discount, url: discounts_path, method: :post do |f| %>
+
+<div class="discount-create-page">
+
+  <!-- Top Header -->
+  <div class="top-header">
+    <div class="breadcrumb">
+      <span class="arrow">‹</span>
+      <span>Create discount</span>
+    </div>
+  </div>
+
+  <div class="discount-layout">
+
+    <!-- LEFT SIDE -->
+    <div class="left-section">
+
+      <!-- Amount off products -->
+      <div class="card">
+        <h3>Amount off products</h3>
+
+        <div class="field-group">
+          <label>Method</label>
+
+          <div class="method-tabs">
+            <button class="tab active" type="button">
+              Discount code
+              <input type="radio" name="discount[discount_method]" value="code" hidden checked>
+            </button>
+
+            <button class="tab" type="button">
+              Automatic discount
+              <input type="radio" name="discount[discount_method]" value="automatic" hidden>
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="label-row">
+            <label>Discount code</label>
+            <a href="#">Generate random code</a>
+          </div>
+
+          <input type="text" name="discount[discount_code]">
+
+          <p class="helper-text">
+            Customers must enter this code at checkout.
+          </p>
+        </div>
+      </div>
+
+      <!-- Discount Value -->
+      <div class="card">
+        <h3>Discount value</h3>
+
+        <div class="discount-value-row">
+          <select name="discount[value_type]">
+            <option value="percentage">Percentage</option>
+            <option value="fixed">Fixed</option>
+          </select>
+
+          <div class="percent-box">
+            <input type="text" name="discount[value]">
+            <span>%</span>
+          </div>
+        </div>
+
+        <div class="field-group mt-16">
+          <label>Applies to</label>
+
+          <select name="discount[applies_to]">
+            <option value="specific_collections">Specific collections</option>
+            <option value="products">Products</option>
+          </select>
+        </div>
+
+        <div class="search-row">
+          <div class="search-box">
+            <span>⌕</span>
+            <input type="text" placeholder="Search collections">
+          </div>
+
+          <button class="browse-btn" type="button">Browse</button>
+        </div>
+      </div>
+
+      <!-- Eligibility -->
+      <div class="card">
+        <h3>Eligibility</h3>
+
+        <select name="discount[customer_eligibility]">
+          <option value="all_customers">All customers</option>
+          <option value="specific_customers">Specific customers</option>
+        </select>
+      </div>
+
+      <!-- Minimum Requirements -->
+      <div class="card">
+        <h3>Minimum purchase requirements</h3>
+
+        <label class="radio-option">
+          <input type="radio" name="discount[minimum_requirement_type]" value="none" checked>
+          <span>No minimum requirements</span>
+        </label>
+
+        <label class="radio-option">
+          <input type="radio" name="discount[minimum_requirement_type]" value="amount">
+          <span>Minimum purchase amount (Rs)</span>
+        </label>
+
+        <label class="radio-option">
+          <input type="radio" name="discount[minimum_requirement_type]" value="quantity">
+          <span>Minimum quantity of items</span>
+        </label>
+
+        <input type="text" name="discount[minimum_purchase_amount]" placeholder="Amount">
+        <input type="text" name="discount[minimum_quantity]" placeholder="Quantity">
+      </div>
+
+      <!-- Maximum Discount Uses -->
+      <div class="card">
+        <h3>Maximum discount uses</h3>
+
+        <label class="checkbox-option">
+          <input type="checkbox" name="discount[max_usage_limit]" value="1">
+          <span>Limit number of times this discount can be used in total</span>
+        </label>
+
+        <label class="checkbox-option">
+          <input type="checkbox" name="discount[limit_one_per_customer]" value="1">
+          <span>Limit to one use per customer</span>
+        </label>
+      </div>
+
+      <!-- Combinations -->
+      <div class="card">
+        <h3>Combinations</h3>
+
+        <label class="checkbox-option">
+          <input type="checkbox" name="discount[product_discount]" value="1">
+          <span>Product discounts</span>
+        </label>
+
+        <label class="checkbox-option">
+          <input type="checkbox" name="discount[order_discount]" value="1">
+          <span>Order discounts</span>
+        </label>
+
+        <label class="checkbox-option">
+          <input type="checkbox" name="discount[shipping_discount]" value="1">
+          <span>Shipping discounts</span>
+        </label>
+      </div>
+
+      <!-- Active Dates -->
+      <div class="card">
+        <h3>Active dates</h3>
+
+        <div class="date-grid">
+          <div>
+            <label>Start date</label>
+            <input type="date" name="discount[start_date]">
+          </div>
+
+          <div>
+            <label>Start time (PKT)</label>
+            <input type="text" value="10:27 PM">
+          </div>
+        </div>
+
+        <label class="checkbox-option mt-16">
+          <input type="checkbox" value="1">
+          <span>Set end date</span>
+        </label>
+
+        <input type="date" name="discount[end_date]">
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="right-section">
+
+      <div class="card side-card">
+        <h4>No discount code yet</h4>
+
+        <div class="summary-group">
+          <span class="summary-title">Code</span>
+        </div>
+
+        <div class="summary-group">
+          <span class="summary-title">Type</span>
+
+          <div class="summary-value">
+            <span class="tag-icon">🏷</span>
+            Product discount
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="summary-group">
+          <span class="summary-title">Details</span>
+
+          <ul class="details-list">
+            <li>All customers</li>
+            <li>For Online Store</li>
+            <li>No minimum purchase requirement</li>
+            <li>No usage limits</li>
+            <li>Can’t combine with other discounts</li>
+            <li>Active from today</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card side-card">
+        <h4>Sales channels access</h4>
+
+        <label class="checkbox-option">
+          <input type="checkbox">
+          <span>Allow discount to be featured on selected channels</span>
+        </label>
+      </div>
+
+      <div class="card side-card">
+        <h4>Tags</h4>
+
+        <button class="tag-btn" type="button">⊕ Add tags</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="bottom-save">
+    <button type="submit">Save</button>
+  </div>
+
+</div>
+
+<% end %>
+
+<style>
+  body {
+    margin: 0;
+    background: #f6f6f7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #303030;
+  }
+
+  .discount-create-page {
+    padding: 18px;
+  }
+
+  /* HEADER */
+
+  .top-header {
+    margin-bottom: 14px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .arrow {
+    font-size: 22px;
+    line-height: 1;
+    margin-top: -2px;
+  }
+
+  /* LAYOUT */
+
+  .discount-layout {
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* CARD */
+
+  .card {
+    background: white;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  }
+
+  .card h3,
+  .card h4 {
+    margin: 0 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #303030;
+  }
+
+  /* FIELDS */
+
+  .field-group {
+    margin-bottom: 14px;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: #616161;
+    margin-bottom: 6px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select {
+    width: 100%;
+    height: 32px;
+    border: 1px solid #8a8a8a;
+    border-radius: 6px;
+    padding: 0 10px;
+    font-size: 12px;
+    background: white;
+    box-sizing: border-box;
+  }
+
+  .helper-text {
+    margin: 6px 0 0;
+    font-size: 11px;
+    color: #8a8a8a;
+  }
+
+  .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .label-row a {
+    font-size: 11px;
+    text-decoration: none;
+    color: #005bd3;
+  }
+
+  /* TABS */
+
+  .method-tabs {
+    display: inline-flex;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .tab {
+    height: 28px;
+    padding: 0 12px;
+    border: none;
+    background: #f6f6f7;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    background: white;
+    font-weight: 600;
+  }
+
+  /* DISCOUNT VALUE */
+
+  .discount-value-row {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    gap: 10px;
+  }
+
+  .percent-box {
+    position: relative;
+  }
+
+  .percent-box span {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 13px;
+    color: #616161;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .search-box {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-box span {
+    position: absolute;
+    left: 10px;
+    top: 7px;
+    color: #8a8a8a;
+    font-size: 13px;
+  }
+
+  .search-box input {
+    padding-left: 28px;
+  }
+
+  .browse-btn {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid #c9c9c9;
+    background: white;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* OPTIONS */
+
+  .radio-option,
+  .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: #303030;
+  }
+
+  .radio-option input,
+  .checkbox-option input {
+    margin: 0;
+  }
+
+  /* DATE GRID */
+
+  .date-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* SIDEBAR */
+
+  .summary-title {
+    font-size: 11px;
+    color: #8a8a8a;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .summary-value {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .divider {
+    height: 1px;
+    background: #ececec;
+    margin: 14px 0;
+  }
+
+  .details-list {
+    padding-left: 16px;
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: #303030;
+    line-height: 1.8;
+  }
+
+  .tag-btn {
+    width: 100%;
+    height: 32px;
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: white;
+    font-size: 12px;
+    text-align: left;
+    padding: 0 10px;
+    cursor: pointer;
+  }
+
+  /* SAVE */
+
+  .bottom-save {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+  }
+
+  .bottom-save button {
+    width: 56px;
+    height: 28px;
+    border: none;
+    border-radius: 8px;
+    background: #d9d9d9;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mt-16 {
+    margin-top: 16px;
+  }
+
+  @media (max-width: 991px) {
+    .discount-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

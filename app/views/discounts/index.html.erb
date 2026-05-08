@@ -1,0 +1,5 @@
+<% if @discounts.any? %>
+  <%= render "discount_list" %>
+<% else %>
+  <%= render "empty_state" %>
+<% end %>

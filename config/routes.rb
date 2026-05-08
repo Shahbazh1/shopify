@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     resources :product_variants
     resources :segments, only: [:index, :show]
     resources :inventories, only: [:index, :show, :edit]
+    resources :discounts
   end
 
   # Keep the store management routes top-level if you need to create/list stores

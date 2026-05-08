@@ -510,6 +510,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     </div>
 
+    <!-- Discounts (no submenu) -->
+    <!-- Discounts (no submenu) -->
+<a href="<%= discounts_path(store_id: params[:store_id]) %>" 
+   class="nav-item <%= 'active' if current_page?(discounts_path(store_id: params[:store_id])) %>">
+  <i class="fa-solid fa-house"></i> Discounts
+</a>
+
   </nav>
 
   <div class="sidebar-section-title">

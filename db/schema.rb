@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_07_083849) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_07_204353) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -91,34 +91,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_083849) do
     t.index ["store_id"], name: "index_customers_on_store_id"
   end
 
-  create_table "discount_codes", force: :cascade do |t|
-    t.string "code"
-    t.datetime "created_at", null: false
-    t.bigint "discount_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usage_limit"
-    t.index ["discount_id"], name: "index_discount_codes_on_discount_id"
-  end
-
-  create_table "discount_usages", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "customer_id", null: false
-    t.bigint "discount_code_id", null: false
-    t.bigint "order_id", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "used_at"
-    t.index ["customer_id"], name: "index_discount_usages_on_customer_id"
-    t.index ["discount_code_id"], name: "index_discount_usages_on_discount_code_id"
-    t.index ["order_id"], name: "index_discount_usages_on_order_id"
-  end
-
   create_table "discounts", force: :cascade do |t|
+    t.string "applies_to"
+    t.boolean "auto_generate_code", default: false
+    t.string "code_type"
     t.datetime "created_at", null: false
+    t.string "customer_eligibility"
+    t.string "discount_code"
+    t.string "discount_method"
+    t.string "discount_type"
     t.datetime "end_date"
+    t.boolean "limit_one_per_customer", default: false
+    t.integer "max_usage_limit"
+    t.decimal "minimum_purchase_amount"
+    t.integer "minimum_quantity"
+    t.string "minimum_requirement_type"
+    t.boolean "order_discount", default: false
+    t.boolean "product_discount", default: false
+    t.boolean "shipping_discount", default: false
     t.datetime "start_date"
-    t.string "type"
+    t.bigint "store_id", null: false
     t.datetime "updated_at", null: false
     t.decimal "value"
+    t.string "value_type"
+    t.index ["store_id"], name: "index_discounts_on_store_id"
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -276,10 +272,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_083849) do
   add_foreign_key "carts", "stores"
   add_foreign_key "collections", "stores"
   add_foreign_key "customers", "stores"
-  add_foreign_key "discount_codes", "discounts"
-  add_foreign_key "discount_usages", "customers"
-  add_foreign_key "discount_usages", "discount_codes"
-  add_foreign_key "discount_usages", "orders"
+  add_foreign_key "discounts", "stores"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "product_variants"
   add_foreign_key "order_items", "products"

@@ -1,0 +1,203 @@
+<div class="shopify-container">
+  <header class="page-header">
+    <div class="header-left">
+      <h1>Discounts</h1>
+    </div>
+    <div class="header-right">
+      <%= link_to 'Export', "#", class: "btn btn-secondary" %>
+      <%= link_to 'Create discount', "#", class: "btn btn-primary" %>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="card-filters">
+      <div class="filter-group">
+        <button class="filter-tab">All <span class="arrow">↕</span></button>
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Search and filter" class="search-input">
+        </div>
+      </div>
+      <div class="view-options">
+        <button class="icon-btn">📋</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="shopify-table">
+        <thead>
+          <tr>
+            <th style="width: 40px;"><input type="checkbox"></th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Method</th>
+            <th>Eligibility</th>
+            <th>Type</th>
+            <th>Combinations</th>
+            <th class="text-right">Used</th>
+          </tr>
+        </thead>
+        <tbody>
+  <% @discounts.each do |discount| %>
+    <tr>
+      <td><input type="checkbox"></td>
+      <td>
+        <div class="discount-title"><%= discount.discount_code.presence || "Automatic Discount" %></div>
+        <div class="discount-subtitle">
+          <%= discount.value || 0 %><%= discount.value_type == 'percentage' ? '%' : '$' %> off <%= discount.applies_to.presence || "Home page" %>
+        </div>
+      </td>
+      <td>
+        <span class="badge badge-success">Active</span>
+      </td>
+      <td><%= discount.discount_method&.capitalize || "Code" %></td>
+      <td class="icon-cell">
+        <span class="icon">👤</span> <%= discount.customer_eligibility&.humanize || "All customers" %>
+      </td>
+      <td class="icon-cell">
+        <span class="icon">🏷️</span> <%= discount.discount_type&.humanize || "Amount off product" %>
+      </td>
+      <td class="combinations-icons">
+        <% if discount.product_discount %><span title="Product">🏷️</span><% end %>
+        <% if discount.order_discount %><span title="Order">📦</span><% end %>
+        <% if discount.shipping_discount %><span title="Shipping">🚚</span><% end %>
+      </td>
+      <td class="text-right">0</td>
+    </tr>
+  <% end %>
+</tbody>
+      </table>
+    </div>
+
+    <div class="card-footer">
+      <a href="#">Learn more about discounts</a>
+    </div>
+  </div>
+</div>
+
+<style>
+:root {
+  --bg-color: #f1f1f1;
+  --surface-color: #ffffff;
+  --text-main: #202223;
+  --text-sub: #6d7175;
+  --border-color: #e1e3e5;
+  --primary-btn: #202223;
+  --success-bg: #bbe5b3;
+  --success-text: #008060;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
+  color: var(--text-main);
+  margin: 0;
+  padding: 20px;
+}
+
+.shopify-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-header h1 { font-size: 20px; font-weight: 600; }
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary { background: white; border: 1px solid var(--border-color); color: var(--text-main); margin-right: 8px; }
+.btn-primary { background: var(--primary-btn); color: white; border: none; }
+
+/* Card */
+.card {
+  background: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.card-filters {
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filter-group { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
+
+.search-wrapper {
+  position: relative;
+  flex-grow: 1;
+  max-width: 800px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 6px 10px 6px 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  outline: none;
+}
+
+.search-icon { position: absolute; left: 10px; top: 6px; color: var(--text-sub); }
+
+/* Table Styling */
+.shopify-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.shopify-table th {
+  text-align: left;
+  padding: 12px;
+  color: var(--text-sub);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.shopify-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.discount-title { font-weight: 600; color: #2c6ecb; margin-bottom: 2px; }
+.discount-subtitle { color: var(--text-sub); font-size: 13px; }
+
+/* Status Badge */
+.badge-success {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Icons and Alignment */
+.icon-cell { display: flex; align-items: center; gap: 8px; }
+.combinations-icons span { margin-right: 5px; opacity: 0.6; }
+.text-right { text-align: right !important; }
+
+.card-footer {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-footer a { color: var(--text-sub); text-decoration: none; font-size: 14px; }
+</style>
