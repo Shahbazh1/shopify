@@ -5,17 +5,17 @@ class ApplicationController < ActionController::Base
   def layout_by_resource
   if devise_controller?
     "application"
-
   elsif controller_name == "stores"
-    false   # ❌ no layout for stores index
-
+    false
+  elsif controller_path.start_with?("storefront/")
+    "storefront"                    # ← add this
   elsif user_signed_in?
     "dashboard"
-
   else
     "application"
   end
 end
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 

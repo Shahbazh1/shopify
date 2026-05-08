@@ -77,4 +77,11 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.active_storage.service = :cloudinary
+
+  # Allow requests from any subdomain of localhost (e.g., store1.localhost, store2.localhost).
+  config.hosts << ".localhost"
+
+  # Since we're using subdomains for stores, we need to tell Rails not to treat them as separate TLDs.
+  config.action_dispatch.tld_length = 0
+
 end

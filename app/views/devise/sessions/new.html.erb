@@ -1,3 +1,4 @@
+# session.html.erb - Login page for Devise sessions
 <style>
   /* Reset & Base Styles */
   * {
@@ -77,7 +78,8 @@
     color: #333;
   }
 
-  input[type="email"] {
+input[type="email"],
+  input[type="password"] {
     width: 100%;
     padding: 12px 14px;
     border: 1px solid #d1d1d1;
@@ -87,9 +89,41 @@
     transition: border-color 0.2s;
   }
 
-  input[type="email"]:focus {
+  input[type="email"]:focus,
+  input[type="password"]:focus {
     border-color: #008060;
     box-shadow: 0 0 0 1px #008060;
+  }
+
+  .password-wrapper {
+    position: relative;
+  }
+
+  .password-wrapper input {
+    padding-right: 44px;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #6d7175;
+    padding: 0;
+  }
+
+  .forgot-link {
+    display: block;
+    text-align: right;
+    font-size: 12px;
+    color: #005bd3;
+    text-decoration: none;
+    margin-top: -10px;
+    margin-bottom: 16px;
   }
 
   /* Buttons */
@@ -259,7 +293,27 @@
               autofocus: true %>
       </div>
 
-      <%= f.submit "Continue with email", class: "btn-primary" %>
+      <div class="form-group">
+        <%= f.label :password, "Password", class: "form-label" %>
+        <div class="password-wrapper">
+          <%= f.password_field :password,
+                placeholder: "Enter password",
+                id: "user_password_login" %>
+          <button type="button" class="toggle-password" 
+                  onclick="togglePassword('user_password_login', this)">
+            👁
+          </button>
+        </div>
+        <%= link_to "Forgot password?", new_user_password_path, class: "forgot-link" %>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+        <%= f.check_box :remember_me, id: "remember_me" %>
+        <%= f.label :remember_me, "Remember me", 
+              style: "font-size:13px; color:#333; cursor:pointer;" %>
+      </div>
+
+      <%= f.submit "Log in", class: "btn-primary" %>
 
     <% end %>
 
@@ -316,3 +370,16 @@
   </div>
 
 </div>
+
+<script>
+  function togglePassword(fieldId, btn) {
+    const field = document.getElementById(fieldId);
+    if (field.type === "password") {
+      field.type = "text";
+      btn.textContent = "🙈";
+    } else {
+      field.type = "password";
+      btn.textContent = "👁";
+    }
+  }
+</script>

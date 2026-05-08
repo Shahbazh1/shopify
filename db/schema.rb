@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_07_204353) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_08_062254) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -198,6 +198,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_204353) do
     t.bigint "store_id", null: false
     t.string "title"
     t.datetime "updated_at", null: false
+    t.index ["store_id", "slug"], name: "index_products_on_store_id_and_slug", unique: true
     t.index ["store_id"], name: "index_products_on_store_id"
   end
 
@@ -246,6 +247,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_204353) do
     t.string "slug"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["slug"], name: "index_stores_on_slug", unique: true
     t.index ["user_id"], name: "index_stores_on_user_id"
   end
 
@@ -257,6 +259,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_204353) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.string "role", default: "user"
     t.string "uid"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true

@@ -1,0 +1,52 @@
+<div class="sf-cart">
+  <h1>Your Cart</h1>
+
+  <% if @cart && @cart.cart_items.any? %>
+    <% total = 0 %>
+
+    <% @cart.cart_items.each do |item| %>
+      <% variant = item.product_variant %>
+      <% subtotal = variant.price * item.quantity %>
+      <% total += subtotal %>
+
+      <div class="sf-cart-item">
+        <div>
+          <div style="font-weight:600; margin-bottom:4px;">
+            <%= item.product.title %>
+          </div>
+          <div style="color:#6b7280; font-size:13px;">
+            <%= [variant.size, variant.color].compact.join(" / ") %>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:24px;">
+          <span><%= item.quantity %> × <%= number_to_currency(variant.price) %></span>
+          <strong><%= number_to_currency(subtotal) %></strong>
+
+          <%= button_to storefront_cart_remove_path(item), 
+                method: :delete,
+                style: "background:none; border:none; color:#ef4444; 
+                        cursor:pointer; font-size:16px;",
+                form: { style: "display:inline" } do %>
+            <i class="fa-solid fa-trash"></i>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="sf-cart-total">
+      Total: <%= number_to_currency(total) %>
+    </div>
+
+    <%= link_to "Proceed to Checkout", storefront_checkout_path, class: "sf-btn sf-btn-dark" %>
+    <%= link_to "Continue Shopping", storefront_products_path, 
+          style: "margin-left:16px; font-size:14px; color:#6b7280; text-decoration:none;" %>
+
+  <% else %>
+    <div style="text-align:center; padding:60px 0; color:#6b7280;">
+      <i class="fa-solid fa-bag-shopping" style="font-size:48px; margin-bottom:16px; display:block;"></i>
+      <p style="margin-bottom:24px;">Your cart is empty</p>
+      <%= link_to "Start Shopping", storefront_products_path, class: "sf-btn sf-btn-dark" %>
+    </div>
+  <% end %>
+</div>

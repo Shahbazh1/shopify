@@ -9,6 +9,7 @@ class Store < ApplicationRecord
   has_many :discounts, dependent: :destroy
 
   before_validation :generate_slug_and_domain
+  validates :slug, presence: true, uniqueness: true
 
   def generate_slug_and_domain
     return if name.blank?

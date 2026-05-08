@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  validates :slug, presence: true
   belongs_to :store
   has_many :product_images, dependent: :destroy
   has_many :product_variants, dependent: :destroy

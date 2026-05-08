@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @store&.name || "Store" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <style>
+      :root {
+        --sf-bg: #ffffff;
+        --sf-text: #1a1a1a;
+        --sf-border: #e5e5e5;
+        --sf-accent: #1a1a1a;
+        --sf-muted: #6b7280;
+        --sf-card-bg: #f9f9f9;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--sf-bg);
+        color: var(--sf-text);
+      }
+
+      /* ── NAVBAR ── */
+      .sf-navbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: #fff;
+        border-bottom: 1px solid var(--sf-border);
+        padding: 0 32px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .sf-navbar .brand {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--sf-text);
+        text-decoration: none;
+      }
+
+      .sf-nav-links {
+        display: flex;
+        gap: 28px;
+        list-style: none;
+      }
+
+      .sf-nav-links a {
+        font-size: 14px;
+        color: var(--sf-text);
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.15s;
+      }
+
+      .sf-nav-links a:hover { opacity: 0.6; }
+
+      .sf-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .sf-cart-icon {
+        position: relative;
+        text-decoration: none;
+        color: var(--sf-text);
+        font-size: 18px;
+      }
+
+      .sf-cart-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #1a1a1a;
+        color: white;
+        font-size: 10px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      /* ── FLASH MESSAGES ── */
+      .sf-flash {
+        padding: 12px 32px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .sf-flash.notice { background: #d1fae5; color: #065f46; }
+      .sf-flash.alert  { background: #fee2e2; color: #991b1b; }
+
+      /* ── MAIN ── */
+      .sf-main {
+        min-height: calc(100vh - 60px - 80px);
+      }
+
+      /* ── FOOTER ── */
+      .sf-footer {
+        border-top: 1px solid var(--sf-border);
+        padding: 24px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        color: var(--sf-muted);
+      }
+
+      /* ── PRODUCT GRID ── */
+      .sf-product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
+        padding: 32px;
+      }
+
+      .sf-product-card {
+        border: 1px solid var(--sf-border);
+        border-radius: 12px;
+        overflow: hidden;
+        text-decoration: none;
+        color: var(--sf-text);
+        transition: box-shadow 0.2s;
+        background: var(--sf-card-bg);
+      }
+
+      .sf-product-card:hover {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      }
+
+      .sf-product-img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font-size: 40px;
+      }
+
+      .sf-product-info {
+        padding: 14px;
+      }
+
+      .sf-product-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .sf-product-price {
+        font-size: 14px;
+        color: var(--sf-muted);
+      }
+
+      /* ── HERO ── */
+      .sf-hero {
+        background: #1a1a1a;
+        color: white;
+        padding: 80px 32px;
+        text-align: center;
+      }
+
+      .sf-hero h1 {
+        font-size: 48px;
+        font-weight: 800;
+        margin-bottom: 16px;
+      }
+
+      .sf-hero p {
+        font-size: 18px;
+        opacity: 0.7;
+        margin-bottom: 28px;
+      }
+
+      .sf-btn {
+        display: inline-block;
+        padding: 12px 28px;
+        background: white;
+        color: #1a1a1a;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: opacity 0.2s;
+      }
+
+      .sf-btn:hover { opacity: 0.85; }
+
+      .sf-btn-dark {
+        background: #1a1a1a;
+        color: white;
+      }
+
+      /* ── SECTION TITLE ── */
+      .sf-section-title {
+        padding: 32px 32px 0;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      /* ── PRODUCT SHOW ── */
+      .sf-product-show {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        padding: 48px 32px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .sf-product-show-img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #f3f4f6;
+      }
+
+      .sf-product-show-info h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+
+      .sf-product-show-price {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: var(--sf-muted);
+      }
+
+      .sf-product-show-desc {
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--sf-muted);
+        margin-bottom: 28px;
+      }
+
+      .sf-variant-select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid var(--sf-border);
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 16px;
+        outline: none;
+      }
+
+      .sf-add-to-cart {
+        width: 100%;
+        padding: 14px;
+        background: #1a1a1a;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .sf-add-to-cart:hover { opacity: 0.85; }
+
+      /* ── CART ── */
+      .sf-cart {
+        max-width: 760px;
+        margin: 48px auto;
+        padding: 0 32px;
+      }
+
+      .sf-cart h1 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 28px;
+      }
+
+      .sf-cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--sf-border);
+        font-size: 14px;
+      }
+
+      .sf-cart-total {
+        text-align: right;
+        padding: 24px 0;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      /* ── PAGE ── */
+      .sf-page {
+        max-width: 760px;
+        margin: 48px auto;
+        padding: 0 32px;
+      }
+
+      .sf-page h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+
+      @media (max-width: 768px) {
+        .sf-navbar { padding: 0 16px; }
+        .sf-nav-links { display: none; }
+        .sf-product-grid { padding: 16px; gap: 16px; }
+        .sf-product-show { grid-template-columns: 1fr; padding: 24px 16px; }
+        .sf-hero h1 { font-size: 32px; }
+        .sf-hero { padding: 48px 16px; }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <%# NAVBAR %>
+    <nav class="sf-navbar">
+      <%= link_to @store.name, storefront_root_path, class: "brand" %>
+
+      <ul class="sf-nav-links">
+        <li><%= link_to "Home",     storefront_root_path %></li>
+        <li><%= link_to "Products", storefront_products_path %></li>
+        <li><%= link_to "About",    storefront_about_path %></li>
+        <li><%= link_to "Contact",  storefront_contact_path %></li>
+      </ul>
+
+      <div class="sf-nav-right">
+        <%= link_to storefront_cart_path, class: "sf-cart-icon" do %>
+          <i class="fa-solid fa-bag-shopping"></i>
+          <% if session[:cart_id] && (cart = Cart.find_by(id: session[:cart_id])) && cart.cart_items.any? %>
+            <span class="sf-cart-badge"><%= cart.cart_items.sum(:quantity) %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </nav>
+
+    <%# FLASH MESSAGES %>
+    <% if notice %>
+      <div class="sf-flash notice"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="sf-flash alert"><%= alert %></div>
+    <% end %>
+
+    <%# MAIN CONTENT %>
+    <main class="sf-main">
+      <%= yield %>
+    </main>
+
+    <%# FOOTER %>
+    <footer class="sf-footer">
+      <span>© <%= Date.today.year %> <%= @store.name %>. All rights reserved.</span>
+      <span>Powered by Shopify Clone</span>
+    </footer>
+
+  </body>
+</html>

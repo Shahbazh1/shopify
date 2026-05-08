@@ -1,0 +1,34 @@
+<h1 class="sf-section-title">All Products</h1>
+
+<% if @products.any? %>
+  <div class="sf-product-grid">
+    <% @products.each do |product| %>
+      <%= link_to storefront_product_path(product.slug), class: "sf-product-card" do %>
+        <div class="sf-product-img">
+          <% if product.product_images.any? %>
+            <img src="<%= product.product_images.first.image_url %>" 
+                 alt="<%= product.title %>"
+                 style="width:100%; height:100%; object-fit:cover;">
+          <% else %>
+            <i class="fa-solid fa-image"></i>
+          <% end %>
+        </div>
+        <div class="sf-product-info">
+          <div class="sf-product-title"><%= product.title %></div>
+          <div class="sf-product-price">
+            <% if product.product_variants.any? %>
+              From <%= number_to_currency(product.product_variants.minimum(:price)) %>
+            <% else %>
+              <%= number_to_currency(product.price) %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <div style="text-align:center; padding: 80px 32px; color: #6b7280;">
+    <i class="fa-solid fa-box-open" style="font-size:48px; margin-bottom:16px; display:block;"></i>
+    <p>No products available yet.</p>
+  </div>
+<% end %>

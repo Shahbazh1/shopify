@@ -46,6 +46,14 @@ end
   redirect_to stores_path, notice: "Store deleted successfully."
 end
 
+# Inside StoresController — add this action
+
+def preview
+  @store = current_user.stores.find(params[:id])
+  redirect_to root_url(subdomain: @store.slug), 
+              allow_other_host: true
+end
+
   private
 
   def store_params

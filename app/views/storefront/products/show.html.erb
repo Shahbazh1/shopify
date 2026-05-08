@@ -1,0 +1,75 @@
+<div class="sf-product-show">
+
+  <%# IMAGE %>
+  <div>
+    <% if @images.any? %>
+      <img src="<%= @images.first.image_url %>" 
+           alt="<%= @product.title %>"
+           class="sf-product-show-img">
+      <% if @images.count > 1 %>
+        <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+          <% @images.each do |img| %>
+            <img src="<%= img.image_url %>" 
+                 style="width:64px; height:64px; object-fit:cover; 
+                        border-radius:6px; border:1px solid #e5e5e5; cursor:pointer;">
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="sf-product-show-img" 
+           style="display:flex; align-items:center; justify-content:center; 
+                  background:#f3f4f6; color:#ccc; font-size:64px;">
+        <i class="fa-solid fa-image"></i>
+      </div>
+    <% end %>
+  </div>
+
+  <%# INFO %>
+  <div class="sf-product-show-info">
+    <h1><%= @product.title %></h1>
+
+    <div class="sf-product-show-price">
+      <% if @variants.any? %>
+        From <%= number_to_currency(@variants.minimum(:price)) %>
+      <% else %>
+        <%= number_to_currency(@product.price) %>
+      <% end %>
+    </div>
+
+    <p class="sf-product-show-desc"><%= @product.description %></p>
+
+    <% if @variants.any? %>
+      <%= form_with url: storefront_cart_add_path, method: :post do |f| %>
+        <%= f.hidden_field :product_id, value: @product.id %>
+
+        <select name="variant_id" class="sf-variant-select">
+          <% @variants.each do |variant| %>
+            <option value="<%= variant.id %>">
+              <%= [variant.size, variant.color].compact.join(" / ") %> 
+              — <%= number_to_currency(variant.price) %>
+              (<%= variant.stock_quantity %> in stock)
+            </option>
+          <% end %>
+        </select>
+
+        <div style="display:flex; gap:8px; margin-bottom:16px;">
+          <input type="number" name="quantity" value="1" min="1" 
+                 style="width:80px; padding:10px; border:1px solid #e5e5e5; 
+                        border-radius:8px; font-size:14px; text-align:center;">
+        </div>
+
+        <%= f.submit "Add to Cart", class: "sf-add-to-cart" %>
+      <% end %>
+    <% else %>
+      <p style="color:#ef4444; font-size:14px; font-weight:500;">
+        Out of stock
+      </p>
+    <% end %>
+
+    <div style="margin-top:16px;">
+      <%= link_to "← Back to Products", storefront_products_path, 
+            style: "font-size:14px; color:#6b7280; text-decoration:none;" %>
+    </div>
+  </div>
+
+</div>

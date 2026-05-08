@@ -1,0 +1,57 @@
+<%# HERO %>
+<section class="sf-hero">
+  <h1>Welcome to <%= @store.name %></h1>
+  <p>Discover our latest products</p>
+  <%= link_to "Shop Now", storefront_products_path, class: "sf-btn" %>
+</section>
+
+<%# FEATURED PRODUCTS %>
+<% if @products.any? %>
+  <h2 class="sf-section-title">Featured Products</h2>
+
+  <div class="sf-product-grid">
+    <% @products.each do |product| %>
+      <%= link_to storefront_product_path(product.slug), class: "sf-product-card" do %>
+        <div class="sf-product-img">
+          <% if product.product_images.any? %>
+            <img src="<%= product.product_images.first.image_url %>" 
+                 alt="<%= product.title %>" 
+                 style="width:100%; height:100%; object-fit:cover;">
+          <% else %>
+            <i class="fa-solid fa-image"></i>
+          <% end %>
+        </div>
+        <div class="sf-product-info">
+          <div class="sf-product-title"><%= product.title %></div>
+          <div class="sf-product-price">
+            <% if product.product_variants.any? %>
+              From <%= number_to_currency(product.product_variants.minimum(:price)) %>
+            <% else %>
+              <%= number_to_currency(product.price) %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <div style="text-align:center; padding: 80px 32px; color: #6b7280;">
+    <i class="fa-solid fa-box-open" style="font-size:48px; margin-bottom:16px; display:block;"></i>
+    <p>No products yet. Check back soon!</p>
+  </div>
+<% end %>
+
+<%# COLLECTIONS %>
+<% if @collections.any? %>
+  <h2 class="sf-section-title" style="margin-bottom: 16px;">Collections</h2>
+  <div style="display:flex; gap:16px; padding: 0 32px 32px; flex-wrap:wrap;">
+    <% @collections.each do |collection| %>
+      <%= link_to storefront_collection_path(collection), 
+            style: "padding: 10px 20px; border: 1px solid #e5e5e5; border-radius: 8px; 
+                    text-decoration: none; color: #1a1a1a; font-size: 14px; font-weight: 500;
+                    transition: background 0.15s;" do %>
+        <%= collection.name %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
