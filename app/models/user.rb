@@ -6,6 +6,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2, :facebook]
 
+  enum :role, { user: "user", admin: "admin" }
+
   def self.from_omniauth(auth)
 
     user = where(email: auth.info.email).first_or_initialize

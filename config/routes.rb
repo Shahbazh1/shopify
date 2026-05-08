@@ -1,5 +1,6 @@
 # config/routes.rb
 require_relative "../lib/tasks/storefront_subdomain_constraint"
+require_relative "../lib/tasks/admin_constraint"
 
 Rails.application.routes.draw do
 
@@ -26,7 +27,7 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
-  # ── Dashboard / Admin ─────────────────────────────────────────────────────
+  # ── Default Urls ─────────────────────────────────────────────────────
   root "welcome#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
@@ -53,6 +54,16 @@ Rails.application.routes.draw do
     resources :segments,    only: [:index, :show]
     resources :inventories, only: [:index, :show, :edit]
     resources :discounts
+  end
+
+  # Admin routes
+constraints AdminConstraint do
+    namespace :admin do
+      root "dashboard#index"
+      resources :users, only: [:index, :show, :destroy] do
+        resources :stores, only: [:show, :destroy]
+      end
+    end
   end
 
 end

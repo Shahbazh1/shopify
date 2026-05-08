@@ -1,0 +1,56 @@
+<div class="admin-page-title">
+  <i class="fa-solid fa-users"></i> All Users
+</div>
+
+<div class="admin-table-wrap">
+  <div class="admin-table-header">
+    <h2>Users (<%= @users.count %>)</h2>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Stores</th>
+        <th>Provider</th>
+        <th>Joined</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td style="font-weight:600;"><%= user.email %></td>
+          <td>
+            <span class="badge <%= user.admin? ? 'badge-admin' : 'badge-user' %>">
+              <%= user.role || "user" %>
+            </span>
+          </td>
+          <td><%= user.stores.count %> stores</td>
+          <td style="color:#6b7280; font-size:13px;">
+            <%= user.provider&.capitalize || "Email" %>
+          </td>
+          <td style="color:#6b7280; font-size:13px;">
+            <%= user.created_at.strftime("%b %d, %Y") %>
+          </td>
+          <td>
+            <div style="display:flex; gap:8px;">
+              <%= link_to admin_user_path(user), class: "btn btn-view" do %>
+                <i class="fa-solid fa-eye"></i> View
+              <% end %>
+              <% unless user == current_user %>
+                <%= button_to admin_user_path(user),
+                      method: :delete,
+                      data: { confirm: "Delete #{user.email}?" },
+                      class: "btn btn-danger" do %>
+                  <i class="fa-solid fa-trash"></i>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

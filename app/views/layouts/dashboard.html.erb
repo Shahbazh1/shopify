@@ -523,9 +523,18 @@ document.addEventListener("DOMContentLoaded", function () {
     Sales channels
   </div>
 
-  <a href="#" class="nav-item">
-    <i class="fa-solid fa-store"></i> Online Store
-  </a>
+  <!-- Online Store (no submenu) -->
+    <div class="menu-group <%= 'active' if request.path.include?('segments') || request.path.include?('companies')  || request.path.include?('customers')%>">
+      <%= link_to customers_path, class: "nav-item has-submenu" do %>
+        <i class="fa-solid fa-box"></i> Online Store
+      <% end %>
+
+      <div class="submenu">
+        <%= link_to "Themes", segments_path, class: "submenu-item" %>
+        <%= link_to "Pages", checkouts_path, class: "submenu-item" %>
+      </div>
+
+    </div>
 
   <a href="#" class="nav-item" style="margin-top: 8px;">
     <i class="fa-solid fa-gear"></i> Settings

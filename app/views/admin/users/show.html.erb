@@ -1,0 +1,92 @@
+<div class="admin-page-title">
+  <i class="fa-solid fa-user"></i> <%= @user.email %>
+</div>
+
+<%# USER INFO %>
+<div class="admin-table-wrap" style="margin-bottom:24px;">
+  <div class="admin-table-header">
+    <h2>User Details</h2>
+    <span class="badge <%= @user.admin? ? 'badge-admin' : 'badge-user' %>">
+      <%= @user.role || "user" %>
+    </span>
+  </div>
+  <div style="padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div>
+      <div style="font-size:12px; color:#aaa; margin-bottom:4px;">Email</div>
+      <div style="font-weight:600;"><%= @user.email %></div>
+    </div>
+    <div>
+      <div style="font-size:12px; color:#aaa; margin-bottom:4px;">Login Provider</div>
+      <div><%= @user.provider&.capitalize || "Email & Password" %></div>
+    </div>
+    <div>
+      <div style="font-size:12px; color:#aaa; margin-bottom:4px;">Joined</div>
+      <div><%= @user.created_at.strftime("%B %d, %Y") %></div>
+    </div>
+    <div>
+      <div style="font-size:12px; color:#aaa; margin-bottom:4px;">Total Stores</div>
+      <div><%= @stores.count %></div>
+    </div>
+  </div>
+</div>
+
+<%# STORES TABLE %>
+<div class="admin-table-wrap">
+  <div class="admin-table-header">
+    <h2>Stores</h2>
+  </div>
+
+  <% if @stores.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Store Name</th>
+          <th>Slug</th>
+          <th>Domain</th>
+          <th>Orders</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @stores.each do |store| %>
+          <tr>
+            <td style="font-weight:600;"><%= store.name %></td>
+            <td style="color:#6b7280; font-size:13px;"><%= store.slug %></td>
+            <td style="color:#6b7280; font-size:13px;"><%= store.domain %></td>
+            <td><%= store.orders.count %></td>
+            <td style="color:#6b7280; font-size:13px;">
+              <%= store.created_at.strftime("%b %d, %Y") %>
+            </td>
+            <td>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <%# View storefront %>
+                <%= link_to root_url(subdomain: store.slug), 
+                      target: "_blank",
+                      class: "btn btn-store" do %>
+                  <i class="fa-solid fa-store"></i> View
+                <% end %>
+
+                <%# Delete store %>
+                <%= button_to admin_user_store_path(@user, store),
+                      method: :delete,
+                      data: { confirm: "Delete #{store.name}?" },
+                      class: "btn btn-danger" do %>
+                  <i class="fa-solid fa-trash"></i>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div style="padding:40px; text-align:center; color:#aaa;">
+      <i class="fa-solid fa-store" style="font-size:32px; margin-bottom:12px; display:block;"></i>
+      This user has no stores yet.
+    </div>
+  <% end %>
+</div>
+
+<%= link_to "← Back to Users", admin_users_path, 
+      style: "font-size:14px; color:#6b7280; text-decoration:none;" %>

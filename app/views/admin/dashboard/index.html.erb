@@ -1,0 +1,105 @@
+<div class="admin-page-title">
+  <i class="fa-solid fa-gauge"></i> Overview
+</div>
+
+<%# STAT CARDS %>
+<div class="admin-stats">
+  <div class="stat-card">
+    <div class="stat-icon">👥</div>
+    <div class="stat-label">Total Users</div>
+    <div class="stat-value"><%= @total_users %></div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">🏪</div>
+    <div class="stat-label">Total Stores</div>
+    <div class="stat-value"><%= @total_stores %></div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">📦</div>
+    <div class="stat-label">Total Orders</div>
+    <div class="stat-value"><%= @total_orders %></div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">🛡️</div>
+    <div class="stat-label">Admins</div>
+    <div class="stat-value"><%= @admins %></div>
+  </div>
+</div>
+
+<%# USERS TABLE %>
+<div class="admin-table-wrap">
+  <div class="admin-table-header">
+    <h2>All Users</h2>
+    <%= link_to admin_users_path, class: "btn btn-view" do %>
+      View All <i class="fa-solid fa-arrow-right"></i>
+    <% end %>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Role</th>
+        <th>Stores</th>
+        <th>Joined</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td>
+            <div style="font-weight:600;"><%= user.email %></div>
+          </td>
+          <td>
+            <span class="badge <%= user.admin? ? 'badge-admin' : 'badge-user' %>">
+              <%= user.role || "user" %>
+            </span>
+          </td>
+          <td>
+            <div class="store-pills">
+              <% if user.stores.any? %>
+                <% user.stores.each do |store| %>
+                  <div class="store-pill">
+                    <i class="fa-solid fa-store" style="font-size:10px;"></i>
+                    <%= store.name %>
+                    <%= button_to admin_user_store_path(user, store),
+                          method: :delete,
+                          data: { confirm: "Delete #{store.name}?" },
+                          class: "del",
+                          form: { style: "display:inline" } do %>
+                      <i class="fa-solid fa-xmark"></i>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% else %>
+                <span style="color:#aaa; font-size:12px;">No stores</span>
+              <% end %>
+            </div>
+          </td>
+          <td style="color:#6b7280; font-size:13px;">
+            <%= user.created_at.strftime("%b %d, %Y") %>
+          </td>
+          <td>
+            <div style="display:flex; gap:8px;">
+              <%= link_to admin_user_path(user), class: "btn btn-view" do %>
+                <i class="fa-solid fa-eye"></i>
+              <% end %>
+              <% unless user == current_user %>
+                <%= button_to admin_user_path(user),
+                      method: :delete,
+                      data: { confirm: "Delete #{user.email} and all their stores?" },
+                      class: "btn btn-danger" do %>
+                  <i class="fa-solid fa-trash"></i>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

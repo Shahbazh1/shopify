@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f4f6f8;
+      color: #1a1a1a;
+    }
+
+    /* TOPBAR */
+    .admin-topbar {
+      background: #1a1a1a;
+      color: white;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-topbar .brand {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .admin-topbar .brand span {
+      background: #10b981;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .admin-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+    }
+
+    .admin-topbar-right a {
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .admin-topbar-right a:hover { color: white; }
+
+    /* LAYOUT */
+    .admin-layout {
+      display: flex;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* SIDEBAR */
+    .admin-sidebar {
+      width: 220px;
+      background: white;
+      border-right: 1px solid #e5e5e5;
+      padding: 20px 12px;
+      flex-shrink: 0;
+    }
+
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #444;
+      text-decoration: none;
+      transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .admin-nav-item:hover { background: #f4f6f8; color: #1a1a1a; }
+    .admin-nav-item.active { background: #1a1a1a; color: white; }
+    .admin-nav-item.active i { color: white; }
+
+    .admin-nav-section {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #aaa;
+      padding: 16px 12px 6px;
+      letter-spacing: 0.8px;
+    }
+
+    /* MAIN */
+    .admin-main {
+      flex: 1;
+      padding: 28px;
+      overflow-y: auto;
+    }
+
+    /* FLASH */
+    .admin-flash {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .admin-flash.notice { background: #d1fae5; color: #065f46; }
+    .admin-flash.alert  { background: #fee2e2; color: #991b1b; }
+
+    /* STAT CARDS */
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e5e5e5;
+    }
+
+    .stat-card .stat-label {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1a1a1a;
+    }
+
+    .stat-card .stat-icon {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    /* TABLE */
+    .admin-table-wrap {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e5e5;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .admin-table-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-table-header h2 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead th {
+      background: #f9fafb;
+      padding: 10px 20px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    tbody td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #fafafa; }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-admin   { background: #fef3c7; color: #92400e; }
+    .badge-user    { background: #e0f2fe; color: #0369a1; }
+    .badge-active  { background: #d1fae5; color: #065f46; }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+    .btn-view   { background: #f3f4f6; color: #1a1a1a; }
+    .btn-danger { background: #fee2e2; color: #991b1b; }
+    .btn-store  { background: #1a1a1a; color: white; font-size: 12px; padding: 4px 10px; }
+
+    /* PAGE TITLE */
+    .admin-page-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* USER ROW STORES */
+    .store-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .store-pill {
+      background: #f3f4f6;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 12px;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .store-pill a { color: #374151; text-decoration: none; }
+    .store-pill .del { color: #ef4444; cursor: pointer; font-size: 11px; }
+
+    @media (max-width: 768px) {
+      .admin-sidebar { display: none; }
+      .admin-main { padding: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <%# TOPBAR %>
+  <header class="admin-topbar">
+    <%= link_to admin_root_path, class: "brand" do %>
+      <i class="fa-solid fa-shield-halved"></i>
+      Admin Panel
+      <span>SUPER</span>
+    <% end %>
+
+    <div class="admin-topbar-right">
+      <span><i class="fa-solid fa-user"></i> <%= current_user.email %></span>
+      <%= link_to stores_path, target: "_blank" do %>
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> My Dashboard
+      <% end %>
+      <%= button_to "Sign out", destroy_user_session_path,
+            method: :delete,
+            style: "background:none; border:none; color:#aaa; 
+                    cursor:pointer; font-size:13px;" %>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+
+    <%# SIDEBAR %>
+    <aside class="admin-sidebar">
+      <div class="admin-nav-section">Main</div>
+
+      <%= link_to admin_root_path,
+            class: "admin-nav-item #{current_page?(admin_root_path) ? 'active' : ''}" do %>
+        <i class="fa-solid fa-house"></i> Overview
+      <% end %>
+
+      <%= link_to admin_users_path,
+            class: "admin-nav-item #{request.path.include?('admin/users') ? 'active' : ''}" do %>
+        <i class="fa-solid fa-users"></i> Users
+      <% end %>
+
+      <div class="admin-nav-section">System</div>
+
+      <%= link_to stores_path,
+            class: "admin-nav-item" do %>
+        <i class="fa-solid fa-store"></i> My Store
+      <% end %>
+    </aside>
+
+    <%# MAIN CONTENT %>
+    <main class="admin-main">
+
+      <% if notice %>
+        <div class="admin-flash notice"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="admin-flash alert"><%= alert %></div>
+      <% end %>
+
+      <%= yield %>
+
+    </main>
+  </div>
+
+</body>
+</html>
