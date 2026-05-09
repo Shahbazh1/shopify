@@ -1,4 +1,4 @@
-<% if @products.any? %>
+<% if @products.present? %>
   <%= render "product_list", products: @products %>
 <% else %>
   <%= render "empty_state" %>

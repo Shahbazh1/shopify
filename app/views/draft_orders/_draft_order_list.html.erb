@@ -1,0 +1,221 @@
+<div class="draft-orders-page">
+
+  <!-- HEADER -->
+  <div class="draft-orders-header">
+
+    <div>
+      <h1 class="page-title">Draft orders</h1>
+
+      <p class="page-subtitle">
+        Create orders manually and send invoices to customers.
+      </p>
+    </div>
+
+    <%= link_to "Create draft order",
+                new_draft_order_path(@store),
+                class: "primary-btn" %>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="draft-orders-wrapper">
+
+    <table class="draft-orders-table">
+
+      <thead>
+        <tr>
+          <th>Draft</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Items</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <% draft_orders.each do |draft_order| %>
+
+          <tr onclick="window.location='<%= edit_draft_order_path(@store, draft_order) %>'">
+
+            <!-- Draft Number -->
+            <td class="draft-link">
+              #D<%= draft_order.id %>
+            </td>
+
+            <!-- Created Date -->
+            <td>
+              <%= draft_order.created_at.strftime("%d %b %Y") %>
+            </td>
+
+            <!-- Customer -->
+            <td>
+              No customer
+            </td>
+
+            <!-- Status -->
+            <td>
+              <span class="status-badge status-<%= draft_order.status %>">
+                <%= draft_order.status.capitalize %>
+              </span>
+            </td>
+
+            <!-- Items -->
+            <td>
+              <%= draft_order.draft_order_items.sum(:quantity) %>
+            </td>
+
+            <!-- Total -->
+            <td>
+              Rs <%= draft_order.total_price.to_f.round(2) %>
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<style>
+
+.draft-orders-page{
+  max-width:1200px;
+  margin:24px auto;
+  padding:0 20px;
+}
+
+/* HEADER */
+
+.draft-orders-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.page-title{
+  font-size:28px;
+  font-weight:700;
+  color:#111827;
+  margin-bottom:4px;
+}
+
+.page-subtitle{
+  font-size:14px;
+  color:#6b7280;
+}
+
+/* BUTTON */
+
+.primary-btn{
+  background:#111827;
+  color:white;
+  text-decoration:none;
+  padding:10px 16px;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:600;
+  transition:0.2s;
+}
+
+.primary-btn:hover{
+  background:#1f2937;
+}
+
+/* TABLE */
+
+.draft-orders-wrapper{
+  background:white;
+  border:1px solid #ddd;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.draft-orders-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+.draft-orders-table thead{
+  background:#f6f6f7;
+}
+
+.draft-orders-table th{
+  text-align:left;
+  padding:14px 16px;
+  color:#616161;
+  font-weight:600;
+  border-bottom:1px solid #e3e3e3;
+}
+
+.draft-orders-table td{
+  padding:14px 16px;
+  border-bottom:1px solid #f1f1f1;
+}
+
+.draft-orders-table tbody tr{
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+.draft-orders-table tbody tr:hover{
+  background:#f6f6f7;
+}
+
+.draft-link{
+  font-weight:600;
+  color:#005bd3;
+}
+
+/* STATUS */
+
+.status-badge{
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.status-open{
+  background:#e3f1df;
+  color:#0c6b2f;
+}
+
+.status-completed{
+  background:#dff3ff;
+  color:#005bd3;
+}
+
+.status-cancelled{
+  background:#ffe0e0;
+  color:#b42318;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .draft-orders-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .draft-orders-wrapper{
+    overflow-x:auto;
+  }
+
+  .draft-orders-table{
+    min-width:700px;
+  }
+
+}
+</style>

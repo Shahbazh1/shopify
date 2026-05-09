@@ -1,7 +1,59 @@
 <!-- app/views/discounts/new.html.erb -->
 
 <%= form_with model: @discount, url: discounts_path, method: :post do |f| %>
+  <!-- Replace the old hidden inputs with this container -->
+<div id="hidden-inputs-container"></div>
+<!-- BROWSE MODAL -->
+<div class="browse-modal-overlay" id="browse-modal">
+  <div class="browse-modal">
 
+    <div class="browse-modal-header">
+      <h3 id="modal-title">Select Items</h3>
+
+      <button type="button" id="close-modal">
+        ✕
+      </button>
+    </div>
+
+    <div class="browse-search">
+      <input type="text" placeholder="Search...">
+    </div>
+
+    <!-- app/views/discounts/new.html.erb -->
+
+<div class="browse-list" id="browse-list">
+  
+  <!-- DYNAMIC COLLECTIONS -->
+  <% @collections.each do |collection| %>
+    <div class="browse-item collection-item">
+      <label>
+        <input type="checkbox" value="<%= collection.id %>" data-name="<%= collection.title %>">
+        <%= collection.title %>
+      </label>
+    </div>
+  <% end %>
+
+  <!-- DYNAMIC PRODUCTS -->
+  <% @products.each do |product| %>
+    <div class="browse-item product-item">
+      <label>
+        <input type="checkbox" value="<%= product.id %>" data-name="<%= product.title %>">
+        <%# If you have images, you could add: <%= image_tag product.image_url, width: 30 if product.image_url %>
+        <%= product.title %>
+      </label>
+    </div>
+  <% end %>
+
+</div>
+
+    <div class="browse-footer">
+      <button type="button" id="save-selection-btn">
+        Done
+      </button>
+    </div>
+
+  </div>
+</div>
 <div class="discount-create-page">
 
   <!-- Top Header -->
@@ -22,33 +74,38 @@
         <h3>Amount off products</h3>
 
         <div class="field-group">
-          <label>Method</label>
+  <label>Method</label>
+  <div class="method-tabs" id="method-toggle">
+    <button class="tab active" type="button" data-value="code">
+      Discount code
+      <input type="radio" name="discount[discount_method]" value="code" hidden checked>
+    </button>
 
-          <div class="method-tabs">
-            <button class="tab active" type="button">
-              Discount code
-              <input type="radio" name="discount[discount_method]" value="code" hidden checked>
-            </button>
-
-            <button class="tab" type="button">
-              Automatic discount
-              <input type="radio" name="discount[discount_method]" value="automatic" hidden>
-            </button>
-          </div>
-        </div>
+    <button class="tab" type="button" data-value="automatic">
+      Automatic discount
+      <input type="radio" name="discount[discount_method]" value="automatic" hidden>
+    </button>
+  </div>
+</div>
 
         <div class="field-group">
-          <div class="label-row">
-            <label>Discount code</label>
-            <a href="#">Generate random code</a>
-          </div>
+  <div class="label-row" id="code-label-row">
+    <label>Discount code</label>
+    <a href="#" id="generate-code">Generate random code</a>
+  </div>
 
-          <input type="text" name="discount[discount_code]">
+  <input type="text" name="discount[discount_code]" id="discount-code-input">
 
-          <p class="helper-text">
-            Customers must enter this code at checkout.
-          </p>
-        </div>
+  <p class="helper-text" id="code-helper-text">
+  Customers must enter this code at checkout.
+</p>
+</div>
+
+<!-- TITLE FIELD -->
+<div class="field-group" id="title-field" style="display:none;">
+  <label>Discount title</label>
+  <input type="text" name="discount[discount_title]" id="discount-title-input">
+</div>
       </div>
 
       <!-- Discount Value -->
@@ -56,16 +113,16 @@
         <h3>Discount value</h3>
 
         <div class="discount-value-row">
-          <select name="discount[value_type]">
-            <option value="percentage">Percentage</option>
-            <option value="fixed">Fixed</option>
-          </select>
+  <select name="discount[value_type]" id="value-type-select">
+    <option value="percentage">Percentage</option>
+    <option value="fixed">Fixed</option>
+  </select>
 
-          <div class="percent-box">
-            <input type="text" name="discount[value]">
-            <span>%</span>
-          </div>
-        </div>
+  <div class="percent-box">
+    <input type="text" name="discount[value]">
+    <span id="value-symbol">%</span>
+  </div>
+</div>
 
         <div class="field-group mt-16">
           <label>Applies to</label>
@@ -83,6 +140,9 @@
           </div>
 
           <button class="browse-btn" type="button">Browse</button>
+<div id="hidden-inputs-container"></div>
+
+<div id="selected-items-preview"></div>
         </div>
       </div>
 
@@ -92,7 +152,7 @@
 
         <select name="discount[customer_eligibility]">
           <option value="all_customers">All customers</option>
-          <option value="specific_customers">Specific customers</option>
+          <option value="specific_customers">Customer segments</option>
         </select>
       </div>
 
@@ -124,33 +184,8 @@
         <h3>Maximum discount uses</h3>
 
         <label class="checkbox-option">
-          <input type="checkbox" name="discount[max_usage_limit]" value="1">
-          <span>Limit number of times this discount can be used in total</span>
-        </label>
-
-        <label class="checkbox-option">
           <input type="checkbox" name="discount[limit_one_per_customer]" value="1">
           <span>Limit to one use per customer</span>
-        </label>
-      </div>
-
-      <!-- Combinations -->
-      <div class="card">
-        <h3>Combinations</h3>
-
-        <label class="checkbox-option">
-          <input type="checkbox" name="discount[product_discount]" value="1">
-          <span>Product discounts</span>
-        </label>
-
-        <label class="checkbox-option">
-          <input type="checkbox" name="discount[order_discount]" value="1">
-          <span>Order discounts</span>
-        </label>
-
-        <label class="checkbox-option">
-          <input type="checkbox" name="discount[shipping_discount]" value="1">
-          <span>Shipping discounts</span>
         </label>
       </div>
 
@@ -164,10 +199,6 @@
             <input type="date" name="discount[start_date]">
           </div>
 
-          <div>
-            <label>Start time (PKT)</label>
-            <input type="text" value="10:27 PM">
-          </div>
         </div>
 
         <label class="checkbox-option mt-16">
@@ -241,6 +272,114 @@
 <% end %>
 
 <style>
+/* MODAL */
+
+.browse-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.browse-modal{
+  width:500px;
+  max-width:95%;
+  background:white;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.browse-modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px;
+  border-bottom:1px solid #e5e5e5;
+}
+
+.browse-modal-header h3{
+  margin:0;
+  font-size:15px;
+}
+
+.browse-modal-header button{
+  border:none;
+  background:none;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.browse-search{
+  padding:14px;
+  border-bottom:1px solid #eee;
+}
+
+.browse-search input{
+  width:100%;
+}
+
+.browse-list{
+  max-height:300px;
+  overflow:auto;
+}
+
+.browse-item{
+  padding:12px 14px;
+  border-bottom:1px solid #f1f1f1;
+}
+
+.browse-item label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0;
+  cursor:pointer;
+}
+
+.browse-footer{
+  padding:14px;
+  display:flex;
+  justify-content:flex-end;
+  border-top:1px solid #eee;
+}
+
+.browse-footer button{
+  height:34px;
+  padding:0 16px;
+  border:none;
+  border-radius:8px;
+  background:#005bd3;
+  color:white;
+  cursor:pointer;
+}
+
+#selected-items-preview{
+  margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.selected-tag{
+  background:#f1f1f1;
+  border-radius:20px;
+  padding:6px 12px;
+  font-size:12px;
+}
+/* Ensure the active tab looks "pressed" or selected */
+.tab.active {
+  background: white;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px #005bd3; /* Optional: adds a blue ring when active */
+  color: #005bd3;
+}
+
+.tab {
+  transition: all 0.2s ease; /* Smooth transition for the toggle */
+}
   body {
     margin: 0;
     background: #f6f6f7;
@@ -511,7 +650,7 @@
     height: 28px;
     border: none;
     border-radius: 8px;
-    background: #d9d9d9;
+    background: green;
     color: white;
     font-size: 12px;
     font-weight: 600;
@@ -528,3 +667,165 @@
     }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('#method-toggle .tab');
+  const codeInput = document.getElementById('discount-code-input');
+  const titleField = document.getElementById('title-field');
+  const titleInput = document.getElementById('discount-title-input');
+  const generateBtn = document.getElementById('generate-code');
+
+ function updateUI() {
+  const selected = document.querySelector('input[name="discount[discount_method]"]:checked').value;
+
+  const codeInput = document.getElementById('discount-code-input');
+  const codeLabel = document.getElementById('code-label-row');
+  const helperText = document.getElementById('code-helper-text');
+  const titleField = document.getElementById('title-field');
+
+  if (selected === 'automatic') {
+    // ❌ hide everything related to code
+    codeInput.value = "";
+    codeInput.disabled = true;
+    codeInput.style.display = "none";
+    codeLabel.style.display = "none";
+    helperText.style.display = "none";
+
+    // ✅ show title
+    titleField.style.display = "block";
+  } 
+  else {
+    // ✅ show code section
+    codeInput.disabled = false;
+    codeInput.style.display = "block";
+    codeLabel.style.display = "flex";
+    helperText.style.display = "block";
+
+    // ❌ hide title
+    titleField.style.display = "none";
+    document.getElementById('discount-title-input').value = "";
+  }
+}
+
+  // Tabs click
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const radio = tab.querySelector('input[type="radio"]');
+      radio.checked = true;
+
+      updateUI();
+    });
+  });
+
+  // Generate code (only when code mode active)
+  generateBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const selected = document.querySelector('input[name="discount[discount_method]"]:checked').value;
+    if (selected !== 'code') return; // 🔥 block if automatic selected
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+
+    for (let i = 0; i < 10; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    codeInput.value = code;
+  });
+
+  updateUI();
+});
+
+// VALUE TYPE SYMBOL CHANGE
+const valueTypeSelect = document.getElementById('value-type-select');
+const valueSymbol = document.getElementById('value-symbol');
+
+function updateValueSymbol() {
+  if (valueTypeSelect.value === 'fixed') {
+    valueSymbol.textContent = 'Rs';
+  } else {
+    valueSymbol.textContent = '%';
+  }
+}
+
+valueTypeSelect.addEventListener('change', updateValueSymbol);
+
+// Initial call
+updateValueSymbol();
+
+const browseBtn = document.querySelector('.browse-btn');
+const browseModal = document.getElementById('browse-modal');
+const closeModal = document.getElementById('close-modal');
+const appliesToSelect = document.querySelector('select[name="discount[applies_to]"]');
+const modalTitle = document.getElementById('modal-title');
+
+const collectionItems = document.querySelectorAll('.collection-item');
+const productItems = document.querySelectorAll('.product-item');
+
+const saveSelectionBtn = document.getElementById('save-selection-btn');
+
+const preview = document.getElementById('selected-items-preview');
+
+browseBtn.addEventListener('click', () => {
+
+  const selectedType = appliesToSelect.value;
+
+  browseModal.style.display = 'flex';
+
+  if(selectedType === 'specific_collections'){
+
+    modalTitle.textContent = 'Select Collections';
+
+    collectionItems.forEach(item => item.style.display = 'block');
+    productItems.forEach(item => item.style.display = 'none');
+
+  } else {
+
+    modalTitle.textContent = 'Select Products';
+
+    collectionItems.forEach(item => item.style.display = 'none');
+    productItems.forEach(item => item.style.display = 'block');
+  }
+});
+
+closeModal.addEventListener('click', () => {
+  browseModal.style.display = 'none';
+});
+
+saveSelectionBtn.addEventListener('click', () => {
+  const selectedType = appliesToSelect.value;
+  const checkedInputs = browseModal.querySelectorAll('input[type="checkbox"]:checked');
+  const hiddenContainer = document.getElementById('hidden-inputs-container');
+  
+  // Clear previous selections
+  preview.innerHTML = '';
+  hiddenContainer.innerHTML = '';
+
+  // Determine the correct parameter name based on selection type
+  const paramName = selectedType === 'specific_collections' 
+    ? 'discount[selected_collection_ids][]' 
+    : 'discount[selected_product_ids][]';
+
+  checkedInputs.forEach(input => {
+    const id = input.value;
+    const name = input.dataset.name;
+
+    // 1. Add visual tag to preview
+    preview.innerHTML += `<div class="selected-tag">${name}</div>`;
+
+    // 2. Create a hidden input for the Rails array
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = paramName;
+    hiddenInput.value = id;
+    hiddenContainer.appendChild(hiddenInput);
+  });
+
+  browseModal.style.display = 'none';
+});
+</script>

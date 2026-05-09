@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_08_062254) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_09_120435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,8 +66,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_08_062254) do
   create_table "collections", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.string "name"
+    t.integer "selected_product_ids", default: [], array: true
     t.bigint "store_id", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
     t.index ["store_id"], name: "index_collections_on_store_id"
   end
@@ -84,6 +85,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_08_062254) do
     t.boolean "is_default", default: false
     t.string "language", default: "en"
     t.string "last_name"
+    t.integer "orders_count", default: 0, null: false
     t.string "phone"
     t.string "postal_code"
     t.bigint "store_id", null: false
@@ -92,13 +94,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_08_062254) do
   end
 
   create_table "discounts", force: :cascade do |t|
-    t.string "applies_to"
     t.boolean "auto_generate_code", default: false
     t.string "code_type"
     t.datetime "created_at", null: false
     t.string "customer_eligibility"
     t.string "discount_code"
     t.string "discount_method"
+    t.string "discount_title"
     t.string "discount_type"
     t.datetime "end_date"
     t.boolean "limit_one_per_customer", default: false
@@ -106,15 +108,38 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_08_062254) do
     t.decimal "minimum_purchase_amount"
     t.integer "minimum_quantity"
     t.string "minimum_requirement_type"
-    t.boolean "order_discount", default: false
-    t.boolean "product_discount", default: false
-    t.boolean "shipping_discount", default: false
+    t.bigint "selected_collection_ids", default: [], array: true
+    t.bigint "selected_product_ids", default: [], array: true
     t.datetime "start_date"
     t.bigint "store_id", null: false
     t.datetime "updated_at", null: false
     t.decimal "value"
     t.string "value_type"
     t.index ["store_id"], name: "index_discounts_on_store_id"
+  end
+
+  create_table "draft_order_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "custom_title"
+    t.bigint "draft_order_id", null: false
+    t.decimal "price", precision: 10, scale: 2
+    t.bigint "product_id"
+    t.bigint "product_variant_id"
+    t.integer "quantity", default: 1
+    t.datetime "updated_at", null: false
+    t.index ["draft_order_id"], name: "index_draft_order_items_on_draft_order_id"
+  end
+
+  create_table "draft_orders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "discount_amount", precision: 10, scale: 2, default: "0.0"
+    t.decimal "shipping_price", precision: 10, scale: 2, default: "0.0"
+    t.string "status", default: "open"
+    t.bigint "store_id", null: false
+    t.decimal "subtotal", precision: 10, scale: 2, default: "0.0"
+    t.decimal "total_price", precision: 10, scale: 2, default: "0.0"
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_draft_orders_on_store_id"
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -276,6 +301,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_08_062254) do
   add_foreign_key "collections", "stores"
   add_foreign_key "customers", "stores"
   add_foreign_key "discounts", "stores"
+  add_foreign_key "draft_order_items", "draft_orders"
+  add_foreign_key "draft_order_items", "product_variants"
+  add_foreign_key "draft_order_items", "products"
+  add_foreign_key "draft_orders", "stores"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "product_variants"
   add_foreign_key "order_items", "products"

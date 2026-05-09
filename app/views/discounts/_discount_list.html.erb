@@ -5,8 +5,11 @@
     </div>
     <div class="header-right">
       <%= link_to 'Export', "#", class: "btn btn-secondary" %>
-      <%= link_to 'Create discount', "#", class: "btn btn-primary" %>
-    </div>
+<%= button_tag 'Create discount',
+  type: 'button',
+  class: 'btn btn-primary',
+  onclick: "document.getElementById('discountPopup').style.display='flex'"
+%>    </div>
   </header>
 
   <div class="card">
@@ -44,7 +47,6 @@
       <td>
         <div class="discount-title"><%= discount.discount_code.presence || "Automatic Discount" %></div>
         <div class="discount-subtitle">
-          <%= discount.value || 0 %><%= discount.value_type == 'percentage' ? '%' : '$' %> off <%= discount.applies_to.presence || "Home page" %>
         </div>
       </td>
       <td>
@@ -57,11 +59,7 @@
       <td class="icon-cell">
         <span class="icon">🏷️</span> <%= discount.discount_type&.humanize || "Amount off product" %>
       </td>
-      <td class="combinations-icons">
-        <% if discount.product_discount %><span title="Product">🏷️</span><% end %>
-        <% if discount.order_discount %><span title="Order">📦</span><% end %>
-        <% if discount.shipping_discount %><span title="Shipping">🚚</span><% end %>
-      </td>
+
       <td class="text-right">0</td>
     </tr>
   <% end %>
@@ -92,7 +90,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
   color: var(--text-main);
   margin: 0;
-  padding: 20px;
 }
 
 .shopify-container {
@@ -201,3 +198,4 @@ body {
 
 .card-footer a { color: var(--text-sub); text-decoration: none; font-size: 14px; }
 </style>
+<%= render 'discounts/discount_popup' %>

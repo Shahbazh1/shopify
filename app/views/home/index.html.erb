@@ -360,7 +360,7 @@ input {
         <p>
           Choose or generate a custom theme, then add your logo, colors, and images.
         </p>
-        <button class="secondary">Customize theme</button>
+    <%= link_to "Customize Theme", store_themes_path(store_id: params[:store_id]), class: "secondary" %>
       </div>
 
     </div>

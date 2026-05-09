@@ -159,9 +159,9 @@
   </div>
 
   <div style="display:flex; gap:8px;">
-    <%= link_to "Edit", store_edit_(@customer), class: "btn" %>
+    <%= link_to "Edit", edit_customer_path(@store, @customer), class: "btn" %>
     <%= link_to "Delete",
-      store_customer_path(@customer),
+      customer_path(@store,@customer),
       data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
       class: "btn btn-danger"
     %>

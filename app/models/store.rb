@@ -7,6 +7,7 @@ class Store < ApplicationRecord
   has_many :collections, dependent: :destroy
   has_many :carts, dependent: :destroy
   has_many :discounts, dependent: :destroy
+  has_many :draft_orders, dependent: :destroy
 
   before_validation :generate_slug_and_domain
   validates :slug, presence: true, uniqueness: true

@@ -171,24 +171,19 @@ th input {
         </tr>
       </thead>
       <tbody>
-  <% @segments.each do |segment| %>
-    <tr onclick="window.location='<%= segment_path(store_id: params[:store_id], id: segment.id) %>'" style="cursor:pointer;">
-      
-      <td>
-        <input type="checkbox" onclick="event.stopPropagation();" />
-      </td>
+        <% @segments.each do |segment| %>
+  <tr>
+    <td><%= segment.name %></td>
 
-      <!-- Name -->
-      <td>
-        <%= segment.name %>
-      </td>
+    <td>
+      <%= Customer.count %>
+    </td>
 
-      <!-- % customers -->
-      <td>
-        <%= Customer.count %>
-      </td>
+    <td>
+      Created recently
+    </td>
 
-      <!-- Last activity -->
+    <!-- Last activity -->
       <td>
         <%= segment.updated_at.strftime("%d %b %Y") if segment.updated_at %>
       </td>
@@ -197,15 +192,9 @@ th input {
       <td>
         System
       </td>
-
-      <!-- Actions -->
-      <td class="actions">
-        <button onclick="event.stopPropagation();">⋮</button>
-      </td>
-
-    </tr>
-  <% end %>
-</tbody>
+  </tr>
+<% end %>
+      </tbody>
     </table>
   </div>
 

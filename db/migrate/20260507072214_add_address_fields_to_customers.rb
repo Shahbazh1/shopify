@@ -1,4 +1,4 @@
-class AddAddressFieldsToCustomers < ActiveRecord::Migration[8.0]
+class AddAddressFieldsToCustomers < ActiveRecord::Migration[8.1]
   def change
     add_column :customers, :company, :string
     add_column :customers, :address, :text

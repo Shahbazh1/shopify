@@ -4,13 +4,15 @@ class CustomersController < ApplicationController
     @customers = @store.customers
   end
 
+  def edit
+  end
+
   def create
     @store = current_user.stores.find_by!(id: params[:store_id])
     @customer = @store.customers.new(customer_params)
  
     if @customer.save
-      redirect_to @customer, notice: "Customer was successfully created."
-    else
+redirect_to customer_path(@store, @customer), notice: "Customer was successfully created."    else
       render :new, status: :unprocessable_entity
     end
   end

@@ -1,0 +1,176 @@
+<!-- app/views/customers/_empty.html.erb -->
+
+<div class="customers-empty-state">
+
+  <!-- Search Bar -->
+  <div class="customers-search-wrapper">
+    <div class="customers-search-box">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="20"
+           height="20"
+           viewBox="0 0 20 20"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="search-icon">
+        <circle cx="9" cy="9" r="6"></circle>
+        <line x1="14" y1="14" x2="18" y2="18"></line>
+      </svg>
+
+      <input type="text"
+             placeholder="Search customers"
+             class="customers-search-input">
+    </div>
+
+    <!-- Right Grid Icon -->
+    <button class="view-toggle-btn">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="20"
+           height="20"
+           viewBox="0 0 20 20"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.6"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <rect x="3" y="3" width="6" height="14" rx="1.5"></rect>
+        <rect x="11" y="3" width="6" height="14" rx="1.5"></rect>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Divider -->
+  <div class="customers-divider"></div>
+
+  <!-- Empty Content -->
+  <div class="customers-empty-content">
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="30"
+         height="30"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="1.9"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         class="empty-search-icon">
+      <circle cx="11" cy="11" r="7"></circle>
+      <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
+    </svg>
+
+    <h2>No customers match this segment criteria</h2>
+
+    <p>
+      Try editing the segment to view matching customers
+    </p>
+  </div>
+</div>
+
+<style>
+  .customers-empty-state {
+    width: 100%;
+    background: #f6f6f7;
+    border: 1px solid #d9d9d9;
+    border-radius: 18px;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  /* Top Search Area */
+  .customers-search-wrapper {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 14px;
+    background: #f6f6f7;
+  }
+
+  .customers-search-box {
+    flex: 1;
+    height: 42px;
+    background: #e9e9ea;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .search-icon {
+    color: #7a7a7a;
+    min-width: 20px;
+  }
+
+  .customers-search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: #222;
+    font-weight: 400;
+  }
+
+  .customers-search-input::placeholder {
+    color: #6f6f6f;
+    font-weight: 500;
+  }
+
+  .view-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    border-left: 1px solid #d8d8d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 14px;
+    cursor: pointer;
+    color: #777;
+  }
+
+  /* Divider */
+  .customers-divider {
+    width: 100%;
+    height: 1px;
+    background: #d9d9d9;
+  }
+
+  /* Empty State */
+  .customers-empty-content {
+    height: 285px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #f6f6f7;
+  }
+
+  .empty-search-icon {
+    color: #4a4a4a;
+    margin-bottom: 18px;
+  }
+
+  .customers-empty-content h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 650;
+    color: #303030;
+    letter-spacing: -0.2px;
+  }
+
+  .customers-empty-content p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #616161;
+    font-weight: 400;
+    line-height: 24px;
+  }
+</style>

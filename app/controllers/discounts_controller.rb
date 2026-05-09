@@ -6,8 +6,14 @@ class DiscountsController < ApplicationController
   end
 
   def new
-    @discount = Discount.new
-  end
+  @store = current_user.stores.find(params[:store_id])
+  @collections=@store.collections
+  @products=@store.products
+
+  @discount = Discount.new(
+    discount_type: params[:discount_type]
+  )
+end
 
   def create
   @store = current_user.stores.find(params[:store_id])
@@ -23,33 +29,25 @@ end
   private
 
   def discount_params
-    params.require(:discount).permit(
-      :discount_type,
-      :discount_method,
-      :code_type,
-      :discount_code,
-      :auto_generate_code,
-
-      :value_type,        # percentage or fixed
-      :value,             # discount value
-
-      :applies_to,       # specific collections / products
-
-      :customer_eligibility, # all customers etc
-
-      :minimum_requirement_type,  # none / amount / quantity
-      :minimum_purchase_amount,
-      :minimum_quantity,
-
-      :max_usage_limit,
-      :limit_one_per_customer,
-
-      :product_discount,
-      :order_discount,
-      :shipping_discount,
-
-      :start_date,
-      :end_date
-    )
-  end
+  params.require(:discount).permit(
+    :discount_type,
+    :discount_title,
+    :discount_method,
+    :code_type,
+    :discount_code,
+    :auto_generate_code,
+    :value_type,
+    :value,
+    :customer_eligibility,
+    :minimum_requirement_type,
+    :minimum_purchase_amount,
+    :minimum_quantity,
+    :limit_one_per_customer,
+    :start_date,
+    :end_date,
+    # Change these two lines:
+    selected_collection_ids: [], 
+    selected_product_ids: []
+  )
+end
 end

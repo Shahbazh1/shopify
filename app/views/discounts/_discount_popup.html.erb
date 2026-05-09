@@ -34,23 +34,6 @@
       </a>
 
       <!-- Option -->
-      <a href="<%= new_discount_path(store_id: params[:store_id], discount_type: 'buy_x_get_y') %>" class="discount-option" style="text-decoration: none; color: inherit;">
-        <div class="option-left">
-
-          <div class="option-icon">
-            🏷
-          </div>
-
-          <div class="option-content">
-            <h3>Buy X get Y</h3>
-            <p>Discount specific products or collections of products</p>
-          </div>
-        </div>
-
-        <div class="option-arrow">›</div>
-      </a>
-
-      <!-- Option -->
       <a href="<%= new_discount_path(store_id: params[:store_id], discount_type: 'amount_off_order') %>" class="discount-option" style="text-decoration: none; color: inherit;">
         <div class="option-left">
 
@@ -95,155 +78,229 @@
 </div>
 
 <style>
+```css id="m9x2kd"
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f6f6f7;
+}
 
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+/* OVERLAY */
+
+.discount-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.38);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:9999;
+  backdrop-filter:blur(4px);
+}
+
+/* MODAL */
+
+.discount-modal{
+  width:100%;
+  max-width:540px; /* smaller popup */
+  background:#ffffff;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid #ececec;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.14),
+    0 3px 10px rgba(0,0,0,0.05);
+  animation:popupFade .18s ease;
+}
+
+@keyframes popupFade{
+  from{
+    opacity:0;
+    transform:translateY(8px) scale(.98);
   }
-
-  /* OVERLAY */
-
-  .discount-modal-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.42);
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    padding-top:70px;
-    z-index:9999;
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
   }
+}
 
-  /* MODAL */
+/* HEADER */
+
+.discount-modal-header{
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.discount-modal-header h2{
+  margin:0;
+  font-size:19px;
+  font-weight:700;
+  color:#222;
+  letter-spacing:-0.2px;
+}
+
+.close-btn{
+  width:34px;
+  height:34px;
+  border:none;
+  background:#f3f3f4;
+  border-radius:10px;
+  font-size:16px;
+  color:#666;
+  cursor:pointer;
+  transition:all .15s ease;
+}
+
+.close-btn:hover{
+  background:#e8e8e8;
+  transform:scale(1.04);
+}
+
+/* OPTIONS */
+
+.discount-options{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.discount-option{
+  min-height:72px; /* reduced height */
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border:1px solid #e8e8e8;
+  border-radius:14px;
+  background:#fff;
+  cursor:pointer;
+  transition:all .16s ease;
+}
+
+.discount-option:hover{
+  background:#fafafa;
+  border-color:#d0d0d0;
+  transform:translateY(-1px);
+  box-shadow:0 4px 14px rgba(0,0,0,0.05);
+}
+
+.option-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+/* ICON */
+
+.option-icon{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  background:#f4f4f4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+
+/* CONTENT */
+
+.option-content h3{
+  margin:0 0 4px;
+  font-size:15px;
+  font-weight:650;
+  color:#222;
+}
+
+.option-content p{
+  margin:0;
+  font-size:12.8px;
+  color:#707070;
+  line-height:1.4;
+}
+
+/* ARROW */
+
+.option-arrow{
+  font-size:22px;
+  color:#9b9b9b;
+  transition:.15s;
+}
+
+.discount-option:hover .option-arrow{
+  transform:translateX(3px);
+  color:#444;
+}
+
+/* FOOTER */
+
+.discount-modal-footer{
+  padding:14px 20px 18px;
+  display:flex;
+  justify-content:flex-end;
+  border-top:1px solid #f0f0f0;
+}
+
+.cancel-btn{
+  height:38px;
+  padding:0 18px;
+  border-radius:10px;
+  border:1px solid #d7d7d7;
+  background:#fff;
+  font-size:14px;
+  font-weight:600;
+  color:#333;
+  cursor:pointer;
+  transition:.16s ease;
+}
+
+.cancel-btn:hover{
+  background:#f5f5f5;
+  border-color:#bdbdbd;
+}
+
+/* MOBILE */
+
+@media(max-width:640px){
 
   .discount-modal{
-    width:930px;
-    background:white;
-    border-radius:24px;
-    overflow:hidden;
-    box-shadow:
-      0 18px 40px rgba(0,0,0,0.16),
-      0 2px 6px rgba(0,0,0,0.08);
+    max-width:100%;
+    border-radius:16px;
   }
 
-  /* HEADER */
-
   .discount-modal-header{
-    height:78px;
-    padding:0 24px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-bottom:1px solid #e3e3e3;
+    padding:16px;
   }
 
   .discount-modal-header h2{
-    margin:0;
-    font-size:22px;
-    font-weight:650;
-    color:#303030;
-  }
-
-  .close-btn{
-    width:36px;
-    height:36px;
-    border:none;
-    background:transparent;
-    border-radius:10px;
-    font-size:20px;
-    color:#8a8a8a;
-    cursor:pointer;
-    transition:0.2s;
-  }
-
-  .close-btn:hover{
-    background:#f1f1f1;
-  }
-
-  /* OPTIONS */
-
-  .discount-options{
-    width:100%;
+    font-size:18px;
   }
 
   .discount-option{
-    height:103px;
-    padding:0 24px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-bottom:1px solid #e7e7e7;
-    cursor:pointer;
-    transition:0.15s;
-  }
-
-  .discount-option:hover{
-    background:#fafafa;
-  }
-
-  .option-left{
-    display:flex;
-    align-items:flex-start;
-    gap:18px;
+    padding:12px 14px;
+    min-height:68px;
   }
 
   .option-icon{
-    width:26px;
-    height:26px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;
-    margin-top:2px;
+    width:40px;
+    height:40px;
+    font-size:17px;
   }
 
   .option-content h3{
-    margin:0 0 10px;
-    font-size:18px;
-    font-weight:650;
-    color:#303030;
+    font-size:14px;
   }
 
   .option-content p{
-    margin:0;
-    font-size:16px;
-    color:#616161;
-    line-height:1.4;
+    font-size:12px;
   }
-
-  .option-arrow{
-    font-size:42px;
-    color:#8a8a8a;
-    line-height:1;
-    margin-top:-4px;
-  }
-
-  /* FOOTER */
-
-  .discount-modal-footer{
-    height:88px;
-    padding:0 24px;
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    background:white;
-  }
-
-  .cancel-btn{
-    height:42px;
-    padding:0 18px;
-    border-radius:14px;
-    border:1px solid #cfcfcf;
-    background:white;
-    font-size:16px;
-    font-weight:600;
-    color:#303030;
-    cursor:pointer;
-    transition:0.15s;
-  }
-
-  .cancel-btn:hover{
-    background:#f6f6f7;
-  }
+}
+```
 
 </style>

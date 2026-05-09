@@ -1,2 +1,299 @@
-<h1>Segments#show</h1>
-<p>Find me in app/views/segments/show.html.erb</p>
+<!-- app/views/customers/_segment.html.erb -->
+
+<div class="customers-segment-table">
+
+  <!-- Search Header -->
+  <div class="segment-topbar">
+
+    <div class="segment-search-box">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="20"
+           height="20"
+           viewBox="0 0 20 20"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="segment-search-icon">
+        <circle cx="9" cy="9" r="6"></circle>
+        <line x1="14" y1="14" x2="18" y2="18"></line>
+      </svg>
+
+      <input type="text"
+             placeholder="Search customers"
+             class="segment-search-input">
+    </div>
+
+    <button class="segment-layout-btn">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="20"
+           height="20"
+           viewBox="0 0 20 20"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.6"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <rect x="3" y="3" width="6" height="14" rx="1.5"></rect>
+        <rect x="11" y="3" width="6" height="14" rx="1.5"></rect>
+      </svg>
+    </button>
+
+  </div>
+
+  <!-- Table -->
+  <table class="customers-table">
+
+    <thead>
+      <tr>
+
+        <th class="checkbox-column">
+          <input type="checkbox">
+        </th>
+
+        <th>Customer name</th>
+
+        <th>Email</th>
+
+        <th class="location-heading">
+          <span>Location</span>
+        </th>
+
+        <th>Phone</th>
+
+        <th>Language</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <% if @customers.present? %>
+
+        <% @customers.each do |customer| %>
+
+          <tr>
+
+            <!-- Checkbox -->
+            <td class="checkbox-column">
+              <input type="checkbox">
+            </td>
+
+            <!-- Name -->
+            <td class="customer-name">
+              <%= "#{customer.first_name} #{customer.last_name}" %>
+            </td>
+
+            <!-- Email -->
+            <td>
+              <%= customer.email.present? ? customer.email : "No email" %>
+            </td>
+
+            <!-- Country -->
+            <td>
+              <%= customer.country.present? ? customer.country : "Pakistan" %>
+            </td>
+
+            <!-- Phone -->
+            <td>
+              <%= customer.phone.present? ? customer.phone : "No phone" %>
+            </td>
+
+            <!-- Language -->
+            <td>
+              <%= customer.language.upcase %>
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      <% else %>
+
+        <tr>
+          <td colspan="6" class="empty-customers">
+            No customers found
+          </td>
+        </tr>
+
+      <% end %>
+
+    </tbody>
+
+  </table>
+</div>
+
+<!-- Bottom Link -->
+<div class="learn-customers-wrapper">
+  <a href="#" class="learn-customers-link">
+    Learn more about customers
+  </a>
+</div>
+
+<style>
+
+  body{
+    background: #efefef;
+  }
+
+  .customers-segment-table {
+    width: 100%;
+    background: #f6f6f7;
+    border: 1px solid #d2d2d2;
+    border-radius: 18px;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  /* Topbar */
+  .segment-topbar {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 18px;
+    border-bottom: 1px solid #d9d9d9;
+    background: #f6f6f7;
+  }
+
+  .segment-search-box {
+    flex: 1;
+    height: 42px;
+    border-radius: 12px;
+    background: #e9e9ea;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .segment-search-icon {
+    color: #767676;
+    flex-shrink: 0;
+  }
+
+  .segment-search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: #222;
+    font-weight: 400;
+  }
+
+  .segment-search-input::placeholder {
+    color: #6e6e6e;
+    font-weight: 500;
+  }
+
+  .segment-layout-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    border-left: 1px solid #d8d8d8;
+    padding-left: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #767676;
+  }
+
+  /* Table */
+  .customers-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .customers-table thead tr {
+    height: 54px;
+  }
+
+  .customers-table tbody tr {
+    height: 52px;
+  }
+
+  .customers-table th,
+  .customers-table td {
+    border-bottom: 1px solid #d9d9d9;
+    padding: 0 18px;
+    text-align: left;
+    font-size: 15px;
+    color: #303030;
+    white-space: nowrap;
+  }
+
+  .customers-table th {
+    font-weight: 650;
+    color: #5c5f62;
+    background: #f6f6f7;
+  }
+
+  .customers-table td {
+    font-weight: 500;
+    background: #f6f6f7;
+  }
+
+  /* Checkbox */
+  .checkbox-column {
+    width: 52px;
+    padding-left: 20px !important;
+  }
+
+  .customers-table input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    appearance: none;
+    border: 1.5px solid #9f9f9f;
+    background: #f6f6f7;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  /* Customer name */
+  .customer-name {
+    font-weight: 600 !important;
+    color: #1f2937;
+    font-size: 15px;
+  }
+
+  /* Dotted underline heading */
+  .location-heading span {
+    border-bottom: 2px dotted #b6b6b6;
+    padding-bottom: 2px;
+  }
+
+  /* Empty State */
+  .empty-customers {
+    text-align: center !important;
+    padding: 30px !important;
+    color: #7a7a7a;
+    font-weight: 600;
+  }
+
+  /* Bottom link */
+  .learn-customers-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 34px;
+  }
+
+  .learn-customers-link {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 650;
+    color: #1f2937;
+    transition: 0.2s ease;
+  }
+
+  .learn-customers-link:hover {
+    opacity: 0.7;
+  }
+
+</style>

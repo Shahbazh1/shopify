@@ -1,4 +1,4 @@
-class UpdateCustomersStructure < ActiveRecord::Migration[7.0]
+class UpdateCustomersStructure < ActiveRecord::Migration[8.1]
   def change
     # 1. Add store reference
     add_reference :customers, :store, null: false, foreign_key: true
