@@ -22,16 +22,22 @@
 
               <!-- Store Link -->
               <%= link_to store_home_path(store), class: "store-pill" do %>
-                <span class="plus-icon">+</span>
+  <span class="plus-icon">+</span>
+  <span class="store-name"><%= store.name %></span>
+  <small class="store-domain">(<%= store.domain %>)</small>
+<% end %>
 
-                <span class="store-name">
-                  <%= store.name %>
-                </span>
-
-                <small class="store-domain">
-                  (<%= store.domain %>)
-                </small>
-              <% end %>
+<%# Preview storefront button %>
+<%= link_to preview_store_path(store),
+      class: "preview-store-btn",
+      title: "View Storefront",
+      target: "_blank" do %>
+  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+    <polyline points="15 3 21 3 21 9"/>
+    <line x1="10" y1="14" x2="21" y2="3"/>
+  </svg>
+<% end %>
 
               <!-- Delete Button -->
               <%= button_to store_path(store),
@@ -66,6 +72,26 @@
     --text-muted: #616161;
     --btn-black: #121212;
   }
+  .preview-store-btn {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #008060;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.preview-store-btn:hover {
+  background: #006e52;
+  transform: scale(1.08);
+}
 
   body {
     background-color: var(--bg-dark);

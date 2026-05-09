@@ -11,7 +11,8 @@
 
   <div class="sf-product-grid">
     <% @products.each do |product| %>
-      <%= link_to storefront_product_path(product.slug), class: "sf-product-card" do %>
+      <% if product.slug.present? %>
+        <%= link_to storefront_product_path(product.slug), class: "sf-product-card" do %>
         <div class="sf-product-img">
           <% if product.product_images.any? %>
             <img src="<%= product.product_images.first.image_url %>" 
@@ -31,6 +32,7 @@
             <% end %>
           </div>
         </div>
+        <% end %>
       <% end %>
     <% end %>
   </div>
@@ -50,7 +52,7 @@
             style: "padding: 10px 20px; border: 1px solid #e5e5e5; border-radius: 8px; 
                     text-decoration: none; color: #1a1a1a; font-size: 14px; font-weight: 500;
                     transition: background 0.15s;" do %>
-        <%= collection.name %>
+        <%= collection.title %>
       <% end %>
     <% end %>
   </div>

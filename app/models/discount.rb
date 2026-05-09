@@ -1,5 +1,12 @@
 class Discount < ApplicationRecord
   belongs_to :store
-  belongs_to :product, optional: true
-  belongs_to :collection, optional: true
+
+  has_many :product_discounts, dependent: :destroy
+  has_many :products, through: :product_discounts
+
+  has_many :collection_discounts, dependent: :destroy
+  has_many :collections, through: :collection_discounts
+
+  accepts_nested_attributes_for :product_discounts, allow_destroy: true
+  accepts_nested_attributes_for :collection_discounts, allow_destroy: true
 end  

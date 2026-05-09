@@ -55,10 +55,10 @@ class CollectionsController < ApplicationController
   private
 
   def collection_params
-    params.require(:collection).permit(
-      :title,
-      :description,
-      selected_product_ids: []
-    )
-  end
+  params.require(:collection).permit(
+    :title,
+    :description,
+    product_collections_attributes: [:id, :product_id, :_destroy]
+  )
+end
 end

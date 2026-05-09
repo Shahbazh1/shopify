@@ -305,6 +305,7 @@ document.getElementById("closeModal").onclick = () => {
 };
 
 document.getElementById("addProducts").onclick = () => {
+
   const selected = document.querySelectorAll(".product-checkbox:checked");
 
   const hiddenContainer = document.getElementById("hidden-products");
@@ -313,22 +314,29 @@ document.getElementById("addProducts").onclick = () => {
   hiddenContainer.innerHTML = "";
   display.innerHTML = "";
 
-  if(selected.length === 0){
+  if (selected.length === 0) {
     display.innerHTML = "<p class='empty-state'>No products selected</p>";
+    modal.classList.add("hidden");
+    return;
   }
+
+  let index = 0;
 
   selected.forEach(cb => {
     const id = cb.value;
 
     const input = document.createElement("input");
     input.type = "hidden";
-    input.name = "collection[selected_product_ids][]";
+    input.name = `collection[product_collections_attributes][${index}][product_id]`;
     input.value = id;
+
     hiddenContainer.appendChild(input);
 
     const div = document.createElement("div");
-    div.innerText = "Product ID: " + id;
+    div.innerText = cb.nextElementSibling.innerText; // product name
     display.appendChild(div);
+
+    index++;
   });
 
   modal.classList.add("hidden");

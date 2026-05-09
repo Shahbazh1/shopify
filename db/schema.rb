@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_09_120435) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_09_210433) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -63,10 +63,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_120435) do
     t.index ["store_id"], name: "index_carts_on_store_id"
   end
 
+  create_table "collection_discounts", force: :cascade do |t|
+    t.bigint "collection_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "discount_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id"], name: "index_collection_discounts_on_collection_id"
+    t.index ["discount_id"], name: "index_collection_discounts_on_discount_id"
+  end
+
   create_table "collections", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.integer "selected_product_ids", default: [], array: true
     t.bigint "store_id", null: false
     t.string "title"
     t.datetime "updated_at", null: false
@@ -108,8 +116,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_120435) do
     t.decimal "minimum_purchase_amount"
     t.integer "minimum_quantity"
     t.string "minimum_requirement_type"
-    t.bigint "selected_collection_ids", default: [], array: true
-    t.bigint "selected_product_ids", default: [], array: true
     t.datetime "start_date"
     t.bigint "store_id", null: false
     t.datetime "updated_at", null: false
@@ -188,6 +194,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_120435) do
     t.datetime "updated_at", null: false
     t.index ["collection_id"], name: "index_product_collections_on_collection_id"
     t.index ["product_id"], name: "index_product_collections_on_product_id"
+  end
+
+  create_table "product_discounts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "discount_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discount_id"], name: "index_product_discounts_on_discount_id"
+    t.index ["product_id"], name: "index_product_discounts_on_product_id"
   end
 
   create_table "product_images", force: :cascade do |t|
@@ -298,6 +313,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_120435) do
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "customers"
   add_foreign_key "carts", "stores"
+  add_foreign_key "collection_discounts", "collections"
+  add_foreign_key "collection_discounts", "discounts"
   add_foreign_key "collections", "stores"
   add_foreign_key "customers", "stores"
   add_foreign_key "discounts", "stores"
@@ -314,6 +331,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_120435) do
   add_foreign_key "payments", "orders"
   add_foreign_key "product_collections", "collections"
   add_foreign_key "product_collections", "products"
+  add_foreign_key "product_discounts", "discounts"
+  add_foreign_key "product_discounts", "products"
   add_foreign_key "product_images", "products"
   add_foreign_key "product_variants", "products"
   add_foreign_key "products", "stores"

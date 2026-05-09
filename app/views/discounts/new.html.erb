@@ -127,8 +127,8 @@
         <div class="field-group mt-16">
           <label>Applies to</label>
 
-          <select name="discount[applies_to]">
-            <option value="specific_collections">Specific collections</option>
+          <select name="discount[applies_to]" id="applies-to">
+            <option value="collections">Collections</option>
             <option value="products">Products</option>
           </select>
         </div>
@@ -800,30 +800,37 @@ closeModal.addEventListener('click', () => {
 saveSelectionBtn.addEventListener('click', () => {
   const selectedType = appliesToSelect.value;
   const checkedInputs = browseModal.querySelectorAll('input[type="checkbox"]:checked');
+
   const hiddenContainer = document.getElementById('hidden-inputs-container');
-  
-  // Clear previous selections
+
   preview.innerHTML = '';
   hiddenContainer.innerHTML = '';
 
-  // Determine the correct parameter name based on selection type
-  const paramName = selectedType === 'specific_collections' 
-    ? 'discount[selected_collection_ids][]' 
-    : 'discount[selected_product_ids][]';
-
-  checkedInputs.forEach(input => {
+  checkedInputs.forEach((input, index) => {
     const id = input.value;
     const name = input.dataset.name;
 
-    // 1. Add visual tag to preview
     preview.innerHTML += `<div class="selected-tag">${name}</div>`;
 
-    // 2. Create a hidden input for the Rails array
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = paramName;
-    hiddenInput.value = id;
-    hiddenContainer.appendChild(hiddenInput);
+    // ✅ PRODUCT NESTED ATTRIBUTES
+    if (selectedType === 'products') {
+
+      hiddenContainer.innerHTML += `
+        <input type="hidden"
+          name="discount[product_discounts_attributes][${index}][product_id]"
+          value="${id}">
+      `;
+    }
+
+    // ✅ COLLECTION NESTED ATTRIBUTES
+    else {
+
+      hiddenContainer.innerHTML += `
+        <input type="hidden"
+          name="discount[collection_discounts_attributes][${index}][collection_id]"
+          value="${id}">
+      `;
+    }
   });
 
   browseModal.style.display = 'none';
