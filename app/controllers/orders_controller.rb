@@ -1,18 +1,52 @@
 class OrdersController < ApplicationController
+  before_action :set_store
+  before_action :set_order, only: [:show, :edit, :update, :confirmation]
 
   def index
-    @store = Store.find(params[:store_id])
-    @orders = Order.includes(:customer)
-                   .order(created_at: :desc)
+    @orders = @store.orders
+                    .includes(:customer)
+                    .order(created_at: :desc)
   end
 
   def show
-    @order = Order.find(params[:id])
+    @order_items = @order.order_items.includes(
+      :product,
+      :product_variant
+    )
   end
 
   def confirmation
-    @order      = Order.find(params[:id])
-    @order_items = @order.order_items.includes(:product, :product_variant)
+    @order_items = @order.order_items.includes(
+      :product,
+      :product_variant
+    )
   end
 
+  # EDIT PAGE
+  def edit
+  end
+
+  # UPDATE STATUS
+  def update
+    if @order.update(order_params)
+      redirect_to order_path(@store, @order),
+                  notice: "Order updated successfully."
+    else
+      render :edit
+    end
+  end
+
+  private
+
+  def set_store
+    @store = Store.find_by(id: params[:store_id])
+  end
+
+  def set_order
+    @order = @store.orders.find_by(id:params[:id])
+  end
+
+  def order_params
+    params.require(:order).permit(:status)
+  end
 end

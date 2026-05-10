@@ -5,4 +5,13 @@ class Order < ApplicationRecord
   has_many :order_items, dependent: :destroy
   has_one :shipment, dependent: :destroy
   has_one :payment, dependent: :destroy
+
+  STATUSES = [
+    "pending",
+    "paid",
+    "processing",
+    "shipped",
+    "completed",
+    "cancelled"
+  ]
 end

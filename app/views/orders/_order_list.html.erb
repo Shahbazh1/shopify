@@ -42,73 +42,102 @@
 
     <!-- TABLE -->
     <table class="orders-table">
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Customer</th>
+      <th>Status</th>
+      <th>Total</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
 
-      <thead>
-        <tr>
-          <th width="40">
-            <input type="checkbox">
-          </th>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td>
+          #<%= order.id %>
+        </td>
 
-          <th>Order</th>
-          <th>Date</th>
-          <th>Customer</th>
-          <th>Payment status</th>
-          <th>Fulfillment</th>
-          <th>Total</th>
-        </tr>
-      </thead>
+        <td>
+          <%= order.customer.first_name %>
+          <%= order.customer.last_name %>
+        </td>
 
-      <tbody>
+        <td>
+          <%= order.status %>
+        </td>
 
-        <% @orders.each do |order| %>
+        <td>
+          <%= number_to_currency(order.total_price) %>
+        </td>
 
-          <tr onclick="window.location='<%= order_path(order.store_id, order) %>'">
+        <td>
+          <%= order.created_at.strftime("%d %b %Y") %>
+        </td>
 
-            <td>
-              <input type="checkbox">
-            </td>
+        <!-- ACTION BUTTONS -->
+        <td>
+          <div class="action-buttons">
 
-            <td class="order-number">
-              #<%= order.id %>
-            </td>
+            <%= link_to "View",
+                order_path(@store, order),
+                class: "view-btn" %>
 
-            <td>
-              <%= order.created_at.strftime("%b %d at %I:%M %p") %>
-            </td>
+            <%= link_to "Edit",
+                edit_order_path(@store, order),
+                class: "edit-btn" %>
 
-            <td>
-              <%= order.customer&.full_name || "Guest" %>
-            </td>
+          </div>
+        </td>
 
-            <td>
-              <span class="status-badge paid">
-                Paid
-              </span>
-            </td>
-
-            <td>
-              <span class="status-badge unfulfilled">
-                Unfulfilled
-              </span>
-            </td>
-
-            <td class="order-total">
-              Rs <%= order.total_price %>
-            </td>
-
-          </tr>
-
-        <% end %>
-
-      </tbody>
-
-    </table>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
   </div>
 
 </div>
 
 <style>
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.view-btn,
+.edit-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.view-btn {
+  background: #111827;
+  color: white;
+}
+
+.edit-btn {
+  background: #f3f4f6;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
 .shopify-orders-page {
   padding: 24px;
   background: #f6f6f7;

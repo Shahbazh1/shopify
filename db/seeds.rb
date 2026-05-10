@@ -12,8 +12,6 @@ ShippingMethod.find_or_create_by!(name: "Standard Shipping")  { |s| s.price = 5.
 ShippingMethod.find_or_create_by!(name: "Express Shipping")   { |s| s.price = 12.00 }
 ShippingMethod.find_or_create_by!(name: "Free Shipping")      { |s| s.price = 0.00  }
 
-store = Store.first
-
 3.times do |i|
   Customer.create!(
     first_name: "Customer#{i + 1}",

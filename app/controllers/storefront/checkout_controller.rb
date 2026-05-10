@@ -91,7 +91,7 @@ end
   private
 
   def set_cart
-    @store = Store.first
+    @store = Store.find(params[:store_id])
 
     customer = Customer.first
 

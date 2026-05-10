@@ -1,0 +1,134 @@
+<div class="checkout-container">
+
+  <h1 class="checkout-title">All Checkouts</h1>
+
+  <table class="checkout-table">
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Total Items</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% carts.each do |cart| %>
+        <tr>
+          <td class="customer-name">
+            <%= cart.customer.first_name %> <%= cart.customer.last_name %>
+          </td>
+
+          <td class="customer-email">
+            <%= cart.customer.email %>
+          </td>
+
+          <td class="items-count">
+            <span class="badge">
+              <%= cart.cart_items.sum(:quantity) %>
+            </span>
+          </td>
+
+          <td class="actions">
+            <%= link_to "View", checkout_path(@store, cart), class: "view-btn" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+</div>
+
+<style>
+/* Container */
+.checkout-container {
+  padding: 25px;
+  background: #f6f6f7;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Title */
+.checkout-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+/* Table */
+.checkout-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Header */
+.checkout-table thead {
+  background: #f3f3f3;
+}
+
+.checkout-table th {
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Rows */
+.checkout-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Hover effect like Shopify */
+.checkout-table tbody tr:hover {
+  background: #fafafa;
+}
+
+/* Customer name style */
+.customer-name {
+  font-weight: 600;
+  color: #111;
+}
+
+/* Email */
+.customer-email {
+  color: #666;
+  font-size: 13px;
+}
+
+/* Badge for items */
+.badge {
+  background: #e9f2ff;
+  color: #1a73e8;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* View button */
+.view-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #1a73e8;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.view-btn:hover {
+  background: #1557b0;
+}
+<style/>

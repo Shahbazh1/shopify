@@ -1,0 +1,219 @@
+<div class="order-show-page">
+
+  <div class="page-header">
+    <h1>Order #<%= @order.id %></h1>
+
+    <span class="order-status <%= @order.status %>">
+      <%= @order.status.capitalize %>
+    </span>
+  </div>
+
+  <!-- ORDER INFO -->
+  <div class="order-card">
+    <h2>Order Details</h2>
+
+    <div class="info-grid">
+      <div>
+        <strong>Order Date:</strong><br>
+        <%= @order.created_at.strftime("%d %b %Y") %>
+      </div>
+
+      <div>
+        <strong>Customer:</strong><br>
+        <%= @order.customer.first_name %>
+        <%= @order.customer.last_name %>
+      </div>
+
+      <div>
+        <strong>Email:</strong><br>
+        <%= @order.customer.email %>
+      </div>
+
+      <div>
+        <strong>Phone:</strong><br>
+        <%= @order.customer.phone %>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHIPPING -->
+  <div class="order-card">
+    <h2>Shipping Address</h2>
+
+    <p>
+      <%= @order.customer.address %><br>
+      <%= @order.customer.city %><br>
+      <%= @order.customer.country %><br>
+      <%= @order.customer.postal_code %>
+    </p>
+
+    <p>
+      <strong>Shipping Method:</strong>
+      <%= @order.shipping_method.name %>
+    </p>
+  </div>
+
+  <!-- ORDER ITEMS -->
+  <div class="order-card">
+    <h2>Items</h2>
+
+    <table class="order-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Variant</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @order_items.each do |item| %>
+          <tr>
+            <td>
+              <%= item.product.title %>
+            </td>
+
+            <td>
+              <%= [
+                    item.product_variant.size,
+                    item.product_variant.color
+                  ].compact.join(" / ") %>
+            </td>
+
+            <td>
+              <%= item.quantity %>
+            </td>
+
+            <td>
+              <%= number_to_currency(item.price) %>
+            </td>
+
+            <td>
+              <%= number_to_currency(
+                    item.price * item.quantity
+                  ) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TOTALS -->
+  <div class="order-card totals-box">
+
+    <div class="total-row">
+      <span>Subtotal</span>
+      <span>
+        <%= number_to_currency(@order.subtotal) %>
+      </span>
+    </div>
+
+    <div class="total-row">
+      <span>Shipping</span>
+      <span>
+        <%= number_to_currency(@order.shipping_price) %>
+      </span>
+    </div>
+
+    <div class="total-row grand-total">
+      <span>Total</span>
+      <span>
+        <%= number_to_currency(@order.total_price) %>
+      </span>
+    </div>
+
+  </div>
+
+</div> 
+
+<style>
+.order-status.pending {
+  background: #facc15;
+  color: black;
+}
+
+.order-status.processing {
+  background: #60a5fa;
+}
+
+.order-status.shipped {
+  background: #a78bfa;
+}
+
+.order-status.completed {
+  background: #22c55e;
+}
+
+.order-status.cancelled {
+  background: #ef4444;
+}
+
+.order-status.paid {
+  background: #14b8a6;
+}
+.order-show-page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.order-status {
+  background: #111827;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.order-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th,
+.order-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.totals-box {
+  max-width: 400px;
+  margin-left: auto;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.grand-total {
+  font-size: 20px;
+  font-weight: bold;
+}
+</style>

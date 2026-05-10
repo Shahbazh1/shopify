@@ -1,0 +1,149 @@
+<div class="checkout-show-container">
+
+  <!-- HEADER -->
+  <div class="checkout-header">
+    <h1>Checkout Details</h1>
+    <p class="sub-text">Cart ID: <%= @cart.id %></p>
+  </div>
+
+  <!-- CUSTOMER CARD -->
+  <div class="card">
+    <h3>Customer Information</h3>
+
+    <div class="customer-box">
+      <p class="name">
+        <%= @cart.customer.first_name %> <%= @cart.customer.last_name %>
+      </p>
+
+      <p class="email"><%= @cart.customer.email %></p>
+      <p class="phone"><%= @cart.customer.phone %></p>
+    </div>
+  </div>
+
+  <!-- ITEMS CARD -->
+  <div class="card">
+    <h3>Cart Items</h3>
+
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Variant</th>
+          <th>Qty</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @cart.cart_items.each do |item| %>
+          <tr>
+            <td class="product-title">
+              <%= item.product.title %>
+            </td>
+
+            <td class="variant">
+              <%= [item.product_variant&.size, item.product_variant&.color].compact.join(" / ") %>
+            </td>
+
+            <td>
+              <span class="qty-badge"><%= item.quantity %></span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<style>
+.checkout-show-container {
+  padding: 25px;
+  background: #f6f6f7;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.checkout-header h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.sub-text {
+  color: #777;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Card UI */
+.card {
+  background: #fff;
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Customer box */
+.customer-box p {
+  margin: 4px 0;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.email, .phone {
+  color: #666;
+  font-size: 13px;
+}
+
+/* Items table */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.items-table th {
+  text-align: left;
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.items-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+}
+
+.items-table tbody tr:hover {
+  background: #fafafa;
+}
+
+/* Product */
+.product-title {
+  font-weight: 600;
+}
+
+/* Variant */
+.variant {
+  color: #666;
+  font-size: 13px;
+}
+
+/* Qty badge */
+.qty-badge {
+  background: #e9f2ff;
+  color: #1a73e8;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+</style>

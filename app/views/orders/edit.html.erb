@@ -1,0 +1,85 @@
+<div class="order-edit-page">
+
+  <h1>Edit Order #<%= @order.id %></h1>
+
+  <div class="edit-card">
+
+    <%= form_with model: @order, local: true do |f| %>
+
+      <div class="field">
+        <%= f.label :status %>
+
+        <%= f.select :status,
+              Order::STATUSES,
+              {},
+              class: "status-select" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Update Order",
+              class: "update-btn" %>
+
+        <%= link_to "Back",
+              order_path(@store, @order),
+              class: "back-btn" %>
+      </div>
+
+    <% end %>
+
+  </div>
+
+</div>
+
+<style>
+.order-edit-page {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.edit-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.field {
+  margin-bottom: 24px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.status-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+}
+
+.update-btn {
+  background: #111827;
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.back-btn {
+  background: #f3f4f6;
+  color: #111827;
+  padding: 12px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+</style>

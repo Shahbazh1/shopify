@@ -1,5 +1,5 @@
-# <% if @draft_orders.present? %>
-#   <%= render "draft_order_list", draft_orders: @draft_orders %>
-# <% else %>
+<% if @cartItem.present? %>
+  <%= render "checkout_list", carts: @carts %>
+<% else %>
   <%= render "empty_state" %>
-# <% end %>
+<% end %>
