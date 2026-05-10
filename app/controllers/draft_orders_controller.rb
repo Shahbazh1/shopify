@@ -26,8 +26,9 @@ class DraftOrdersController < ApplicationController
   end
 
   def edit
-        @products = Product.all
-  end
+  @products = @store.products.includes(:product_variants)
+  @draft_order_items = @draft_order.draft_order_items.includes(:product, :product_variant)
+end
 
   def update
   if @draft_order.update(draft_order_params)
