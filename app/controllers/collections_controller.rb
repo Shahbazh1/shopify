@@ -31,15 +31,18 @@ class CollectionsController < ApplicationController
   def edit
     @store = current_user.stores.find(params[:store_id])
     @collection = @store.collections.find(params[:id])
+    @products = @store.products
   end
 
   def update
     @store = current_user.stores.find(params[:store_id])
     @collection = @store.collections.find(params[:id])
-
+    @collection.product_collections.destroy_all
+    
     if @collection.update(collection_params)
-      redirect_to store_collections_path(@store), notice: "Collection updated successfully"
+      redirect_to collections_path(@store), notice: "Collection updated successfully"
     else
+      @products = @store.products
       render :edit
     end
   end

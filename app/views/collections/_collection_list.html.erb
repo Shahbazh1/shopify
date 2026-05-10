@@ -164,6 +164,15 @@
   text-decoration: none;
   font-size: 14px;
 }
+.clickable-row{
+  cursor:pointer;
+  transition: background 0.2s ease;
+}
+
+.clickable-row:hover{
+  background:#f9fafb;
+}
+
 </style>
 
 <div class="collections-page">
@@ -221,7 +230,7 @@
       </div>
 
       <% @collections.each do |collection| %>
-  <div class="table-row">
+  <div class="table-row clickable-row" data-href="<%= edit_collection_path(@store, collection) %>">
     
     <div>
       <input type="checkbox">
@@ -256,3 +265,17 @@
   </div>
 
 </div>
+
+<script>
+document.querySelectorAll(".clickable-row").forEach(row => {
+
+  row.addEventListener("click", function(e) {
+
+    // prevent navigation when checkbox clicked
+    if (e.target.tagName === "INPUT") return;
+
+    window.location.href = this.dataset.href;
+  });
+
+});
+</script>
