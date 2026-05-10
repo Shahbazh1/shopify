@@ -1,47 +1,452 @@
-<h1><%= @product.title %></h1>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<hr>
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #f6f6f1;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
 
-<p><strong>Description:</strong></p>
-<p><%= @product.description %></p>
+  .product-page {
+    max-width: 860px;
+    margin: 0 auto;
+  }
 
-<p><strong>Category:</strong> <%= @product.category %></p>
-<p><strong>Status:</strong> <%= @product.status %></p>
+  /* Breadcrumb */
+  .breadcrumb {
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .breadcrumb span { margin: 0 5px; }
 
-<hr>
+  /* Top layout: image gallery + info */
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid #e8e8e8;
+  }
 
-<h2>Variants</h2>
+  /* Images column */
+  .product-images {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-<% if @product.product_variants.any? %>
-  <table border="1" cellpadding="5">
-    <tr>
-      <th>Color</th>
-      <th>Size</th>
-      <th>Price</th>
-      <th>Stock</th>
-    </tr>
+  .main-image-slot {
+    background: #f0ede8;
+    border-radius: 12px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    <% @product.product_variants.each do |v| %>
-      <tr>
-        <td><%= v.color %></td>
-        <td><%= v.size %></td>
-        <td><%= v.price %></td>
-        <td><%= v.stock_quantity %></td>
-      </tr>
+  .main-image-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .no-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #b0aba4;
+  }
+
+  .no-image-placeholder svg {
+    width: 36px;
+    height: 36px;
+    opacity: 0.4;
+  }
+
+  .no-image-placeholder span {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  .image-thumbnails {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .image-thumbnails img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .image-thumbnails img:first-child {
+    border-color: #1a1a1a;
+  }
+
+  .image-thumbnails img:hover {
+    border-color: #888;
+  }
+
+  /* Info column */
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .product-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .category-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #5b4ae8;
+    background: #f0eeff;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .status-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .status-badge.active {
+    color: #1a7a4a;
+    background: #eaf6f0;
+  }
+
+  .status-badge.draft {
+    color: #8a6800;
+    background: #fdf6e0;
+  }
+
+  .status-badge.archived {
+    color: #888;
+    background: #f4f4f4;
+  }
+
+  .product-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: #1a1a1a;
+  }
+
+  .product-description {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.65;
+  }
+
+  .divider {
+    height: 1px;
+    background: #f0ede8;
+  }
+
+  .price-range {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  /* Variants section */
+  .section-block {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #1a1a1a;
+  }
+
+  .variant-count {
+    font-size: 11px;
+    color: #888;
+    background: #f4f4f4;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .variants-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .variants-table thead th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #999;
+    padding: 0 10px 10px 10px;
+    border-bottom: 1px solid #f0ede8;
+  }
+
+  .variants-table tbody tr {
+    border-bottom: 1px solid #f7f6f3;
+    transition: background 0.1s;
+  }
+
+  .variants-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .variants-table tbody tr:hover {
+    background: #faf9f7;
+  }
+
+  .variants-table td {
+    padding: 10px 10px;
+    color: #333;
+    vertical-align: middle;
+  }
+
+  .color-swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .swatch-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: #ddd;
+    flex-shrink: 0;
+  }
+
+  .size-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    background: #f4f4f4;
+    border-radius: 5px;
+    color: #444;
+  }
+
+  .price-cell {
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .stock-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .stock-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .stock-dot.in-stock  { background: #2da568; }
+  .stock-dot.low-stock { background: #e8a320; }
+  .stock-dot.no-stock  { background: #d94f4f; }
+
+  .empty-state {
+    text-align: center;
+    padding: 32px 20px;
+    color: #aaa;
+  }
+
+  .empty-state svg {
+    width: 32px;
+    height: 32px;
+    opacity: 0.25;
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 640px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      padding: 16px;
+      gap: 20px;
+    }
+
+    .product-title { font-size: 18px; }
+
+    .section-block {
+      padding: 16px;
+    }
+
+    .variants-table thead th,
+    .variants-table td {
+      padding: 8px 6px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+<div class="product-page">
+
+  <%# Breadcrumb %>
+  <div class="breadcrumb">
+    Products <span>›</span> <%= @product.category %> <span>›</span> <%= @product.title %>
+  </div>
+
+  <%# Hero layout: images + info %>
+  <div class="product-layout">
+
+    <%# Left: Images %>
+    <div class="product-images">
+      <div class="main-image-slot">
+        <% if @product.product_images.any? %>
+          <img src="<%= @product.product_images.first.image_url %>" alt="<%= @product.title %>">
+        <% else %>
+          <div class="no-image-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span>No images uploaded</span>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @product.product_images.count > 1 %>
+        <div class="image-thumbnails">
+          <% @product.product_images.each do |img| %>
+            <img src="<%= img.image_url %>" alt="<%= @product.title %>">
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Right: Product info %>
+    <div class="product-info">
+      <div class="product-meta">
+        <% if @product.category.present? %>
+          <span class="category-badge"><%= @product.category %></span>
+        <% end %>
+        <span class="status-badge <%= @product.status.to_s.downcase %>">
+          <%= @product.status %>
+        </span>
+      </div>
+
+      <h1 class="product-title"><%= @product.title %></h1>
+
+      <% if @product.product_variants.any? %>
+        <div class="price-range">
+          <% prices = @product.product_variants.map(&:price).map(&:to_f) %>
+          <% if prices.min == prices.max %>
+            $<%= sprintf("%.2f", prices.min) %>
+          <% else %>
+            $<%= sprintf("%.2f", prices.min) %> – $<%= sprintf("%.2f", prices.max) %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="divider"></div>
+
+      <p class="product-description"><%= @product.description %></p>
+    </div>
+
+  </div>
+
+  <%# Variants table %>
+  <div class="section-block">
+    <div class="section-header">
+      <h2 class="section-title">Variants</h2>
+      <% if @product.product_variants.any? %>
+        <span class="variant-count"><%= @product.product_variants.count %> variants</span>
+      <% end %>
+    </div>
+
+    <% if @product.product_variants.any? %>
+      <table class="variants-table">
+        <thead>
+          <tr>
+            <th>Color</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @product.product_variants.each do |v| %>
+            <tr>
+              <td>
+                <span class="color-swatch">
+                  <span class="swatch-dot" style="background: <%= v.color.to_s.downcase %>;"></span>
+                  <%= v.color %>
+                </span>
+              </td>
+              <td><span class="size-pill"><%= v.size %></span></td>
+              <td class="price-cell">$<%= sprintf("%.2f", v.price.to_f) %></td>
+              <td>
+                <span class="stock-cell">
+                  <% stock = v.stock_quantity.to_i %>
+                  <span class="stock-dot <%= stock > 10 ? 'in-stock' : stock > 0 ? 'low-stock' : 'no-stock' %>"></span>
+                  <%= v.stock_quantity %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+        </svg>
+        <p>No variants available</p>
+      </div>
     <% end %>
-  </table>
-<% else %>
-  <p>No variants available</p>
-<% end %>
+  </div>
 
-<hr>
-
-<h2>Images</h2>
-
-<% if @product.product_images.any? %>
-  <% @product.product_images.each do |img| %>
-    <img src="<%= img.image_url %>" width="120" style="margin:5px;">
-  <% end %>
-<% else %>
-  <p>No images uploaded</p>
-<% end %>
+</div>
