@@ -91,15 +91,19 @@ end
   private
 
   def set_cart
-    @store = Store.find(params[:store_id])
+  @store = Store.find_by(slug: request.subdomain)
 
-    customer = Customer.first
-
-    @cart = Cart.find_or_create_by(
-      store: @store,
-      customer: customer
-    )
+  unless @store
+    raise ActiveRecord::RecordNotFound, "Store not found for subdomain: #{request.subdomain}"
   end
+
+  customer = Customer.first
+
+  @cart = Cart.find_or_create_by(
+    store: @store,
+    customer: customer
+  )
+end
 
   def checkout_params
     params.require(:checkout).permit(
