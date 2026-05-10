@@ -157,7 +157,6 @@ th input {
         <tr>
           <th><input type="checkbox" /></th>
           <th>Name</th>
-          <th>% of customers</th>
           <th>Last activity</th>
           <th>Created by</th>
           <th></th>
@@ -168,7 +167,6 @@ th input {
           <tr>
             <td><input type="checkbox" /></td>
             <td><%= segment[:name] %></td>
-            <td><%= segment[:customer_percentage] %>%</td>
             <td>Created on <%= segment[:created_at].strftime("%B %-d, %Y") %></td>
             <td>
               <div class="created-by">

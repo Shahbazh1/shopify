@@ -21,7 +21,7 @@ class SegmentsController < ApplicationController
     when "orders_count"
 
       if segment.rule_value == "=0"
-        Customer.where(orders_count: 0)
+        Customer.where.not(email: [nil, ""])
 
       elsif segment.rule_value == ">=1"
         Customer.where("orders_count >= 1")

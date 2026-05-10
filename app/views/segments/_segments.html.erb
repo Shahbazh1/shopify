@@ -164,7 +164,6 @@ th input {
         <tr>
           <th><input type="checkbox" /></th>
           <th>Name</th>
-          <th>% of customers</th>
           <th>Last activity</th>
           <th>Created by</th>
           <th></th>
@@ -174,10 +173,6 @@ th input {
         <% @segments.each do |segment| %>
   <tr>
     <td><%= segment.name %></td>
-
-    <td>
-      <%= Customer.count %>
-    </td>
 
     <td>
       Created recently
