@@ -1,57 +1,50 @@
-# app/controllers/storefront/cart_controller.rb
 class Storefront::CartController < Storefront::BaseController
+  before_action :set_cart
+
   def show
-    @cart = current_cart
   end
 
   def add_item
-    @cart    = current_cart
-    variant  = @store.products
-                     .joins(:product_variants)
-                     .where(product_variants: { id: params[:variant_id] })
-                     .first
-                     &.product_variants
-                     &.find(params[:variant_id])
+    variant = ProductVariant.find(params[:variant_id])
+    product = variant.product
 
-    if variant
-      item = @cart.cart_items.find_or_initialize_by(
-        product_id: variant.product_id,
-        product_variant_id: variant.id
-      )
-      item.quantity = (item.quantity || 0) + (params[:quantity]&.to_i || 1)
-      item.save!
-      redirect_to storefront_cart_path, notice: "Item added to cart"
+    quantity = params[:quantity].to_i
+    quantity = 1 if quantity <= 0
+
+    cart_item = @cart.cart_items.find_by(product_variant_id: variant.id)
+
+    if cart_item
+      cart_item.update(quantity: cart_item.quantity + quantity)
     else
-      redirect_to storefront_cart_path, alert: "Item not found"
+      @cart.cart_items.create!(
+        product: product,
+        product_variant: variant,
+        quantity: quantity
+      )
     end
+
+    redirect_to storefront_cart_path,
+                notice: "Item added to cart"
   end
 
   def remove_item
-    @cart = current_cart
-    item  = @cart.cart_items.find(params[:id])
+    item = @cart.cart_items.find(params[:id])
     item.destroy
-    redirect_to storefront_cart_path, notice: "Item removed"
+
+    redirect_to storefront_cart_path,
+                notice: "Item removed"
   end
 
   private
 
-  def current_cart
-    # For now uses session-based guest cart via customer_id
-    # You can expand this later for logged-in customers
-    session[:cart_id] ||= Cart.create!(
-      store_id:    @store.id,
-      customer_id: guest_customer.id
-    ).id
-    Cart.find(session[:cart_id])
-  end
+  def set_cart
+    store = Store.find(18)
 
-  def guest_customer
-    # Creates a temporary guest customer record for the cart
-    Customer.find_or_create_by!(
-      store_id: @store.id,
-      email:    "guest_#{session.id}@guest.local"
-    ) do |c|
-      c.first_name = "Guest"
-    end
+    customer = Customer.first
+
+    @cart = Cart.find_or_create_by(
+      store: store,
+      customer: customer
+    )
   end
 end
