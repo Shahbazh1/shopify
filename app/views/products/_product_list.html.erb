@@ -354,8 +354,8 @@
       <td>
         <div class="product-cell">
           <div class="product-thumb">
-            <% if product.product_images.any? %>
-              <%= image_tag product.product_images.first.image_url, width: 38, height: 38 %>
+            <% if product.product_images.any? && product.product_images.first.image_url.present? %>
+              <%= image_tag product.product_images.first.image_url, width: 38, height: 38, alt: product.title %>
             <% else %>
               <!-- Placeholder -->
               <svg viewBox="0 0 20 20" fill="none">

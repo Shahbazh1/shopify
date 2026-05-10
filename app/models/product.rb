@@ -23,7 +23,6 @@ class Product < ApplicationRecord
   private
 
   def generate_slug
-    return if title.blank?
     self.slug = title.parameterize
   end
 end

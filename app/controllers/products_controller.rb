@@ -13,13 +13,13 @@ class ProductsController < ApplicationController
   end
 
   def show; end
-  def edit; end
+
 
   def create
     @product = @store.products.new(product_params)
 
     if @product.save
-      redirect_to products_path(@store, @product), notice: "Product created successfully"
+      redirect_to product_url(@store, @product), notice: "Product created successfully"
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
-      redirect_to @product, notice: "Product updated successfully"
+      redirect_to product_url(@store, @product), notice: "Product updated successfully"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -36,8 +36,8 @@ class ProductsController < ApplicationController
   private
 
   def set_user_store
-    @user = User.first
-    @store = current_user.stores.find_by(id: params[:store_id])
+    user = User.first
+    @store = user.stores.find_by(id: params[:store_id])
 
     redirect_to root_path, alert: "Store not found" unless @store
   end

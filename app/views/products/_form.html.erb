@@ -481,7 +481,7 @@
     }
 </style>
 
-<%= form_with model: @product, local: true do |f| %>
+<%= form_with url: product_path(@store, @product), method: @product.new_record? ? :post : :patch, local: true, html: { multipart: true } do |f| %>
 <div class="page-wrapper">
 
   <!-- Breadcrumb -->
@@ -553,8 +553,20 @@
             <p class="media-hint">Click to upload images</p>
           </div>
 
-          <!-- Existing images (edit mode) -->
-
+          <% if @product.product_images.any? %>
+            <div id="existing-images" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+              <% @product.product_images.each_with_index do |image, index| %>
+                <div class="existing-image" style="position:relative; width:80px;">
+                  <img src="<%= image.image_url %>" width="80" height="80" style="object-fit:cover; border-radius:6px; border:1px solid #d1d5db;" alt="<%= image.alt_text.presence || @product.title %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][id]" value="<%= image.id %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][image_url]" value="<%= image.image_url %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][alt_text]" value="<%= image.alt_text.presence || 'Product image' %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][_destroy]" value="false">
+                  <button type="button" onclick="removeExistingImage(this)" style="position:absolute; top:4px; right:4px; border:none; background:rgba(0,0,0,0.5); color:#fff; border-radius:50%; width:20px; height:20px; cursor:pointer;">×</button>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
 
           <!-- New image preview area -->
           <div id="preview" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;"></div>
@@ -738,6 +750,16 @@
       };
       reader.readAsDataURL(file);
     });
+  }
+
+  function removeExistingImage(button) {
+    let wrapper = button.closest('.existing-image');
+    if (!wrapper) return;
+    let destroyInput = wrapper.querySelector('input[name$="[_destroy]"]');
+    if (destroyInput) {
+      destroyInput.value = '1';
+    }
+    wrapper.style.display = 'none';
   }
 
   // ── Publishing toggle ──

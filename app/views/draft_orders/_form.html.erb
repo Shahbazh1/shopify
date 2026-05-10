@@ -186,7 +186,7 @@
 
 <%= form_with model: [@store, @draft_order], 
               url: @draft_order.persisted? ? draft_order_path(@store, @draft_order) : draft_orders_path(@store), 
-              local: true do |f| %>
+              local: true,  do |f| %>
                 <%= f.hidden_field :status, id: "draft-order-status" %>
 
 <%= f.hidden_field :subtotal, id: "draft-order-subtotal" %>
