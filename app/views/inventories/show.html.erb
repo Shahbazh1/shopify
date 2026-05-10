@@ -1,2 +1,22 @@
-<h1>Inventories#show</h1>
-<p>Find me in app/views/inventories/show.html.erb</p>
+<h1>Inventory Details</h1>
+
+<div>
+  <h2><%= @variant.product.title %></h2>
+
+  <p>
+    Variant:
+    <%= [@variant.size, @variant.color]
+          .compact
+          .join(" / ") %>
+  </p>
+
+  <p>
+    Price:
+    <%= number_to_currency(@variant.price) %>
+  </p>
+
+  <p>
+    Stock:
+    <%= @variant.stock_quantity %>
+  </p>
+</div>

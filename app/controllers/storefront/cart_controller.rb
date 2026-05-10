@@ -38,7 +38,7 @@ class Storefront::CartController < Storefront::BaseController
   private
 
   def set_cart
-    store = Store.find(18)
+    store = Store.first
 
     customer = Customer.first
 

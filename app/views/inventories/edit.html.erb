@@ -1,2 +1,17 @@
-<h1>Inventories#edit</h1>
-<p>Find me in app/views/inventories/edit.html.erb</p>
+<h1>Edit Inventory</h1>
+
+<%= form_with model: @variant,
+      url: inventory_path(@store, @variant),
+      method: :patch do |f| %>
+
+  <div>
+    <label>Stock Quantity</label>
+
+    <%= f.number_field :stock_quantity %>
+  </div>
+
+  <br>
+
+  <%= f.submit "Update Inventory" %>
+
+<% end %>

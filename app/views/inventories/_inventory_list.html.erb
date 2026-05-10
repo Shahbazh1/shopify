@@ -1,0 +1,51 @@
+<div class="inventory-page">
+
+  <h1>Inventories</h1>
+
+  <table class="inventory-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Variant</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @variants.each do |variant| %>
+        <tr>
+          <td>
+            <%= variant.product.title %>
+          </td>
+
+          <td>
+            <%= [variant.size, variant.color]
+                  .compact
+                  .join(" / ") %>
+          </td>
+
+          <td>
+            <%= number_to_currency(variant.price) %>
+          </td>
+
+          <td>
+            <%= variant.stock_quantity %>
+          </td>
+
+          <td>
+            <%= link_to "View",
+                  inventory_path(@store, variant),
+                  class: "btn" %>
+
+            <%= link_to "Edit",
+                  edit_inventory_path(@store, variant),
+                  class: "btn" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+</div>

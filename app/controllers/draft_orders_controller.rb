@@ -5,6 +5,7 @@ class DraftOrdersController < ApplicationController
 
   def index
     @draft_orders = @store.draft_orders.order(created_at: :desc)
+  
   end
 
   def new
@@ -25,11 +26,12 @@ class DraftOrdersController < ApplicationController
   end
 
   def edit
+        @products = Product.all
   end
 
   def update
   if @draft_order.update(draft_order_params)
-    redirect_to edit_draft_order_path(@store, @draft_order),
+    redirect_to draft_orders_path(@store),
     notice: "Draft order updated"
   else
     render :edit

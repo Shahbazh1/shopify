@@ -9,16 +9,17 @@ Rails.application.routes.draw do
   constraints StorefrontSubdomainConstraint do
     scope module: :storefront do
       root  "home#index",             as: :storefront_root
-      get   "/products",              to: "products#index",    as: :storefront_products
-      get   "/products/:slug",        to: "products#show",     as: :storefront_product
-      get   "/collections/:id",       to: "collections#show",  as: :storefront_collection
-      get   "/cart",                  to: "cart#show",         as: :storefront_cart
-      post  "/cart/items",            to: "cart#add_item",     as: :storefront_cart_add
-      delete "/cart/items/:id",       to: "cart#remove_item",  as: :storefront_cart_remove
-      get   "/checkout",              to: "checkout#show",     as: :storefront_checkout
-      post  "/checkout",              to: "checkout#create",   as: :storefront_checkout_create
-      get   "/contact",               to: "pages#contact",     as: :storefront_contact
-      get   "/about",                 to: "pages#about",       as: :storefront_about
+      get   "/products",              to: "products#index",      as: :storefront_products
+      get   "/products/:slug",        to: "products#show",       as: :storefront_product
+      get   "/collections/:id",       to: "collections#show",    as: :storefront_collection
+      get   "/cart",                  to: "cart#show",           as: :storefront_cart
+      post  "/cart/items",            to: "cart#add_item",       as: :storefront_cart_add
+      delete "/cart/items/:id",       to: "cart#remove_item",    as: :storefront_cart_remove
+      get   "/checkout",              to: "checkout#show",       as: :storefront_checkout
+      post  "/checkout",              to: "checkout#create",     as: :storefront_checkout_create
+      get   "/contact",               to: "pages#contact",       as: :storefront_contact
+      get   "/about",                 to: "pages#about",         as: :storefront_about
+      get "/orders/:id/confirmation", to: "orders#confirmation", as: :storefront_order_confirmation
     end
   end
 
@@ -52,7 +53,7 @@ Rails.application.routes.draw do
     resources :products
     resources :product_variants
     resources :segments,    only: [:index, :show]
-    resources :inventories, only: [:index, :show, :edit]
+    resources :inventories, only: [:index, :show, :edit, :update]
     resources :discounts
     resources :themes, only: [:index, :show], as: :store_themes
   end
