@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
-  before_action :set_user_store
+  include StoreFinder
+
   before_action :set_product, only: [:show, :edit, :update]
 
   def index
@@ -12,35 +13,36 @@ class ProductsController < ApplicationController
     @product.product_images.build
   end
 
-  def show; end
-
+  def show
+  end
 
   def create
-    @product = @store.products.new(product_params)
+    result = Products::CreateService.new(@store, product_params).call
 
-    if @product.save
-      redirect_to product_url(@store, @product), notice: "Product created successfully"
+    @product = result[:product]
+
+    if result[:success]
+      redirect_to product_url(@store, @product),
+                  notice: "Product created successfully"
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    if @product.update(product_params)
-      redirect_to product_url(@store, @product), notice: "Product updated successfully"
+    result = Products::UpdateService.new(@product, product_params).call
+
+    @product = result[:product]
+
+    if result[:success]
+      redirect_to product_url(@store, @product),
+                  notice: "Product updated successfully"
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   private
-
-  def set_user_store
-    user = User.first
-    @store = user.stores.find_by(id: params[:store_id])
-
-    redirect_to root_path, alert: "Store not found" unless @store
-  end
 
   def set_product
     @product = @store.products.find(params[:id])
@@ -51,13 +53,23 @@ class ProductsController < ApplicationController
       :title,
       :description,
       :category,
-      :price,
-      :inventory_quantity,
       :status,
       :published_online_store,
       :published_pos,
-      product_variants_attributes: [:id, :color, :size, :price, :stock_quantity, :_destroy],
-      product_images_attributes: [:id, :image_url, :alt_text, :_destroy]
+      product_variants_attributes: [
+        :id,
+        :color,
+        :size,
+        :price,
+        :stock_quantity,
+        :_destroy
+      ],
+      product_images_attributes: [
+        :id,
+        :image_url,
+        :alt_text,
+        :_destroy
+      ]
     )
   end
 end
