@@ -1,14 +1,23 @@
 module Orders
-  class ItemsQuery
-    def initialize(order)
+  class UpdateService
+    def initialize(order, params)
       @order = order
+      @params = params
     end
 
     def call
-      @order.order_items.includes(
-        :product,
-        :product_variant
-      )
+      if @order.update(@params)
+        {
+          success: true,
+          order: @order
+        }
+      else
+        {
+          success: false,
+          order: @order,
+          errors: @order.errors.full_messages
+        }
+      end
     end
   end
 end

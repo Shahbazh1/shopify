@@ -1,10 +1,9 @@
 class StoresController < ApplicationController
-  include StoreFinder
-
   before_action :authenticate_user!
+  before_action :set_store, only: [:edit, :update, :destroy, :preview]
 
   def index
-    @stores = current_user.stores
+    @stores = Stores::IndexQuery.new(current_user).call
 
     if @stores.empty?
       redirect_to new_store_path
@@ -16,11 +15,12 @@ class StoresController < ApplicationController
   end
 
   def create
-    @store = current_user.stores.new(store_params)
+    result = Stores::CreateService.new(current_user, store_params).call
 
-    if @store.save
-      redirect_to stores_path,
-                  notice: "Store created successfully"
+    @store = result[:store]
+
+    if result[:success]
+      redirect_to stores_path, notice: "Store created successfully"
     else
       render :new
     end
@@ -30,18 +30,20 @@ class StoresController < ApplicationController
   end
 
   def update
-    if @store.update(store_params)
-      redirect_to stores_path,
-                  notice: "Store updated successfully"
+    result = Stores::UpdateService.new(@store, store_params).call
+
+    @store = result[:store]
+
+    if result[:success]
+      redirect_to stores_path, notice: "Store updated successfully"
     else
       render :edit
     end
   end
 
   def destroy
-    @store.destroy
-    redirect_to stores_path,
-                notice: "Store deleted successfully."
+    Stores::DestroyService.new(@store).call
+    redirect_to stores_path, notice: "Store deleted successfully."
   end
 
   def preview
@@ -50,6 +52,10 @@ class StoresController < ApplicationController
   end
 
   private
+
+  def set_store
+    @store = current_user.stores.find_by!(id: params[:id])
+  end
 
   def store_params
     params.require(:store).permit(:name)

@@ -4,7 +4,7 @@
 
   <div class="edit-card">
 
-    <%= form_with model: @order, local: true do |f| %>
+<%= form_with model: @order, url: order_path(@store, @order), method: :patch, local: true, html: { multipart: true } do |f| %>
 
       <div class="field">
         <%= f.label :status %>

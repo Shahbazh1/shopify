@@ -9,7 +9,7 @@ module StoreFinder
 
   def set_user_store
 
-    @store = current_user.stores.find_by(id: params[:store_id])
+    @store = current_user.stores.find(params[:store_id])
 
     redirect_to root_path, alert: "Store not found" unless @store
   end
