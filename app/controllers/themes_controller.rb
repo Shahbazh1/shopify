@@ -1,6 +1,7 @@
 class ThemesController < ApplicationController
+  include StoreFider
+
   def index
-    @store = Store.find(params[:store_id])
   end
 
   def show

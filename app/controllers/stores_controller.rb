@@ -1,15 +1,15 @@
 class StoresController < ApplicationController
+  include StoreFinder
+
   before_action :authenticate_user!
 
   def index
-  # Change @store to @stores and fetch all stores for the user
-  @stores = current_user.stores 
+    @stores = current_user.stores
 
-  # If you still want to redirect if they have NO stores at all:
-  if @stores.empty?
-    redirect_to new_store_path
+    if @stores.empty?
+      redirect_to new_store_path
+    end
   end
-end
 
   def new
     @store = current_user.stores.new
@@ -19,40 +19,35 @@ end
     @store = current_user.stores.new(store_params)
 
     if @store.save
-      redirect_to stores_path, notice: "Store created successfully"
+      redirect_to stores_path,
+                  notice: "Store created successfully"
     else
       render :new
     end
   end
 
   def edit
-    @store = current_user.stores.find_by!(id: params[:store_id])
   end
 
   def update
-    @store = current_user.stores.find_by!(id: params[:store_id])
-
     if @store.update(store_params)
-      redirect_to stores_path, notice: "Store updated successfully"
+      redirect_to stores_path,
+                  notice: "Store updated successfully"
     else
       render :edit
     end
   end
 
   def destroy
-  @store = Store.find(params[:id])
-  @store.destroy
+    @store.destroy
+    redirect_to stores_path,
+                notice: "Store deleted successfully."
+  end
 
-  redirect_to stores_path, notice: "Store deleted successfully."
-end
-
-# Inside StoresController — add this action
-
-def preview
-  @store = current_user.stores.find(params[:id])
-  redirect_to root_url(subdomain: @store.slug), 
-              allow_other_host: true
-end
+  def preview
+    redirect_to root_url(subdomain: @store.slug),
+                allow_other_host: true
+  end
 
   private
 
