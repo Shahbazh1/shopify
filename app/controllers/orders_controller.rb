@@ -1,49 +1,48 @@
 class OrdersController < ApplicationController
-  before_action :set_store
-  before_action :set_order, only: [:show, :edit, :update, :confirmation]
+  include StoreFinder
+
+  before_action :set_order,
+                only: [:show, :edit, :update, :confirmation]
 
   def index
-    @orders = @store.orders
-                    .includes(:customer)
-                    .order(created_at: :desc)
+    @orders = Orders::ListQuery.new(@store).call
   end
 
   def show
-    @order_items = @order.order_items.includes(
-      :product,
-      :product_variant
-    )
+    load_order_items
   end
 
   def confirmation
-    @order_items = @order.order_items.includes(
-      :product,
-      :product_variant
-    )
+    load_order_items
   end
 
-  # EDIT PAGE
   def edit
   end
 
-  # UPDATE STATUS
   def update
-    if @order.update(order_params)
+    result = Orders::UpdateService.new(
+      @order,
+      order_params
+    ).call
+
+    @order = result[:order]
+
+    if result[:success]
       redirect_to order_path(@store, @order),
                   notice: "Order updated successfully."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   private
 
-  def set_store
-    @store = Store.find_by(id: params[:store_id])
+  def load_order_items
+    @order_items = Orders::ItemsQuery.new(@order).call
   end
 
   def set_order
-    @order = @store.orders.find_by(id:params[:id])
+    @order = @store.orders.find_by(id: params[:id])
   end
 
   def order_params
