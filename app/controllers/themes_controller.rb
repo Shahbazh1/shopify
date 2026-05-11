@@ -1,5 +1,5 @@
 class ThemesController < ApplicationController
-  include StoreFider
+  include StoreFinder
 
   def index
   end
