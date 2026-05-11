@@ -1,50 +1,73 @@
 class CustomersController < ApplicationController
+  include StoreFinder
+
+  before_action :set_customer, only: [:show, :edit, :update, :destroy]
+
   def index
-    @store = current_user.stores.find_by!(id: params[:store_id])
-    @customers = @store.customers
+    @customers = Customers::ListQuery.new(@store).call
+  end
+
+  def show
+  end
+
+  def new
+    @customer = @store.customers.new
+  end
+
+  def create
+    result = Customers::CreateService.new(
+      @store,
+      customer_params
+    ).call
+
+    @customer = result[:customer]
+
+    if result[:success]
+      redirect_to customer_path(@store, @customer),
+                  notice: "Customer was successfully created."
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def edit
   end
 
-  def create
-    @store = current_user.stores.find_by!(id: params[:store_id])
-    @customer = @store.customers.new(customer_params)
- 
-    if @customer.save
-redirect_to customer_path(@store, @customer), notice: "Customer was successfully created."    else
-      render :new, status: :unprocessable_entity
+  def update
+    if @customer.update(customer_params)
+      redirect_to customer_path(@store, @customer),
+                  notice: "Customer updated successfully"
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  def new
-    @store = current_user.stores.find_by!(id: params[:store_id])
-    @customer = @store.customers.new
+  def destroy
+    @customer.destroy
+    redirect_to store_customers_path(@store),
+                notice: "Customer deleted"
   end
- 
-  def show
-    @store = current_user.stores.find_by!(id: params[:store_id])
+
+  private
+
+  def set_customer
     @customer = @store.customers.find(params[:id])
   end
- 
-  # … edit / update / destroy etc.
- 
-  private
- 
+
   def customer_params
-  params.require(:customer).permit(
-    :first_name,
-    :last_name,
-    :email,
-    :phone,
-    :language,
-    :address,
-    :apartment,
-    :city,
-    :company,
-    :country,
-    :postal_code,
-    :is_default
-  )
-end
+    params.require(:customer).permit(
+      :first_name,
+      :last_name,
+      :email,
+      :phone,
+      :language,
+      :address,
+      :apartment,
+      :city,
+      :company,
+      :country,
+      :postal_code,
+      :is_default
+    )
   end
+end
