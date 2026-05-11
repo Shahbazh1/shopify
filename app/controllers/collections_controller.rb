@@ -1,67 +1,83 @@
 class CollectionsController < ApplicationController
+  include StoreFinder
+
+  before_action :set_collection, only: [:show, :edit, :update, :destroy]
 
   def index
-    @store = current_user.stores.find(params[:store_id])
-    @collections = @store.collections
+    @collections = Collections::ListQuery.new(@store).call
   end
 
   def show
-    @store = current_user.stores.find(params[:store_id])
-    @collection = @store.collections.find(params[:id])
   end
 
   def new
-    @store = current_user.stores.find(params[:store_id])
     @collection = @store.collections.new
-    @products = @store.products
+    @products = form_data[:products]
   end
 
   def create
-    @store = current_user.stores.find(params[:store_id])
-    @collection = @store.collections.new(collection_params)
+    result = Collections::CreateService.new(
+      @store,
+      collection_params
+    ).call
 
-    if @collection.save
-      redirect_to collections_path(store_id: @store.id), notice: "Collection created successfully"
+    @collection = result[:collection]
+
+    if result[:success]
+      redirect_to collections_path(@store),
+                  notice: "Collection created successfully"
     else
-      @products = @store.products
+      @products = form_data[:products]
       render :new
     end
   end
 
   def edit
-    @store = current_user.stores.find(params[:store_id])
-    @collection = @store.collections.find(params[:id])
-    @products = @store.products
+    @products = form_data[:products]
   end
 
   def update
-    @store = current_user.stores.find(params[:store_id])
-    @collection = @store.collections.find(params[:id])
-    @collection.product_collections.destroy_all
-    
-    if @collection.update(collection_params)
-      redirect_to collections_path(@store), notice: "Collection updated successfully"
+    result = Collections::UpdateService.new(
+      @collection,
+      collection_params
+    ).call
+
+    @collection = result[:collection]
+
+    if result[:success]
+      redirect_to collections_path(@store),
+                  notice: "Collection updated successfully"
     else
-      @products = @store.products
+      @products = form_data[:products]
       render :edit
     end
   end
 
   def destroy
-    @store = current_user.stores.find(params[:store_id])
-    @collection = @store.collections.find(params[:id])
     @collection.destroy
-
-    redirect_to store_collections_path(@store), notice: "Collection deleted"
+    redirect_to store_collections_path(@store),
+                notice: "Collection deleted"
   end
 
   private
 
+  def set_collection
+    @collection = @store.collections.find(params[:id])
+  end
+
+  def form_data
+    Collections::FormDataQuery.new(@store).call
+  end
+
   def collection_params
-  params.require(:collection).permit(
-    :title,
-    :description,
-    product_collections_attributes: [:id, :product_id, :_destroy]
-  )
-end
+    params.require(:collection).permit(
+      :title,
+      :description,
+      product_collections_attributes: [
+        :id,
+        :product_id,
+        :_destroy
+      ]
+    )
+  end
 end
