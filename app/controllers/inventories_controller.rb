@@ -1,25 +1,25 @@
 class InventoriesController < ApplicationController
-  before_action :set_store
+  include StoreFinder
+
+  before_action :set_variant, only: [:show, :edit, :update]
 
   def index
-    @variants = ProductVariant
-                  .includes(:product)
-                  .where(products: { store_id: @store.id })
-                  .references(:product)
+    @variants = Inventories::VariantsListQuery.new(@store).call
   end
 
   def show
-    @variant = ProductVariant.find(params[:id])
   end
 
   def edit
-    @variant = ProductVariant.find(params[:id])
   end
 
   def update
-    @variant = ProductVariant.find(params[:id])
+    result = Inventories::UpdateService.new(
+      @variant,
+      inventory_params
+    ).call
 
-    if @variant.update(inventory_params)
+    if result[:success]
       redirect_to inventories_path(@store),
                   notice: "Inventory updated successfully."
     else
@@ -29,8 +29,8 @@ class InventoriesController < ApplicationController
 
   private
 
-  def set_store
-    @store = Store.find(params[:store_id])
+  def set_variant
+    @variant = ProductVariant.find(params[:id])
   end
 
   def inventory_params
