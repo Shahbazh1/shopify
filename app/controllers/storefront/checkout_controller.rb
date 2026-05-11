@@ -1,10 +1,11 @@
 class Storefront::CheckoutController < Storefront::BaseController
   before_action :set_cart
+
   def index
-  # You need to fetch the store context here
-  @store = Store.find(params[:store_id]) 
-  @orders = @store.orders # Or however you are fetching orders
-end
+    # You need to fetch the store context here
+    @store = Store.find(params[:store_id])
+    @orders = @store.orders # Or however you are fetching orders
+  end
 
   def show
     if @cart.cart_items.empty?
@@ -83,6 +84,7 @@ end
     # 7 — Redirect
     redirect_to storefront_root_path,
                 notice: "Order placed successfully!"
+
   rescue ActiveRecord::RecordInvalid => e
     flash[:alert] = "Something went wrong: #{e.message}"
     redirect_to storefront_checkout_path
@@ -91,19 +93,20 @@ end
   private
 
   def set_cart
-  @store = Store.find_by(slug: request.subdomain)
+    @store = Store.find_by(slug: request.subdomain)
 
-  unless @store
-    raise ActiveRecord::RecordNotFound, "Store not found for subdomain: #{request.subdomain}"
+    unless @store
+      raise ActiveRecord::RecordNotFound,
+            "Store not found for subdomain: #{request.subdomain}"
+    end
+
+    customer = Customer.first
+
+    @cart = Cart.find_or_create_by(
+      store: @store,
+      customer: customer
+    )
   end
-
-  customer = Customer.first
-
-  @cart = Cart.find_or_create_by(
-    store: @store,
-    customer: customer
-  )
-end
 
   def checkout_params
     params.require(:checkout).permit(

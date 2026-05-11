@@ -38,13 +38,6 @@ class Storefront::CartController < Storefront::BaseController
   private
 
   def set_cart
-    store = Store.first
-
-    customer = Customer.first
-
-    @cart = Cart.find_or_create_by(
-      store: store,
-      customer: customer
-    )
+    @cart = current_cart
   end
 end

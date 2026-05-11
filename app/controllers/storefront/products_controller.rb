@@ -9,6 +9,7 @@ class Storefront::ProductsController < Storefront::BaseController
     @product  = @store.products.find_by!(slug: params[:slug])
     @variants = @product.product_variants
     @images   = @product.product_images
+
   rescue ActiveRecord::RecordNotFound
     render file: Rails.root.join("public/404.html"),
            status: :not_found,
