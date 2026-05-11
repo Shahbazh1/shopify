@@ -1,31 +1,39 @@
 class DiscountsController < ApplicationController
+  include StoreFinder
+
   def index
-    @store = current_user.stores.find(params[:store_id])
-    @discounts = @store.discounts
+    @discounts = Discounts::ListQuery.new(@store).call
   end
 
   def new
-    @store = current_user.stores.find(params[:store_id])
-    @collections = @store.collections
-    @products = @store.products
-
+    load_form_data
     @discount = Discount.new(discount_type: params[:discount_type])
   end
 
   def create
-    @store = current_user.stores.find(params[:store_id])
-    @discount = @store.discounts.new(discount_params)
-    @collections= @store.collections
-    @products = @store.products
+    load_form_data
 
-    if @discount.save
-      redirect_to discounts_path(@store), notice: "Discount created"
+    result = Discounts::CreateService.new(
+      @store,
+      discount_params
+    ).call
+
+    @discount = result[:discount]
+
+    if result[:success]
+      redirect_to discounts_path(@store),
+                  notice: "Discount created"
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   private
+
+  def load_form_data
+    @collections = @store.collections
+    @products = @store.products
+  end
 
   def discount_params
     params.require(:discount).permit(
@@ -45,8 +53,12 @@ class DiscountsController < ApplicationController
       :start_date,
       :end_date,
 
-      product_discounts_attributes: [:id, :product_id, :_destroy],
-      collection_discounts_attributes: [:id, :collection_id, :_destroy]
+      product_discounts_attributes: [
+        :id, :product_id, :_destroy
+      ],
+      collection_discounts_attributes: [
+        :id, :collection_id, :_destroy
+      ]
     )
   end
 end
