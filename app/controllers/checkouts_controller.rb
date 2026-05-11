@@ -1,18 +1,14 @@
 class CheckoutsController < ApplicationController
-  before_action :set_store
+  include StoreFinder
 
   def index
-    @cartItem = CartItem.all
-    @carts = @store.carts.includes(:customer, cart_items: [:product, :product_variant])
+    @carts = Checkouts::CartsIndexQuery.new(@store).call
   end
 
   def show
-    @cart = @store.carts.includes(cart_items: [:product, :product_variant]).find(params[:id])
-  end
-
-  private
-
-  def set_store
-    @store = Store.find(params[:store_id])
+    @cart = Checkouts::CartShowQuery.new(
+      @store,
+      params[:id]
+    ).call
   end
 end
