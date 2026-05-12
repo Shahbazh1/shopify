@@ -1,4 +1,4 @@
-class InventoriesController < ApplicationController
+class InventoriesController < StoreBaseController
   include StoreFinder
 
   before_action :set_variant, only: [:show, :edit, :update]

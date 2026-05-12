@@ -1,4 +1,4 @@
-class DiscountsController < ApplicationController
+class DiscountsController < StoreBaseController
   include StoreFinder
 
   def index

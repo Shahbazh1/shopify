@@ -31,18 +31,17 @@ class Storefront::CheckoutController < Storefront::BaseController
     end
 
     # 1 — Find or create customer
-    customer = Customer.find_or_create_by!(
-      store_id: @store.id,
-      email: checkout_params[:email]
-    ) do |c|
-      c.first_name  = checkout_params[:first_name]
-      c.last_name   = checkout_params[:last_name]
-      c.phone       = checkout_params[:phone]
-      c.address     = checkout_params[:address]
-      c.city        = checkout_params[:city]
-      c.country     = checkout_params[:country]
-      c.postal_code = checkout_params[:postal_code]
-    end
+    customer = current_customer
+
+customer.update!(
+  first_name: checkout_params[:first_name],
+  last_name: checkout_params[:last_name],
+  phone: checkout_params[:phone],
+  address: checkout_params[:address],
+  city: checkout_params[:city],
+  country: checkout_params[:country],
+  postal_code: checkout_params[:postal_code]
+)
 
     # 2 — Shipping method
     shipping_method = ShippingMethod.find(
@@ -100,7 +99,7 @@ class Storefront::CheckoutController < Storefront::BaseController
             "Store not found for subdomain: #{request.subdomain}"
     end
 
-    customer = Customer.first
+    customer = current_customer
 
     @cart = Cart.find_or_create_by(
       store: @store,

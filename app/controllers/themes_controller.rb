@@ -1,4 +1,4 @@
-class ThemesController < ApplicationController
+class ThemesController < StoreBaseController
   include StoreFinder
 
   def index

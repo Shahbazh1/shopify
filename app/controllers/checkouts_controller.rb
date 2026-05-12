@@ -1,4 +1,4 @@
-class CheckoutsController < ApplicationController
+class CheckoutsController < StoreBaseController
   include StoreFinder
 
   def index

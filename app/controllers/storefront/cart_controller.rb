@@ -1,7 +1,7 @@
 class Storefront::CartController < Storefront::BaseController
-  before_action :authenticate_customer!
   before_action :set_cart
-
+  before_action :authenticate_customer!
+  
   def show
   end
 

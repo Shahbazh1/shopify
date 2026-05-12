@@ -1,4 +1,4 @@
-class SegmentsController < ApplicationController
+class SegmentsController < StoreBaseController
   def index
     @segments = Segment.all
   end

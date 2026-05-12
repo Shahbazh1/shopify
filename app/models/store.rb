@@ -1,4 +1,6 @@
 class Store < ApplicationRecord
+  validates :slug, presence: true, uniqueness: true
+  
   belongs_to :user
 
   has_many :products, dependent: :destroy

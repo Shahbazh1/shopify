@@ -1,4 +1,4 @@
-class DraftOrdersController < ApplicationController
+class DraftOrdersController < StoreBaseController
   include StoreFinder
 
   before_action :set_draft_order,

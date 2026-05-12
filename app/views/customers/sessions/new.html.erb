@@ -1,0 +1,226 @@
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #0f0f10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #e8e8ea;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Shopify logo ── */
+    .shopify-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .shopify-logo svg { width: 108px; height: auto; }
+
+    /* ── Card ── */
+    .card {
+      background: #1a1b1e;
+      border-radius: 12px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 4px 24px rgba(0,0,0,.5);
+      padding: 32px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .card h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #f0f0f2;
+      margin-bottom: 24px;
+      text-align: center;
+      letter-spacing: -0.2px;
+    }
+
+    /* ── Form fields ── */
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #c9cace;
+      margin-bottom: 6px;
+    }
+
+    .field input[type="email"],
+    .field input[type="password"],
+    .field input[type="text"] {
+      display: block;
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #e8e8ea;
+      background: #111214;
+      border: 1px solid #2e3035;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+    }
+    .field input::placeholder { color: #4b5057; }
+    .field input:hover { border-color: #3e4148; }
+    .field input:focus {
+      border-color: #5a5f6b;
+      box-shadow: 0 0 0 3px rgba(148,163,184,.1);
+    }
+
+    /* ── Remember me ── */
+    .field.remember-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .field.remember-field input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      accent-color: #e8e8ea;
+      background: #111214;
+      border: 1px solid #2e3035;
+      border-radius: 3px;
+      cursor: pointer;
+      margin: 0;
+    }
+    .field.remember-field label {
+      font-size: 13px;
+      font-weight: 400;
+      color: #94a3b8;
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+
+    /* ── Submit button ── */
+    .actions {
+      margin-top: 20px;
+    }
+    .actions input[type="submit"] {
+      display: block;
+      width: 100%;
+      height: 38px;
+      background: #e8e8ea;
+      color: #0f0f10;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+      letter-spacing: 0.1px;
+    }
+    .actions input[type="submit"]:hover { background: #ffffff; }
+    .actions input[type="submit"]:active { background: #cbd5e1; }
+    .actions input[type="submit"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(232,232,234,.2);
+    }
+
+    /* ── Shared links ── */
+    .devise-links {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .devise-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .devise-links a:hover {
+      color: #e8e8ea;
+      text-decoration: underline;
+    }
+    .devise-links p { margin-bottom: 6px; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #22252b;
+      margin: 20px 0;
+    }
+
+    /* ── Footer ── */
+    .footer-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #4b5057;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .footer-note a { color: #6b7280; text-decoration: none; }
+    .footer-note a:hover { color: #94a3b8; text-decoration: underline; }
+  </style>
+
+  <!-- Shopify wordmark -->
+  <div class="shopify-logo">
+    <svg viewBox="0 0 109 31" xmlns="http://www.w3.org/2000/svg" aria-label="Shopify">
+      <path d="M25.3 6.2c0-.2-.2-.3-.3-.3l-2-.1c0 0-1.3-1.3-1.5-1.5V31l7.4-1.6S25.3 6.4 25.3 6.2z" fill="#95BF47"/>
+      <path d="M19.8 4.5c0 0-.3-.1-.7-.1-.3-1-.9-1.9-1.6-2.6C16.6.8 15.4.3 14.4.3c-.1 0-.1 0-.2 0C14 .1 13.6 0 13.3 0c-2.5 0-3.8 3.2-4.2 4.8l-3.6 1.1c-1.1.3-1.1.4-1.3 1.4C4 8.2 0 38.8 0 38.8... " fill="#5E8E3E"/>
+      <g fill="#e8e8ea">
+        <path d="M40.8 11.5c-1.4-.4-2.1-.7-2.1-1.4 0-.6.5-1 1.4-1 1 0 1.8.4 1.8.4l.7-2.1s-.9-.5-2.4-.5c-2.5 0-4.2 1.4-4.2 3.4 0 1.8 1.3 2.7 3.3 3.3 1.3.4 1.7.8 1.7 1.4 0 .7-.5 1.1-1.6 1.1-1.2 0-2.3-.6-2.3-.6l-.7 2.1s1 .7 2.8.7c2.6 0 4.4-1.3 4.4-3.6 0-1.8-1.2-2.8-3.3-3.2z"/>
+        <path d="M52 7.9c-1.2 0-2.2.6-2.9 1.4V4h-2.8v14.6H49v-8c0-1.2.7-2.1 1.8-2.1 1 0 1.4.7 1.4 1.8v8.3H55v-8.7C55 9.2 53.9 7.9 52 7.9z"/>
+        <path d="M60.5 7.9c-3 0-5 2.3-5 5.4 0 3.2 1.9 5.3 5 5.3s5-2.1 5-5.3c0-3.1-1.9-5.4-5-5.4zm0 8.4c-1.3 0-2.1-1.2-2.1-3 0-1.9.8-3.1 2.1-3.1s2.1 1.2 2.1 3.1c0 1.8-.8 3-2.1 3z"/>
+        <path d="M71.8 7.9c-1.3 0-2.2.6-2.7 1.6l-.1-1.4h-2.5c.1.8.1 1.8.1 2.9v10.5h2.8v-5c.5.7 1.4 1.2 2.5 1.2 2.6 0 4.3-2.1 4.3-5.4 0-3-1.6-5.2-4.4-5.2zm-.8 8.5c-.8 0-1.5-.5-1.9-1.3v-3.5c.4-.8 1.1-1.4 1.9-1.4 1.3 0 2 1.1 2 3.1 0 2-.7 3.1-2 3.1z"/>
+        <path d="M79.2 5.1c-.9 0-1.6.7-1.6 1.6s.7 1.6 1.6 1.6 1.6-.7 1.6-1.6-.7-1.6-1.6-1.6zM77.8 18.6h2.8V8.1h-2.8v10.5z"/>
+        <path d="M87.2 16.2l-2.4-8.1h-3l3.8 10.4-.2.6c-.4 1.1-.9 1.5-1.7 1.5-.4 0-.8-.1-.8-.1l-.1 2.2s.5.2 1.2.2c2 0 3.2-.9 4-3.3l4-11.5h-2.9l-1.9 8.1z"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <h2>Log in</h2>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "example@email.com" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password %>
+        <%= f.password_field :password, autocomplete: "current-password" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="field remember-field">
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me %>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit "Log in" %>
+      </div>
+
+    <% end %>
+
+    <hr class="divider" />
+
+    <div class="devise-links">
+      <%= render "customers/shared/links" %>
+    </div>
+  </div>
+
+  <p class="footer-note">
+    By logging in, you agree to our
+    <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
+  </p>

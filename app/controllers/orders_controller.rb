@@ -1,4 +1,4 @@
-class OrdersController < ApplicationController
+class OrdersController < StoreBaseController
   include StoreFinder
 
   before_action :set_order,

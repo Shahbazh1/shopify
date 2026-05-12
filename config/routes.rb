@@ -3,7 +3,11 @@ require_relative "../lib/tasks/storefront_subdomain_constraint"
 require_relative "../lib/tasks/admin_constraint"
 
 Rails.application.routes.draw do
-  devise_for :customers
+  devise_for :customers,
+  controllers: {
+    registrations: "customers/registrations",
+    sessions: "customers/sessions"
+  }
 
   # ── Storefront (subdomain-based) ─────────────────────────────────────────
   # Must come FIRST so subdomain requests are caught before anything else

@@ -1,4 +1,4 @@
-class ProductsController < ApplicationController
+class ProductsController < StoreBaseController
   include StoreFinder
 
   before_action :set_product, only: [:show, :edit, :update]

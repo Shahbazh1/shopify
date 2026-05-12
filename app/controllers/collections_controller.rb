@@ -1,4 +1,4 @@
-class CollectionsController < ApplicationController
+class CollectionsController < StoreBaseController
   include StoreFinder
 
   before_action :set_collection, only: [:show, :edit, :update, :destroy]
