@@ -23,6 +23,12 @@ class Product < ApplicationRecord
   private
 
   def generate_slug
-    self.slug = title.parameterize
+    base_slug = title.to_s.parameterize
+
+    if self.persisted?
+      self.slug = base_slug
+    else
+      self.slug = "#{base_slug}-#{SecureRandom.hex(3)}"
+    end
   end
 end
