@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_09_210433) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_12_060634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "active_storage_attachments"~, force: :cascade do |t|
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -89,6 +89,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_210433) do
     t.string "country"
     t.datetime "created_at", null: false
     t.string "email"
+    t.string "encrypted_password", default: "", null: false
     t.string "first_name"
     t.boolean "is_default", default: false
     t.string "language", default: "en"
@@ -96,8 +97,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_210433) do
     t.integer "orders_count", default: 0, null: false
     t.string "phone"
     t.string "postal_code"
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
     t.bigint "store_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_customers_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
     t.index ["store_id"], name: "index_customers_on_store_id"
   end
 
@@ -229,8 +235,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_210433) do
     t.string "category"
     t.datetime "created_at", null: false
     t.text "description"
-    t.integer "inventory_quantity", default: 0
-    t.decimal "price"
     t.boolean "published_online_store", default: false
     t.boolean "published_pos", default: false
     t.string "slug"
