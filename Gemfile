@@ -83,3 +83,6 @@ gem "dotenv-rails"
 # add the cloudinary gems for image upload
 gem "cloudinary"
 gem "activestorage-cloudinary-service"
+
+# add the stripe gem for payment processing
+gem "stripe"

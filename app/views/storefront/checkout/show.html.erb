@@ -5,7 +5,9 @@
   <div>
     <h1 style="font-size: 24px; font-weight: 700; margin-bottom: 28px;">Checkout</h1>
 
-    <%= form_with url: storefront_checkout_create_path, method: :post do |f| %>
+    <%= form_with url: storefront_checkout_stripe_path,
+              method: :post,
+              data: { turbo: false } do |f| %>
 
       <%# CONTACT INFO %>
       <div style="margin-bottom: 28px;">
@@ -146,7 +148,7 @@
         <% end %>
       </div>
 
-      <%= f.submit "Place Order →",
+      <%= f.submit "Pay with Stripe →",
             style: "width:100%; padding:14px; background:#1a1a1a; color:white;
                     border:none; border-radius:8px; font-size:15px; font-weight:600;
                     cursor:pointer;" %>
