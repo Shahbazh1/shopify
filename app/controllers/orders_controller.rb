@@ -46,6 +46,9 @@ class OrdersController < StoreBaseController
   end
 
   def order_params
-    params.require(:order).permit(:status)
+    params.require(:order).permit(
+      :fulfillment_status,
+      :order_status
+    )
   end
 end
