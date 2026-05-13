@@ -1,0 +1,63 @@
+<div style="max-width: 520px; margin: 40px auto;">
+  <div style="background: #fff; border: 0.5px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+
+    <%# Header %>
+    <div style="padding: 20px 24px; border-bottom: 0.5px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <p style="font-size: 13px; color: #6b7280; margin: 0 0 2px;">Order #<%= @order.id %></p>
+        <p style="font-size: 16px; font-weight: 500; margin: 0;"><%= @order.first_name %> <%= @order.last_name %></p>
+      </div>
+      <span style="background: #d1fae5; color: #065f46; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 999px;">
+        <%= @order.fulfillment_status.capitalize %>
+      </span>
+    </div>
+
+    <%# Timeline %>
+    <div style="padding: 24px;">
+      <% timeline = order_timeline(@order) %>
+      <% timeline.each_with_index do |step, index| %>
+        <% is_last = index == timeline.size - 1 %>
+        <% done = step[:status] == "done" %>
+
+        <div style="display: flex; gap: 16px; align-items: flex-start;">
+
+          <%# Dot + connector %>
+          <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
+            <div style="
+              width: 32px; height: 32px; border-radius: 50%;
+              background: <%= done ? '#1D9E75' : '#e5e7eb' %>;
+              display: flex; align-items: center; justify-content: center;
+            ">
+              <% if done %>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              <% else %>
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #d1d5db;"></div>
+              <% end %>
+            </div>
+
+            <% unless is_last %>
+              <div style="width: 2px; height: 36px; margin-top: 4px; background: <%= done ? '#1D9E75' : '#e5e7eb' %>;"></div>
+            <% end %>
+          </div>
+
+          <%# Label %>
+          <div style="padding-top: 6px; <%= is_last ? '' : 'padding-bottom: 24px;' %>">
+            <p style="font-size: 14px; font-weight: 500; margin: 0; color: <%= done ? '#111827' : '#9ca3af' %>;">
+              <%= step[:label] %>
+            </p>
+          </div>
+
+        </div>
+      <% end %>
+    </div>
+
+    <%# Footer %>
+    <div style="padding: 16px 24px; border-top: 0.5px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 13px; color: #6b7280;">
+      <span>Total paid</span>
+      <span style="color: #111827; font-weight: 500;"><%= number_to_currency(@order.total_price) %></span>
+    </div>
+
+  </div>
+</div>

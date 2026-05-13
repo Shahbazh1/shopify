@@ -1,4 +1,4 @@
-<% if @carts.present? %>
+<% if @cart_items.present? %>
   <%= render "checkout_list", carts: @carts %>
 <% else %>
   <%= render "empty_state" %>

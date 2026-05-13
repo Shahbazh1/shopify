@@ -3,6 +3,7 @@ class CheckoutsController < StoreBaseController
 
   def index
     @carts = Checkouts::CartsIndexQuery.new(@store).call
+    @cart_items = Checkouts::CartItemIndexQuery.new(@store).call
   end
 
   def show

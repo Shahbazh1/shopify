@@ -327,6 +327,81 @@
         .sf-hero h1 { font-size: 32px; }
         .sf-hero { padding: 48px 16px; }
       }
+      /* ── ORDERS ── */
+.sf-orders {
+  max-width: 700px;
+  margin: 48px auto;
+  padding: 0 32px;
+}
+
+.sf-orders h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+
+.sf-order-card {
+  border: 1px solid var(--sf-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--sf-card-bg);
+}
+
+.sf-order-card-left { display: flex; flex-direction: column; gap: 6px; }
+.sf-order-card-left strong { font-size: 15px; }
+.sf-order-card-left span  { font-size: 13px; color: var(--sf-muted); }
+
+.sf-order-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sf-order-badge.done     { background: #d1fae5; color: #065f46; }
+.sf-order-badge.pending  { background: #fef3c7; color: #92400e; }
+.sf-order-badge.shipped  { background: #dbeafe; color: #1e40af; }
+
+/* ── TIMELINE ── */
+.sf-timeline { padding: 32px 0; }
+
+.sf-timeline-step {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.sf-timeline-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.sf-timeline-dot.done    { background: #10b981; }
+.sf-timeline-dot.pending { background: #e5e7eb; }
+
+.sf-timeline-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sf-timeline-label.pending { color: var(--sf-muted); }
+
+.sf-timeline-connector {
+  margin-left: 8px;
+  width: 2px;
+  height: 24px;
+  background: #e5e7eb;
+  margin-bottom: 8px;
+}
     </style>
   </head>
 
@@ -344,13 +419,22 @@
       </ul>
 
       <div class="sf-nav-right">
-        <%= link_to storefront_cart_path, class: "sf-cart-icon" do %>
-          <i class="fa-solid fa-bag-shopping"></i>
-          <% if session[:cart_id] && (cart = Cart.find_by(id: session[:cart_id])) && cart.cart_items.any? %>
-            <span class="sf-cart-badge"><%= cart.cart_items.sum(:quantity) %></span>
-          <% end %>
+
+      <%# Orders icon — only show when logged in %>
+        <% if customer_signed_in? %>
+          <%= link_to storefront_orders_path, class: "sf-cart-icon", title: "My Orders" do %>
+          <i class="fa-solid fa-box"></i>
         <% end %>
-      </div>
+      <% end %>
+
+      <%= link_to storefront_cart_path, class: "sf-cart-icon" do %>
+        <i class="fa-solid fa-bag-shopping"></i>
+          <% if session[:cart_id] && (cart = Cart.find_by(id: session[:cart_id])) && cart.cart_items.any? %>
+        <span class="sf-cart-badge"><%= cart.cart_items.sum(:quantity) %></span>
+    <% end %>
+  <% end %>
+
+</div>
     </nav>
 
     <%# FLASH MESSAGES %>

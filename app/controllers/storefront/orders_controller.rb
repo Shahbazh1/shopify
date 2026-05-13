@@ -1,7 +1,17 @@
 # app/controllers/storefront/orders_controller.rb
 class Storefront::OrdersController < Storefront::BaseController
-  def confirmation
-    @order      = Order.find(params[:id])
-    @order_items = @order.order_items.includes(:product, :product_variant)
+  helper OrdersHelper
+  before_action :authenticate_customer!
+
+  def index
+    @orders = current_customer.orders
+                              .where(store: @store)
+                              .order(created_at: :desc)
+  end
+
+  def show
+    @order = current_customer.orders
+                             .where(store: @store)
+                             .find(params[:id])
   end
 end

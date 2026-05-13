@@ -5,7 +5,7 @@
   <table class="checkout-table">
     <thead>
       <tr>
-        <th>Customer</th>
+        <th>Customer Id</th>
         <th>Email</th>
         <th>Total Items</th>
         <th>Actions</th>
@@ -16,7 +16,7 @@
       <% carts.each do |cart| %>
         <tr>
           <td class="customer-name">
-            <%= cart.customer.first_name %> <%= cart.customer.last_name %>
+            <%= cart.customer.id %>
           </td>
 
           <td class="customer-email">

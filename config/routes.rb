@@ -25,6 +25,8 @@ Rails.application.routes.draw do
       get   "/contact",               to: "pages#contact",       as: :storefront_contact
       get   "/about",                 to: "pages#about",         as: :storefront_about
       get "/orders/:id/confirmation", to: "orders#confirmation", as: :storefront_order_confirmation
+      get  "/account/orders",     to: "orders#index",  as: :storefront_orders
+      get  "/account/orders/:id", to: "orders#show",   as: :storefront_order
 
       # Stripe Checkout routes
 post "/checkout/stripe", to: "checkout#create_stripe_session", as: :storefront_checkout_stripe
