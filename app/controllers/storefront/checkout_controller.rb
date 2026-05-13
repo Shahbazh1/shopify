@@ -21,16 +21,6 @@ class Storefront::CheckoutController < Storefront::BaseController
     customer       = current_customer
     shipping_method = ShippingMethod.find(checkout_params[:shipping_method_id])
 
-    customer.update!(
-      first_name:  checkout_params[:first_name],
-      last_name:   checkout_params[:last_name],
-      phone:       checkout_params[:phone],
-      address:     checkout_params[:address],
-      city:        checkout_params[:city],
-      country:     checkout_params[:country],
-      postal_code: checkout_params[:postal_code]
-    )
-
     subtotal = @cart.cart_items.sum { |i| i.product_variant.price * i.quantity }
     total    = subtotal + shipping_method.price
 
@@ -42,7 +32,15 @@ class Storefront::CheckoutController < Storefront::BaseController
       shipping_price:  shipping_method.price,
       subtotal:        subtotal,
       total_price:     total,
-      status:          "pending_payment"
+      status:          "pending_payment",
+      first_name: checkout_params[:first_name],
+      last_name:  checkout_params[:last_name],
+      phone:      checkout_params[:phone],
+      email:      checkout_params[:email],
+      shipping_address:    checkout_params[:address],
+      city:       checkout_params[:city],
+      country:    checkout_params[:country],
+      postal_code: checkout_params[:postal_code]
     )
 
     @cart.cart_items.each do |item|

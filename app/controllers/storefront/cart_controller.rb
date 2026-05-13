@@ -24,8 +24,6 @@ class Storefront::CartController < Storefront::BaseController
       )
     end
 
-    redirect_to storefront_cart_path,
-                notice: "Item added to cart"
   end
 
   def remove_item

@@ -25,10 +25,19 @@ module Segments
 
     def customers_by_orders_count
       case @segment.rule_value
+
       when "=0"
-        Customer.where.not(email: [nil, ""])
+        Customer
+          .left_joins(:orders)
+          .group("customers.id")
+          .having("COUNT(orders.id) = 0")
+
       when ">=1"
-        Customer.where("orders_count >= 1")
+        Customer
+          .joins(:orders)
+          .group("customers.id")
+          .having("COUNT(orders.id) >= 1")
+
       else
         Customer.all
       end

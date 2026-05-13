@@ -20,18 +20,18 @@
 
       <div>
         <strong>Customer:</strong><br>
-        <%= @order.customer.first_name %>
-        <%= @order.customer.last_name %>
+        <%= @order.first_name %>
+        <%= @order.last_name %>
       </div>
 
       <div>
         <strong>Email:</strong><br>
-        <%= @order.customer.email %>
+        <%= @order.email %>
       </div>
 
       <div>
         <strong>Phone:</strong><br>
-        <%= @order.customer.phone %>
+        <%= @order.phone %>
       </div>
     </div>
   </div>
@@ -41,10 +41,10 @@
     <h2>Shipping Address</h2>
 
     <p>
-      <%= @order.customer.address %><br>
-      <%= @order.customer.city %><br>
-      <%= @order.customer.country %><br>
-      <%= @order.customer.postal_code %>
+      <%= @order.shipping_address %><br>
+      <%= @order.city %><br>
+      <%= @order.country %><br>
+      <%= @order.postal_code %>
     </p>
 
     <p>

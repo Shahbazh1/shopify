@@ -213,9 +213,8 @@
       <thead>
         <tr>
           <th><input type="checkbox" class="checkbox"></th>
-          <th>Customer name</th>
-          <th>Email subscription</th>
-          <th>Location</th>
+          <th>Customer Id</th>
+          <th>Email </th>
           <th>Orders</th>
           <th>Amount spent</th>
         </tr>
@@ -233,29 +232,25 @@
 
               <!-- NAME -->
               <td class="customer-name">
-                <%= full_name.present? ? full_name : "—" %>
+                <%= customer.id %>
               </td>
 
               <!-- EMAIL SUBSCRIPTION (STATIC since no column exists) -->
               <td>
                 <span class="tag">
-                  Subscribed
+                  <%= customer.email %>
                 </span>
               </td>
 
-              <!-- LOCATION (CITY + COUNTRY) -->
-              <td class="muted">
-                <%= [customer.city, customer.country].compact.join(", ").presence || "—" %>
-              </td>
 
               <!-- ORDERS (NOT IN DB → STATIC) -->
               <td>
-                0
+                <%= customer.orders.count %>
               </td>
 
               <!-- AMOUNT SPENT (NOT IN DB → STATIC) -->
               <td class="muted">
-                Rs 0.00
+                Rs <%= customer.orders.sum(:total_price).to_f.round(2) %>
               </td>
             </tr>
 
