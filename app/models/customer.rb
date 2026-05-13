@@ -5,7 +5,7 @@ class Customer < ApplicationRecord
          :recoverable, :rememberable, :validatable
   belongs_to :store
 
-  has_many :orders
+  has_many :orders, dependent: :destroy
   has_one :cart, dependent: :destroy
 
   def full_name

@@ -3,73 +3,178 @@
   <%# IMAGE %>
   <div>
     <% if @images.any? %>
-      <img src="<%= @images.first.image_url %>" 
+      <img src="<%= @images.first.image_url %>"
            alt="<%= @product.title %>"
            class="sf-product-show-img">
+
       <% if @images.count > 1 %>
         <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
           <% @images.each do |img| %>
-            <img src="<%= img.image_url %>" 
-                 style="width:64px; height:64px; object-fit:cover; 
+            <img src="<%= img.image_url %>"
+                 style="width:64px; height:64px; object-fit:cover;
                         border-radius:6px; border:1px solid #e5e5e5; cursor:pointer;">
           <% end %>
         </div>
       <% end %>
+
     <% else %>
-      <div class="sf-product-show-img" 
-           style="display:flex; align-items:center; justify-content:center; 
+
+      <div class="sf-product-show-img"
+           style="display:flex; align-items:center; justify-content:center;
                   background:#f3f4f6; color:#ccc; font-size:64px;">
         <i class="fa-solid fa-image"></i>
       </div>
+
     <% end %>
   </div>
 
+
   <%# INFO %>
   <div class="sf-product-show-info">
+
     <h1><%= @product.title %></h1>
 
     <div class="sf-product-show-price">
       <% if @variants.any? %>
         From <%= number_to_currency(@variants.minimum(:price)) %>
-      <% else %>
-        <%= number_to_currency(@product.price) %>
       <% end %>
     </div>
 
-    <p class="sf-product-show-desc"><%= @product.description %></p>
+    <p class="sf-product-show-desc">
+      <%= @product.description %>
+    </p>
+
 
     <% if @variants.any? %>
+
       <%= form_with url: storefront_cart_add_path, method: :post do |f| %>
+
         <%= f.hidden_field :product_id, value: @product.id %>
 
-        <select name="variant_id" class="sf-variant-select">
+        <%# VARIANT SELECT %>
+        <select
+          name="variant_id"
+          class="sf-variant-select"
+          id="variant-select">
+
           <% @variants.each do |variant| %>
-            <option value="<%= variant.id %>">
-              <%= [variant.size, variant.color].compact.join(" / ") %> 
-              — <%= number_to_currency(variant.price) %>
-              (<%= variant.stock_quantity %> in stock)
+
+            <option
+              value="<%= variant.id %>"
+              data-stock="<%= variant.stock_quantity %>"
+              <%= "disabled" if variant.stock_quantity <= 0 %>>
+
+              <%= [variant.size, variant.color].compact.join(" / ") %>
+              —
+              <%= number_to_currency(variant.price) %>
+
+              <% if variant.stock_quantity > 0 %>
+                (<%= variant.stock_quantity %> in stock)
+              <% else %>
+                (Out of stock)
+              <% end %>
+
             </option>
+
           <% end %>
         </select>
 
-        <div style="display:flex; gap:8px; margin-bottom:16px;">
-          <input type="number" name="quantity" value="1" min="1" 
-                 style="width:80px; padding:10px; border:1px solid #e5e5e5; 
-                        border-radius:8px; font-size:14px; text-align:center;">
+
+        <%# QUANTITY %>
+        <div style="display:flex; gap:8px; margin-bottom:16px; margin-top:16px;">
+
+          <input
+            type="number"
+            name="quantity"
+            id="quantity-input"
+            value="1"
+            min="1"
+            max="<%= @variants.first.stock_quantity %>"
+            style="width:80px; padding:10px; border:1px solid #e5e5e5;
+                   border-radius:8px; font-size:14px; text-align:center;">
+
         </div>
 
-        <%= f.submit "Add to Cart", class: "sf-add-to-cart" %>
+
+        <%# STOCK MESSAGE %>
+        <p id="stock-message"
+           style="font-size:14px; margin-bottom:12px; color:#6b7280;">
+        </p>
+
+
+        <%# BUTTON %>
+        <%= f.submit "Add to Cart",
+              class: "sf-add-to-cart",
+              id: "add-to-cart-btn" %>
+
       <% end %>
+
     <% else %>
+
       <p style="color:#ef4444; font-size:14px; font-weight:500;">
         Out of stock
       </p>
+
     <% end %>
 
+
     <div style="margin-top:16px;">
-      <%= link_to "← Back to Products", storefront_products_path, 
+      <%= link_to "← Back to Products",
+            storefront_products_path,
             style: "font-size:14px; color:#6b7280; text-decoration:none;" %>
     </div>
-  </div>
 
+  </div>
 </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const variantSelect = document.getElementById("variant-select");
+  const quantityInput = document.getElementById("quantity-input");
+  const stockMessage = document.getElementById("stock-message");
+  const addToCartBtn = document.getElementById("add-to-cart-btn");
+
+  function updateStockUI() {
+
+    const selectedOption =
+      variantSelect.options[variantSelect.selectedIndex];
+
+    const stock =
+      parseInt(selectedOption.dataset.stock);
+
+    quantityInput.max = stock;
+
+    if (parseInt(quantityInput.value) > stock) {
+      quantityInput.value = stock;
+    }
+
+    if (stock <= 0) {
+
+      stockMessage.innerHTML = "Out of stock";
+      stockMessage.style.color = "#ef4444";
+
+      addToCartBtn.disabled = true;
+      addToCartBtn.style.opacity = "0.5";
+      addToCartBtn.style.cursor = "not-allowed";
+
+    } else {
+
+      stockMessage.innerHTML =
+        stock + " items available";
+
+      stockMessage.style.color = "#16a34a";
+
+      addToCartBtn.disabled = false;
+      addToCartBtn.style.opacity = "1";
+      addToCartBtn.style.cursor = "pointer";
+    }
+  }
+
+  updateStockUI();
+
+  variantSelect.addEventListener("change", updateStockUI);
+
+});
+</script>
