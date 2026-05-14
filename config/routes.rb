@@ -29,10 +29,10 @@ Rails.application.routes.draw do
       get  "/account/orders/:id", to: "orders#show",   as: :storefront_order
 
       # Stripe Checkout routes
-post "/checkout/stripe", to: "checkout#create_stripe_session", as: :storefront_checkout_stripe
-get  "/checkout/success",  to: "checkout#success",  as: :storefront_checkout_success
-get  "/checkout/cancel",   to: "checkout#cancel",   as: :storefront_checkout_cancel
-post "/webhooks/stripe",   to: "stripe_webhooks#create", as: :storefront_stripe_webhook
+      post "/checkout/stripe", to: "checkout#create_stripe_session", as: :storefront_checkout_stripe
+      get  "/checkout/success",  to: "checkout#success",  as: :storefront_checkout_success
+      get  "/checkout/cancel",   to: "checkout#cancel",   as: :storefront_checkout_cancel
+      post "/webhooks/stripe",   to: "stripe_webhooks#create", as: :storefront_stripe_webhook
     end
   end
 
