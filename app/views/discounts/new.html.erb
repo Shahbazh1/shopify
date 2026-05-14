@@ -1,6 +1,7 @@
 <!-- app/views/discounts/new.html.erb -->
 
 <%= form_with model: @discount, url: discounts_path, method: :post do |f| %>
+  <%= f.hidden_field :discount_type, value: @discount_type %>
   <!-- Replace the old hidden inputs with this container -->
 <div id="hidden-inputs-container"></div>
 <!-- BROWSE MODAL -->
@@ -69,9 +70,9 @@
     <!-- LEFT SIDE -->
     <div class="left-section">
 
-      <!-- Amount off products -->
+      <!-- type of discount -->
       <div class="card">
-        <h3>Amount off products</h3>
+        <h3><%= @discount_type.capitalize %></h3>
 
         <div class="field-group">
   <label>Method</label>
@@ -109,85 +110,47 @@
       </div>
 
       <!-- Discount Value -->
+      <% if @discount_type == "amount_off_products" || @discount_type == "amount_off_order" %>
       <div class="card">
-        <h3>Discount value</h3>
+        <h3>Discount</h3>
 
         <div class="discount-value-row">
-  <select name="discount[value_type]" id="value-type-select">
-    <option value="percentage">Percentage</option>
-    <option value="fixed">Fixed</option>
-  </select>
+          <select name="discount[value_type]" id="value-type-select">
+            <option value="percentage">Percentage</option>
+            <option value="fixed">Fixed</option>
+          </select>
 
-  <div class="percent-box">
-    <input type="text" name="discount[value]">
-    <span id="value-symbol">%</span>
-  </div>
-</div>
+          <div class="percent-box">
+            <input type="text" name="discount[value]">
+            <span id="value-symbol">%</span>
+          </div>
+        </div>
+        <% if @discount_type == "amount_off_products" %>
+          <div class="field-group mt-16">
+            <label>Applies to</label>
 
-        <div class="field-group mt-16">
-          <label>Applies to</label>
-
-          <select name="discount[applies_to]" id="applies-to">
+            <select name="discount[applies_to]" id="applies-to">
             <option value="collections">Collections</option>
             <option value="products">Products</option>
-          </select>
-        </div>
-
-        <div class="search-row">
-          <div class="search-box">
-            <span>⌕</span>
-            <input type="text" placeholder="Search collections">
+            </select>
           </div>
+        
 
-          <button class="browse-btn" type="button">Browse</button>
-<div id="hidden-inputs-container"></div>
+           <div class="search-row">
+            <div class="search-box">
+              <span>⌕</span>
+              <input type="text" placeholder="Search collections">
+            </div>
 
-<div id="selected-items-preview"></div>
-        </div>
+            <button class="browse-btn" type="button">Browse</button>
+            <div id="hidden-inputs-container"></div>
+
+            <div id="selected-items-preview"></div>
+          </div>
+        <% end %>
+
       </div>
-
-      <!-- Eligibility -->
-      <div class="card">
-        <h3>Eligibility</h3>
-
-        <select name="discount[customer_eligibility]">
-          <option value="all_customers">All customers</option>
-          <option value="specific_customers">Customer segments</option>
-        </select>
-      </div>
-
-      <!-- Minimum Requirements -->
-      <div class="card">
-        <h3>Minimum purchase requirements</h3>
-
-        <label class="radio-option">
-          <input type="radio" name="discount[minimum_requirement_type]" value="none" checked>
-          <span>No minimum requirements</span>
-        </label>
-
-        <label class="radio-option">
-          <input type="radio" name="discount[minimum_requirement_type]" value="amount">
-          <span>Minimum purchase amount (Rs)</span>
-        </label>
-
-        <label class="radio-option">
-          <input type="radio" name="discount[minimum_requirement_type]" value="quantity">
-          <span>Minimum quantity of items</span>
-        </label>
-
-        <input type="text" name="discount[minimum_purchase_amount]" placeholder="Amount">
-        <input type="text" name="discount[minimum_quantity]" placeholder="Quantity">
-      </div>
-
-      <!-- Maximum Discount Uses -->
-      <div class="card">
-        <h3>Maximum discount uses</h3>
-
-        <label class="checkbox-option">
-          <input type="checkbox" name="discount[limit_one_per_customer]" value="1">
-          <span>Limit to one use per customer</span>
-        </label>
-      </div>
+    <% end%>
 
       <!-- Active Dates -->
       <div class="card">
@@ -772,22 +735,15 @@ const saveSelectionBtn = document.getElementById('save-selection-btn');
 const preview = document.getElementById('selected-items-preview');
 
 browseBtn.addEventListener('click', () => {
-
   const selectedType = appliesToSelect.value;
-
   browseModal.style.display = 'flex';
 
-  if(selectedType === 'specific_collections'){
-
+  if (selectedType === 'collections') {            // ← matches <option value="collections">
     modalTitle.textContent = 'Select Collections';
-
     collectionItems.forEach(item => item.style.display = 'block');
     productItems.forEach(item => item.style.display = 'none');
-
   } else {
-
     modalTitle.textContent = 'Select Products';
-
     collectionItems.forEach(item => item.style.display = 'none');
     productItems.forEach(item => item.style.display = 'block');
   }

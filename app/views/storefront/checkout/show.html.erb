@@ -121,32 +121,25 @@
         </div>
       </div>
 
-      <%# SHIPPING METHOD %>
+      <%# DISCOUNT CODE %>
       <div style="margin-bottom: 28px;">
-        <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;
-                   text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280;">
-          Shipping Method
+        <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280;">
+          Discount
         </h2>
 
-        <% @shipping_methods.each do |method| %>
-          <label style="display: flex; align-items: center; justify-content: space-between;
-                        padding: 14px 16px; border: 1px solid #e5e5e5; border-radius: 8px;
-                        margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <input type="radio" 
-                     name="checkout[shipping_method_id]" 
-                     value="<%= method.id %>"
-                     <%= "checked" if method == @shipping_methods.first %>>
-              <div>
-                <div style="font-size: 14px; font-weight: 600;"><%= method.name %></div>
-              </div>
-            </div>
-            <span style="font-size: 14px; font-weight: 600;">
-              <%= method.price.zero? ? "Free" : number_to_currency(method.price) %>
-            </span>
+        <div>
+          <label style="font-size: 13px; font-weight: 500; display: block; margin-bottom: 4px;">
+            Discount Code (optional)
           </label>
-        <% end %>
+
+          <%= f.text_field :discount_code,
+                name: "checkout[discount_code]",
+                placeholder: "Enter discount code",
+                style: "width:100%; padding:10px 12px; border:1px solid #e5e5e5;
+                        border-radius:8px; font-size:14px; outline:none;" %>
+        </div>
       </div>
+
 
       <%= f.submit "Pay with Stripe →",
             style: "width:100%; padding:14px; background:#1a1a1a; color:white;
@@ -157,49 +150,32 @@
   </div>
 
   <%# RIGHT — ORDER SUMMARY %>
-  <div>
-    <div style="background: #f9fafb; border-radius: 12px; padding: 24px; 
-                position: sticky; top: 80px;">
-      <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">
-        Order Summary
-      </h2>
-
-      <% @cart_items.each do |item| %>
-        <div style="display: flex; justify-content: space-between; 
-                    align-items: center; margin-bottom: 16px;">
-          <div>
-            <div style="font-size: 14px; font-weight: 600;">
-              <%= item.product.title %>
-            </div>
-            <div style="font-size: 12px; color: #6b7280;">
-              <%= [item.product_variant.size, item.product_variant.color].compact.join(" / ") %>
-              × <%= item.quantity %>
-            </div>
-          </div>
-          <span style="font-size: 14px; font-weight: 500;">
-            <%= number_to_currency(item.product_variant.price * item.quantity) %>
-          </span>
-        </div>
-      <% end %>
-
-      <div style="border-top: 1px solid #e5e5e5; padding-top: 16px; margin-top: 8px;">
-        <div style="display: flex; justify-content: space-between; 
-                    font-size: 14px; margin-bottom: 8px;">
-          <span style="color: #6b7280;">Subtotal</span>
-          <span><%= number_to_currency(@subtotal) %></span>
-        </div>
-        <div style="display: flex; justify-content: space-between; 
-                    font-size: 14px; margin-bottom: 16px;">
-          <span style="color: #6b7280;">Shipping</span>
-          <span>Calculated above</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; 
-                    font-size: 16px; font-weight: 700;">
-          <span>Total</span>
-          <span><%= number_to_currency(@subtotal) %>+</span>
-        </div>
-      </div>
-    </div>
+  <div style="border-top: 1px solid #e5e5e5; padding-top: 16px; margin-top: 8px;">
+  <div style="display: flex; justify-content: space-between; 
+              font-size: 14px; margin-bottom: 8px;">
+    <span style="color: #6b7280;">Subtotal</span>
+    <span><%= number_to_currency(@subtotal) %></span>
   </div>
+
+  <% if @order_discount > 0 %>
+    <div style="display: flex; justify-content: space-between; 
+                font-size: 14px; margin-bottom: 8px; color: #16a34a;">
+      <span>Discount</span>
+      <span>− <%= number_to_currency(@order_discount) %></span>
+    </div>
+  <% end %>
+
+  <div style="display: flex; justify-content: space-between; 
+              font-size: 14px; margin-bottom: 16px;">
+    <span style="color: #6b7280;">Shipping</span>
+    <span><%= @shipping_price == 0 ? "Free" : number_to_currency(@shipping_price) %></span>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; 
+              font-size: 16px; font-weight: 700; border-top: 1px solid #e5e5e5; padding-top: 12px;">
+    <span>Total</span>
+    <span><%= number_to_currency(@total) %></span>
+  </div>
+</div>
 
 </div>

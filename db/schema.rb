@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_14_025432) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -82,21 +82,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
   end
 
   create_table "customers", force: :cascade do |t|
-    t.text "address"
-    t.string "apartment"
-    t.string "city"
-    t.string "company"
-    t.string "country"
     t.datetime "created_at", null: false
     t.string "email"
     t.string "encrypted_password", default: "", null: false
-    t.string "first_name"
     t.boolean "is_default", default: false
-    t.string "language", default: "en"
-    t.string "last_name"
     t.integer "orders_count", default: 0, null: false
-    t.string "phone"
-    t.string "postal_code"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
@@ -109,19 +99,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
 
   create_table "discounts", force: :cascade do |t|
     t.boolean "auto_generate_code", default: false
-    t.string "code_type"
     t.datetime "created_at", null: false
-    t.string "customer_eligibility"
     t.string "discount_code"
     t.string "discount_method"
     t.string "discount_title"
     t.string "discount_type"
     t.datetime "end_date"
     t.boolean "limit_one_per_customer", default: false
-    t.integer "max_usage_limit"
-    t.decimal "minimum_purchase_amount"
-    t.integer "minimum_quantity"
-    t.string "minimum_requirement_type"
     t.datetime "start_date"
     t.bigint "store_id", null: false
     t.datetime "updated_at", null: false
@@ -181,7 +165,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
     t.string "phone"
     t.string "postal_code"
     t.text "shipping_address"
-    t.bigint "shipping_method_id", null: false
     t.decimal "shipping_price"
     t.bigint "store_id", null: false
     t.string "stripe_session_id"
@@ -189,7 +172,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
     t.decimal "total_price"
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_orders_on_customer_id"
-    t.index ["shipping_method_id"], name: "index_orders_on_shipping_method_id"
     t.index ["store_id"], name: "index_orders_on_store_id"
   end
 
@@ -274,29 +256,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "shipments", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "delivered_at"
-    t.bigint "order_id", null: false
-    t.datetime "shipped_at"
-    t.bigint "shipping_method_id", null: false
-    t.string "status"
-    t.string "tracking_number"
-    t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_shipments_on_order_id"
-    t.index ["shipping_method_id"], name: "index_shipments_on_shipping_method_id"
-  end
-
-  create_table "shipping_methods", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "name"
-    t.decimal "price"
-    t.datetime "updated_at", null: false
-  end
-
   create_table "stores", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "currency"
+    t.string "currency", default: "PKR"
     t.string "domain"
     t.string "name"
     t.string "slug"
@@ -341,7 +303,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
   add_foreign_key "order_items", "product_variants"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "customers"
-  add_foreign_key "orders", "shipping_methods"
   add_foreign_key "orders", "stores"
   add_foreign_key "payments", "orders"
   add_foreign_key "product_collections", "collections"
@@ -352,7 +313,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_080850) do
   add_foreign_key "product_variants", "products"
   add_foreign_key "products", "stores"
   add_foreign_key "refunds", "payments"
-  add_foreign_key "shipments", "orders"
-  add_foreign_key "shipments", "shipping_methods"
   add_foreign_key "stores", "users"
 end

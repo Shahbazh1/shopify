@@ -2,106 +2,101 @@ class Storefront::CheckoutController < Storefront::BaseController
   before_action :set_cart
 
   def show
-    if @cart.cart_items.empty?
-      redirect_to storefront_cart_path, alert: "Your cart is empty."
-      return
-    end
-
-    @cart_items    = @cart.cart_items.includes(:product, :product_variant)
-    @subtotal      = @cart_items.sum { |i| i.product_variant.price * i.quantity }
-    @shipping_methods = ShippingMethod.all
+  if @cart.cart_items.empty?
+    redirect_to storefront_cart_path, alert: "Your cart is empty."
+    return
   end
 
+  @cart_items      = @cart.cart_items.includes(:product, :product_variant)
+  @discount_result = Discounts::ApplyService.new(@store, @cart, nil).call
+  @subtotal        = @discount_result[:subtotal]
+  @order_discount  = @discount_result[:order_discount]
+  @shipping_price  = @discount_result[:shipping_discount] == :free ? 0 : 5.00
+  @total           = [@subtotal + @shipping_price - @order_discount, 0].max
+end
+
   def create_stripe_session
-    if @cart.cart_items.empty?
-      redirect_to storefront_cart_path, alert: "Your cart is empty."
-      return
-    end
+    return redirect_to storefront_cart_path, alert: "Your cart is empty." if @cart.cart_items.empty?
 
-    customer       = current_customer
-    shipping_method = ShippingMethod.find(checkout_params[:shipping_method_id])
+  customer        = current_customer
+  discount_result = Discounts::ApplyService.new(
+    @store,
+    @cart,
+    checkout_params[:discount_code]
+  ).call
 
-    subtotal = @cart.cart_items.sum { |i| i.product_variant.price * i.quantity }
-    total    = subtotal + shipping_method.price
+    Rails.logger.debug "=== DISCOUNT RESULT: #{discount_result.inspect}"  # ← add this
 
-    # Create order with status "pending_payment" before Stripe
-    order = Order.create!(
-      store:           @store,
-      customer:        customer,
-      shipping_method: shipping_method,
-      shipping_price:  shipping_method.price,
-      subtotal:        subtotal,
-      total_price:     total,
-      payment_status: "pending",
-      fulfillment_status: "pending",
-      order_status: "pending",
-      first_name: checkout_params[:first_name],
-      last_name:  checkout_params[:last_name],
-      phone:      checkout_params[:phone],
-      email:      checkout_params[:email],
-      shipping_address:    checkout_params[:address],
-      city:       checkout_params[:city],
-      country:    checkout_params[:country],
-      postal_code: checkout_params[:postal_code]
+
+  subtotal       = discount_result[:subtotal]          # ← was: @cart.cart_items.sum { ... }
+  shipping_price = discount_result[:shipping_discount] == :free ? 0 : 5.00
+  discount_total = discount_result[:order_discount]
+  total          = [subtotal + shipping_price - discount_total, 0].max
+
+    Rails.logger.debug "=== TOTAL: #{total}"  # ← and this
+
+
+  order = Order.create!(
+    store:              @store,
+    customer:           customer,
+    shipping_price:     shipping_price,
+    subtotal:           subtotal,
+    total_price:        total,
+    payment_status:     "pending",
+    fulfillment_status: "pending",
+    order_status:       "pending",
+    first_name:         checkout_params[:first_name],
+    last_name:          checkout_params[:last_name],
+    phone:              checkout_params[:phone],
+    email:              checkout_params[:email],
+    shipping_address:   checkout_params[:address],
+    city:               checkout_params[:city],
+    country:            checkout_params[:country],
+    postal_code:        checkout_params[:postal_code]
+  )
+
+  @cart.cart_items.each do |item|
+    OrderItem.create!(
+      order:           order,
+      product:         item.product,
+      product_variant: item.product_variant,
+      quantity:        item.quantity,
+      price:           item.product_variant.price
     )
+  end
 
-    @cart.cart_items.each do |item|
-      OrderItem.create!(
-        order:           order,
-        product:         item.product,
-        product_variant: item.product_variant,
-        quantity:        item.quantity,
-        price:           item.product_variant.price
-      )
-    end
-
-    # Build Stripe line items from cart
-    line_items = @cart.cart_items.map do |item|
-      variant = item.product_variant
-      {
-        price_data: {
-          currency:     @store.currency.downcase,
-          unit_amount:  (variant.price * 100).to_i,  # Stripe wants cents
-          product_data: {
-            name: "#{item.product.title} — #{[variant.size, variant.color].compact.join(' / ')}"
-          }
-        },
-        quantity: item.quantity
-      }
-    end
-
-    # Add shipping as a line item
-    line_items << {
+  # Single line item = exactly what customer owes after discount
+  line_items = [
+    {
       price_data: {
         currency:     @store.currency.downcase,
-        unit_amount:  (shipping_method.price * 100).to_i,
-        product_data: { name: "Shipping — #{shipping_method.name}" }
+        unit_amount:  (total * 100).to_i,
+        product_data: { name: "Order ##{order.id} — #{@store.name}" }
       },
       quantity: 1
     }
+  ]
 
-    session = Stripe::Checkout::Session.create(
-      payment_method_types: ['card'],
-      line_items:           line_items,
-      mode:                 'payment',
-      customer_email:       customer.email,
-      success_url: storefront_checkout_success_url(host: request.host_with_port) + "?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url:  storefront_checkout_cancel_url(host: request.host_with_port),
-      metadata: {
-        order_id: order.id,
-        store_id: @store.id
-      }
-    )
+  session = Stripe::Checkout::Session.create(
+    payment_method_types: ["card"],
+    line_items:           line_items,
+    mode:                 "payment",
+    customer_email:       customer.email,
+    success_url: storefront_checkout_success_url(host: request.host_with_port) + "?session_id={CHECKOUT_SESSION_ID}",
+    cancel_url:  storefront_checkout_cancel_url(host: request.host_with_port),
+    metadata: {
+      order_id: order.id,
+      store_id: @store.id
+    }
+  )
 
-    # Save the stripe session id so webhook can find the order
-    order.update!(stripe_session_id: session.id)
+  order.update!(stripe_session_id: session.id)
+  redirect_to session.url, allow_other_host: true
 
-    redirect_to session.url, allow_other_host: true
-
-  rescue ActiveRecord::RecordInvalid => e
-    flash[:alert] = "Something went wrong: #{e.message}"
-    redirect_to storefront_checkout_path
-  end
+rescue ActiveRecord::RecordInvalid => e
+  flash[:alert] = "Something went wrong: #{e.message}"
+  redirect_to storefront_checkout_path
+end   
 
   # Stripe redirects here after successful payment
   # DO NOT trust this to confirm payment — use the webhook for that
@@ -127,7 +122,7 @@ class Storefront::CheckoutController < Storefront::BaseController
     params.require(:checkout).permit(
       :first_name, :last_name, :email, :phone,
       :address, :city, :country, :postal_code,
-      :shipping_method_id
+      :shipping_method_id, :discount_code
     )
   end
 end

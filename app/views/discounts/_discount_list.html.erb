@@ -34,7 +34,6 @@
             <th>Title</th>
             <th>Status</th>
             <th>Method</th>
-            <th>Eligibility</th>
             <th>Type</th>
             <th>Combinations</th>
             <th class="text-right">Used</th>
@@ -53,9 +52,6 @@
         <span class="badge badge-success">Active</span>
       </td>
       <td><%= discount.discount_method&.capitalize || "Code" %></td>
-      <td class="icon-cell">
-        <span class="icon">👤</span> <%= discount.customer_eligibility&.humanize || "All customers" %>
-      </td>
       <td class="icon-cell">
         <span class="icon">🏷️</span> <%= discount.discount_type&.humanize || "Amount off product" %>
       </td>
