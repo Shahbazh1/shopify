@@ -58,6 +58,12 @@ post "/webhooks/stripe",   to: "stripe_webhooks#create", as: :storefront_stripe_
   scope "/stores/:store_id" do
     get "/home", to: "home#index", as: :store_home
 
+
+    resources :draft_orders do
+      member do
+        post :send_invoice
+      end
+    end
     resources :orders
     resources :draft_orders
     resources :checkouts
@@ -79,6 +85,5 @@ constraints AdminConstraint do
         resources :stores, only: [:show, :destroy]
       end
     end
-  end
-
+end
 end

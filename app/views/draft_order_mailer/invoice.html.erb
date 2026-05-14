@@ -1,0 +1,30 @@
+<h2>Invoice — Order #D<%= @draft_order.id %></h2>
+
+<% if @message.present? %>
+  <p><%= @message %></p>
+<% end %>
+
+<table border="1" cellpadding="8" style="border-collapse:collapse; width:100%;">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Variant</th>
+      <th>Price</th>
+      <th>Qty</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= item.product&.title %></td>
+        <td><%= item.product_variant&.size %> / <%= item.product_variant&.color %></td>
+        <td>Rs <%= item.price %></td>
+        <td><%= item.quantity %></td>
+        <td>Rs <%= item.price * item.quantity %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><strong>Total: Rs <%= @draft_order.total_price.to_f.round(2) %></strong></p>

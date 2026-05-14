@@ -58,7 +58,6 @@
     padding-bottom: 50px;
   }
 
-  /* HEADER ACTIONS */
   .header-container {
     max-width: 1100px;
     margin: 20px auto 10px;
@@ -81,7 +80,6 @@
     cursor: pointer;
   }
 
-  /* LAYOUT */
   .page-layout {
     display: grid;
     grid-template-columns: 1fr 300px;
@@ -109,7 +107,6 @@
 
   .card-body { padding: 0 16px 16px; }
 
-  /* PRODUCTS SECTION */
   .product-row {
     display: flex;
     align-items: center;
@@ -124,11 +121,9 @@
   .prod-price-qty { display: flex; align-items: center; gap: 10px; }
   .qty-input { width: 60px; padding: 6px; border: 1px solid var(--border); border-radius: 6px; text-align: center; }
 
-  /* PAYMENT TABLE */
   .payment-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
   .payment-table td { padding: 8px 0; color: var(--text-muted); }
   .payment-table .val { text-align: right; color: var(--text); }
-  .payment-table .link { color: #005bd3; cursor: pointer; text-decoration: none; }
   .total-row { border-top: 1px solid #eee; font-weight: 700; font-size: 14px; }
   .total-row td { padding-top: 12px; color: var(--text) !important; }
 
@@ -140,7 +135,6 @@
     align-items: center;
   }
 
-  /* INPUTS */
   input, select, textarea {
     width: 100%;
     padding: 8px 12px;
@@ -174,51 +168,63 @@
 
 <div class="header-container">
   <div class="order-title">
-    <h1><span style="color:#6b6b6b;">←</span> #D4</h1>
-    <div class="updated-by">Updated by Shahbaz Hashmi today at 11:49 am</div>
-  </div>
-  <div class="header-btns">
-    <button class="btn-secondary">Duplicate</button>
-    <button class="btn-secondary">Share</button>
-    <button class="btn-secondary">More actions ▾</button>
+    <h1><span style="color:#6b6b6b;">←</span> New Draft Order</h1>
+    <div class="updated-by">Create a new draft order</div>
   </div>
 </div>
 
-<%= form_with model: [@store, @draft_order], 
-              url: @draft_order.persisted? ? draft_order_path(@store, @draft_order) : draft_orders_path(@store), 
-              local: true  do |f| %>
-                <%= f.hidden_field :status, id: "draft-order-status" %>
+<% if @draft_order.errors.any? %>
 
-<%= f.hidden_field :subtotal, id: "draft-order-subtotal" %>
+  <div style="
+    background:#fff4f4;
+    border:1px solid #f5c2c2;
+    color:#c62828;
+    padding:14px;
+    border-radius:10px;
+    margin-bottom:16px;
+  ">
 
-<%= f.hidden_field :discount_amount,
-                   value: 0,
-                   id: "draft-order-discount" %>
+    <% @draft_order.errors.full_messages.each do |msg| %>
+      <div style="margin-bottom:6px;">
+        <%= msg %>
+      </div>
+    <% end %>
 
-<%= f.hidden_field :shipping_price,
-                   value: 250,
-                   id: "draft-order-shipping" %>
+  </div>
 
-<%= f.hidden_field :total_price,
-                   id: "draft-order-total" %>
+<% end %>
+
+<%= form_with model: [@store, @draft_order],
+              url: draft_orders_path(@store),
+              local: true do |f| %>
+
+  <%= f.hidden_field :status, id: "draft-order-status" %>
+  <%= f.hidden_field :subtotal, id: "draft-order-subtotal" %>
+  <%= f.hidden_field :discount_amount, value: 0, id: "draft-order-discount" %>
+  <%= f.hidden_field :shipping_price, value: 250, id: "draft-order-shipping" %>
+  <%= f.hidden_field :total_price, id: "draft-order-total" %>
+
   <div class="page-layout">
-    
+
     <!-- LEFT COLUMN -->
     <div>
+
       <!-- PRODUCTS -->
       <div class="card">
         <div class="card-header">
           <span>Products</span>
           <div style="display:flex; gap:8px;">
-<button type="button" class="btn-secondary" style="background:white; border:1px solid #ddd;" onclick="openProductModal()">
-  + Add product
-</button>            <button type="button" class="btn-secondary" style="background:white; border:1px solid #ddd;">+ Add custom item</button>
+            <button type="button" class="btn-secondary" style="background:white; border:1px solid #ddd;" onclick="openProductModal()">
+              + Add product
+            </button>
+            <button type="button" class="btn-secondary" style="background:white; border:1px solid #ddd;">
+              + Add custom item
+            </button>
           </div>
         </div>
-        <!-- Replace the static product-row with this -->
-<div class="card-body" id="selected-products-container">
-  <p id="no-products-msg" style="color: #6b6b6b; padding: 10px;">No products selected.</p>
-</div>
+        <div class="card-body" id="selected-products-container">
+          <p id="no-products-msg" style="color:#6b6b6b; padding:10px;">No products selected.</p>
+        </div>
       </div>
 
       <!-- PAYMENT -->
@@ -226,72 +232,45 @@
         <div class="card-header">Payment</div>
         <div class="card-body">
           <table class="payment-table">
-  <tr>
-    <td>Subtotal</td>
-    <td id="total-items">0 items</td>
-    <td class="val" id="subtotal-price">Rs 0.00</td>
-  </tr>
 
-  <tr>
-    <td class="link">Add discount</td>
-    <td>—</td>
-    <td class="val">Rs 0.00</td>
-  </tr>
+            <tr>
+              <td>Subtotal</td>
+              <td id="total-items">0 items</td>
+              <td class="val" id="subtotal-price">Rs 0.00</td>
+            </tr>
 
-  <tr>
-    <td class="link">Add shipping or delivery</td>
-    <td>—</td>
-    <td class="val">Rs 0.00</td>
-  </tr>
+            <tr>
+              <td>Shipping</td>
+              <td>Flat rate</td>
+              <td class="val" id="shipping-display">Rs 250.00</td>
+            </tr>
 
-  <tr>
-    <td class="link">
-      Estimated tax
-      <span style="font-size:10px; opacity:0.5;">ⓘ</span>
-    </td>
+            <tr class="total-row">
+              <td colspan="2">Total</td>
+              <td class="val" id="grand-total">Rs 250.00</td>
+            </tr>
 
-    <td>16% GST</td>
-
-    <td class="val" id="tax-price">Rs 0.00</td>
-  </tr>
-
-  <tr class="total-row">
-    <td colspan="2">Total</td>
-    <td class="val" id="grand-total">Rs 0.00</td>
-  </tr>
-</table>
+          </table>
         </div>
         <div class="payment-footer">
           <label style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" style="width:auto;"> Payment due later
           </label>
           <div style="display:flex; gap:8px;">
-
-  <button type="submit"
-          class="btn-secondary"
-          onclick="setDraftStatus('cancelled')">
-    Cancel Order
-  </button>
-
-  <button type="submit"
-          class="btn-secondary"
-          onclick="setDraftStatus('open')">
-    Save
-  </button>
-
-  <button type="submit"
-          class="btn-black"
-          onclick="setDraftStatus('completed')">
-    Mark as paid
-  </button>
-
-</div>
+            <button type="submit"
+                    class="btn-black"
+                    onclick="setDraftStatus('open')">
+              Save Draft Order
+            </button>
+          </div>
         </div>
       </div>
+
     </div>
 
     <!-- RIGHT COLUMN -->
     <div>
+
       <div class="card">
         <div class="card-header">Notes <span style="font-weight:normal; font-size:16px;">✎</span></div>
         <div class="card-body">
@@ -330,287 +309,192 @@
           <%= f.text_field :tags, placeholder: "" %>
         </div>
       </div>
+
     </div>
   </div>
 <% end %>
 
+<!-- PRODUCT MODAL -->
 <div id="productModal" class="modal-overlay" style="display:none;">
   <div class="modal-box">
-    
     <div class="modal-header">
       <h3>Select Product</h3>
       <span onclick="closeProductModal()" style="cursor:pointer;">✕</span>
     </div>
-
     <div class="modal-body">
-
       <% @products.each do |product| %>
         <div class="modal-product">
           <div>
             <strong><%= product.title %></strong>
           </div>
-
           <div style="margin-left:10px; margin-top:6px;">
-  <% product.product_variants.each do |variant| %>
-    <div style="display:flex; justify-content:space-between; padding:6px 0;">
-      
-      <span>
-        <%= "#{variant.size} / #{variant.color}" %> — Rs <%= variant.price %>
-      </span>
-
-      <button type="button"
-onclick="selectProduct(
-  <%= product.id %>,
-  <%= variant.id %>,
-  '<%= j product.title %>',
-  '<%= j variant.size %>',
-  '<%= j variant.color %>',
-  <%= variant.price %>
-)">
-  Add
-</button>
-
-    </div>
-  <% end %>
-</div>
-
+            <% product.product_variants.each do |variant| %>
+              <div style="display:flex; justify-content:space-between; padding:6px 0;">
+                <span>
+                  <%= "#{variant.size} / #{variant.color}" %> — Rs <%= variant.price %>
+                </span>
+                <button type="button"
+                  onclick="selectProduct(
+                    <%= product.id %>,
+                    <%= variant.id %>,
+                    '<%= j product.title %>',
+                    '<%= j variant.size %>',
+                    '<%= j variant.color %>',
+                    <%= variant.price %>
+                  )">
+                  Add
+                </button>
+              </div>
+            <% end %>
+          </div>
         </div>
         <hr>
       <% end %>
-
     </div>
   </div>
 </div>
 
 <script>
 
-function openProductModal(){
-  document.getElementById("productModal").style.display = "flex";
-}
-
-function closeProductModal(){
-  document.getElementById("productModal").style.display = "none";
-}
-
-function selectProduct(productId, variantId, title, size, color, price){
-
-  const container = document.getElementById("selected-products-container");
-  const noProductsMsg = document.getElementById("no-products-msg");
-
-  if(noProductsMsg){
-    noProductsMsg.remove();
+  function openProductModal() {
+    document.getElementById("productModal").style.display = "flex";
   }
 
-  // check if variant already exists
-  let existingRow = document.getElementById(`variant-${variantId}`);
-
-  if(existingRow){
-
-    let qtyInput = existingRow.querySelector(".qty-input");
-
-    qtyInput.value = parseInt(qtyInput.value) + 1;
-
-rowQty = qtyInput.value;
-
-existingRow.querySelector(".quantity-hidden").value = rowQty;
-
-    updateRowTotal(existingRow, price);
-
-    calculateTotals();
-
-    closeProductModal();
-
-    return;
+  function closeProductModal() {
+    document.getElementById("productModal").style.display = "none";
   }
 
-  // create row
-  let row = document.createElement("div");
+  function selectProduct(productId, variantId, title, size, color, price) {
 
-  row.className = "product-row";
+    const container     = document.getElementById("selected-products-container");
+    const noProductsMsg = document.getElementById("no-products-msg");
 
-  row.id = `variant-${variantId}`;
+    if (noProductsMsg) noProductsMsg.remove();
 
-  row.setAttribute("data-price", price);
+    // if variant already in list, just bump quantity
+    let existingRow = document.getElementById(`variant-${variantId}`);
 
-  let index = document.querySelectorAll(".product-row").length;
+    if (existingRow) {
+      let qtyInput       = existingRow.querySelector(".qty-input");
+      qtyInput.value     = parseInt(qtyInput.value) + 1;
+      existingRow.querySelector(".quantity-hidden").value = qtyInput.value;
+      updateRowTotal(existingRow, price);
+      calculateTotals();
+      closeProductModal();
+      return;
+    }
 
-row.innerHTML = `
-  
-  <div class="prod-img"></div>
+    let index = document.querySelectorAll(".product-row").length;
 
-  <div class="prod-info">
-    <strong>${title}</strong>
+    let row = document.createElement("div");
+    row.className = "product-row";
+    row.id        = `variant-${variantId}`;
+    row.setAttribute("data-price", price);
 
-    <div style="color:#6b6b6b; margin-top:4px;">
-      ${size} / ${color}
-    </div>
-  </div>
+    row.innerHTML = `
+      <div class="prod-img"></div>
 
-  <div class="prod-price-qty">
+      <div class="prod-info">
+        <strong>${title}</strong>
+        <div style="color:#6b6b6b; margin-top:4px;">${size} / ${color}</div>
+      </div>
 
-    <div>
-      Rs <span class="unit-price">${price}</span>
-    </div>
+      <div class="prod-price-qty">
+        <div>Rs <span class="unit-price">${price}</span></div>
 
-    <input type="number"
-           value="1"
-           min="1"
-           class="qty-input"
-           onchange="quantityChanged(this)"
-    >
+        <input type="number"
+               value="1"
+               min="1"
+               class="qty-input"
+               onchange="quantityChanged(this)">
 
-    <div>
-      Rs <span class="row-total">${price}</span>
-    </div>
+        <div>Rs <span class="row-total">${parseFloat(price).toFixed(2)}</span></div>
 
-    <button type="button"
-            onclick="removeRow(${variantId})"
-            style="
-              border:none;
-              background:none;
-              cursor:pointer;
-              color:red;
-              font-size:18px;
-            ">
-      ✕
-    </button>
+        <button type="button"
+                onclick="removeRow(${variantId})"
+                style="border:none; background:none; cursor:pointer; color:red; font-size:18px;">
+          ✕
+        </button>
+      </div>
 
-  </div>
+      <input type="hidden"
+             name="draft_order[draft_order_items_attributes][${index}][product_id]"
+             value="${productId}">
 
-  <!-- HIDDEN FIELDS -->
+      <input type="hidden"
+             name="draft_order[draft_order_items_attributes][${index}][product_variant_id]"
+             value="${variantId}">
 
-  <input type="hidden"
-         name="draft_order[draft_order_items_attributes][${index}][product_id]"
-         value="${productId}"
-         class="product-id">
+      <input type="hidden"
+             name="draft_order[draft_order_items_attributes][${index}][price]"
+             value="${price}">
 
-  <input type="hidden"
-         name="draft_order[draft_order_items_attributes][${index}][product_variant_id]"
-         value="${variantId}"
-         class="variant-id">
-
-  <input type="hidden"
-         name="draft_order[draft_order_items_attributes][${index}][price]"
-         value="${price}"
-         class="price-input">
-
-  <input type="hidden"
-         name="draft_order[draft_order_items_attributes][${index}][quantity]"
-         value="1"
-         class="quantity-hidden">
-`;
-
-  container.appendChild(row);
-
-  calculateTotals();
-
-  closeProductModal();
-}
-
-function quantityChanged(input){
-
-  let row = input.closest(".product-row");
-
-  let price = parseFloat(row.getAttribute("data-price"));
-
-  let qty = parseInt(input.value);
-
-  // update hidden quantity field
-  row.querySelector(".quantity-hidden").value = qty;
-
-  updateRowTotal(row, price);
-
-  calculateTotals();
-}
-
-function updateRowTotal(row, price){
-
-  let qty = parseInt(row.querySelector(".qty-input").value);
-
-  let total = qty * price;
-
-  row.querySelector(".row-total").innerText = total.toFixed(2);
-}
-
-function removeRow(variantId){
-
-  let row = document.getElementById(`variant-${variantId}`);
-
-  row.remove();
-
-  let container = document.getElementById("selected-products-container");
-
-  if(container.children.length === 0){
-
-    container.innerHTML = `
-      <p id="no-products-msg"
-         style="color:#6b6b6b; padding:10px;">
-        No products selected.
-      </p>
+      <input type="hidden"
+             name="draft_order[draft_order_items_attributes][${index}][quantity]"
+             value="1"
+             class="quantity-hidden">
     `;
+
+    container.appendChild(row);
+    calculateTotals();
+    closeProductModal();
   }
 
-  calculateTotals();
-}
-
-function calculateTotals(){
-
-  let rows = document.querySelectorAll(".product-row");
-
-  let subtotal = 0;
-
-  let totalItems = 0;
-
-  rows.forEach(row => {
-
+  function quantityChanged(input) {
+    let row   = input.closest(".product-row");
     let price = parseFloat(row.getAttribute("data-price"));
+    let qty   = parseInt(input.value);
+    row.querySelector(".quantity-hidden").value = qty;
+    updateRowTotal(row, price);
+    calculateTotals();
+  }
 
-    let qty = parseInt(row.querySelector(".qty-input").value);
+  function updateRowTotal(row, price) {
+    let qty   = parseInt(row.querySelector(".qty-input").value);
+    let total = qty * price;
+    row.querySelector(".row-total").innerText = total.toFixed(2);
+  }
 
-    subtotal += price * qty;
+  function removeRow(variantId) {
+    document.getElementById(`variant-${variantId}`).remove();
 
-    totalItems += qty;
-  });
+    let container = document.getElementById("selected-products-container");
+    if (container.children.length === 0) {
+      container.innerHTML = `<p id="no-products-msg" style="color:#6b6b6b; padding:10px;">No products selected.</p>`;
+    }
+    calculateTotals();
+  }
 
-  // static values
-  let shipping = 250;
+  function calculateTotals() {
+    let rows       = document.querySelectorAll(".product-row");
+    let subtotal   = 0;
+    let totalItems = 0;
 
-  let discount = 0;
+    rows.forEach(row => {
+      let price  = parseFloat(row.getAttribute("data-price"));
+      let qty    = parseInt(row.querySelector(".qty-input").value);
+      subtotal   += price * qty;
+      totalItems += qty;
+    });
 
-  let tax = subtotal * 0.16;
+    let shipping   = 250;
+    let grandTotal = subtotal + shipping;
 
-  let grandTotal = subtotal + shipping + tax - discount;
+    // UI
+    document.getElementById("subtotal-price").innerText  = `Rs ${subtotal.toFixed(2)}`;
+    document.getElementById("shipping-display").innerText = `Rs ${shipping.toFixed(2)}`;
+    document.getElementById("grand-total").innerText      = `Rs ${grandTotal.toFixed(2)}`;
+    document.getElementById("total-items").innerText      = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
 
-  // UI update
-  document.getElementById("subtotal-price").innerText =
-    `Rs ${subtotal.toFixed(2)}`;
+    // Hidden fields
+    document.getElementById("draft-order-subtotal").value  = subtotal.toFixed(2);
+    document.getElementById("draft-order-discount").value  = "0.00";
+    document.getElementById("draft-order-shipping").value  = shipping.toFixed(2);
+    document.getElementById("draft-order-total").value     = grandTotal.toFixed(2);
+  }
 
-  document.getElementById("tax-price").innerText =
-    `Rs ${tax.toFixed(2)}`;
-
-  document.getElementById("grand-total").innerText =
-    `Rs ${grandTotal.toFixed(2)}`;
-
-  document.getElementById("total-items").innerText =
-    `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
-
-  // hidden fields update
-  document.getElementById("draft-order-subtotal").value =
-    subtotal.toFixed(2);
-
-  document.getElementById("draft-order-discount").value =
-    discount.toFixed(2);
-
-  document.getElementById("draft-order-shipping").value =
-    shipping.toFixed(2);
-
-  document.getElementById("draft-order-total").value =
-    grandTotal.toFixed(2);
-}
-
-function setDraftStatus(status){
-
-  document.getElementById("draft-order-status").value = status;
-}
+  function setDraftStatus(status) {
+    document.getElementById("draft-order-status").value = status;
+  }
 
 </script>

@@ -22,7 +22,7 @@ class DraftOrdersController < StoreBaseController
     @draft_order = result[:draft_order]
 
     if result[:success]
-      redirect_to draft_orders_path(@store),
+      redirect_to edit_draft_order_path(@store, @draft_order),
                   notice: "Draft order was successfully created."
     else
       @products = form_data.products
@@ -36,6 +36,7 @@ class DraftOrdersController < StoreBaseController
   def edit
     @products = form_data.products
     @draft_order_items = form_data.items
+    @draft_order = @store.draft_orders.find(params[:id])
   end
 
   def update
@@ -45,21 +46,21 @@ class DraftOrdersController < StoreBaseController
     ).call
 
     if result[:success]
-      redirect_to draft_orders_path(@store),
+      redirect_to edit_draft_order_path(@store, @draft_order),
                   notice: "Draft order updated"
     else
       render :edit
     end
   end
 
-  def send_invoice
-    DraftOrders::SendInvoiceService.new(@draft_order).call
+ def send_invoice
+  email   = params[:email]
+  message = params[:message]
 
-    render json: {
-      success: true,
-      message: "Invoice sent successfully"
-    }
-  end
+  DraftOrderMailer.invoice(@draft_order, email, message).deliver_now
+
+  render json: { success: true, message: "Invoice sent successfully" }
+end
 
   def destroy
     @draft_order.destroy

@@ -312,20 +312,6 @@ input {
   <!-- Header -->
   <div class="header">
     <h2>Good afternoon, let's get started.</h2>
-
-    <div class="search-bar">
-      <input type="text" placeholder="Ask anything..." />
-      <div class="icons">
-        <span>+</span>
-        <span>↑</span>
-      </div>
-    </div>
-
-    <div class="suggestions">
-      <button>Write product descriptions for me</button>
-      <button>Is my store ready to launch?</button>
-      <button>Brainstorm business ideas with me</button>
-    </div>
   </div>
 
   <!-- Main Card -->
@@ -361,42 +347,6 @@ input {
           Choose or generate a custom theme, then add your logo, colors, and images.
         </p>
     <%= link_to "Customize Theme", store_themes_path(store_id: params[:store_id]), class: "secondary" %>
-      </div>
-
-    </div>
-
-    <!-- Bottom Grid -->
-    <div class="grid-3">
-
-      <!-- Payment -->
-      <div class="small-box">
-        <h4>Set up a payment provider</h4>
-        <div class="payment-icons">
-  <img src="https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/4e117.svg" alt="Card 1" />
-  <img src="https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/2c2bf.svg" alt="Card 2" />
-  <img src="https://cdn.shopify.com/shopifycloud/admin-ui-foundations/payment-icons/cd169.svg" alt="Card 3" />
-</div>
-        <button class="secondary">Activate</button>
-      </div>
-
-      <!-- Shipping -->
-      <div class="small-box shipping-box">
-  <div class="box-content">
-    <h4>Review your shipping rates</h4>
-
-    <div class="shipping-info">
-      <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/pk-ba18a7da7bb4.svg" alt="Pakistan Flag" />
-    </div>
-  </div>
-
-  <button class="secondary">Review</button>
-</div>
-
-      <!-- Domain -->
-      <div class="small-box">
-        <h4>Customize domain <span class="price">Get $20</span></h4>
-        <input type="text" value="ibqb5l-5m.myshopify.com" readonly />
-        <button class="secondary">Customize</button>
       </div>
 
     </div>

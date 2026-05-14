@@ -225,7 +225,7 @@
         <% if @customers.present? %>
           <% @customers.each do |customer| %>
 
-            <% full_name = [customer.first_name, customer.last_name].compact.join(" ") %>
+            <% full_name = [customer.id].compact.join(" ") %>
 
             <tr class="clickable-row" data-href="<%= (customer) %>">
               <td><input type="checkbox" class="checkbox"></td>

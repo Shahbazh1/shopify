@@ -52,17 +52,11 @@
           <input type="checkbox">
         </th>
 
-        <th>Customer name</th>
+        <th>Customer Id</th>
 
         <th>Email</th>
 
-        <th class="location-heading">
-          <span>Location</span>
-        </th>
-
-        <th>Phone</th>
-
-        <th>Language</th>
+ 
 
       </tr>
     </thead>
@@ -82,27 +76,12 @@
 
             <!-- Name -->
             <td class="customer-name">
-              <%= "#{customer.first_name} #{customer.last_name}" %>
+              <%= customer.id %>
             </td>
 
             <!-- Email -->
             <td>
               <%= customer.email.present? ? customer.email : "No email" %>
-            </td>
-
-            <!-- Country -->
-            <td>
-              <%= customer.country.present? ? customer.country : "Pakistan" %>
-            </td>
-
-            <!-- Phone -->
-            <td>
-              <%= customer.phone.present? ? customer.phone : "No phone" %>
-            </td>
-
-            <!-- Language -->
-            <td>
-              <%= customer.language.upcase %>
             </td>
 
           </tr>
