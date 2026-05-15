@@ -11,6 +11,7 @@
       <th>Variant</th>
       <th>Price</th>
       <th>Qty</th>
+      <th>Shipping</th>
       <th>Total</th>
     </tr>
   </thead>
@@ -21,7 +22,8 @@
         <td><%= item.product_variant&.size %> / <%= item.product_variant&.color %></td>
         <td>Rs <%= item.price %></td>
         <td><%= item.quantity %></td>
-        <td>Rs <%= item.price * item.quantity %></td>
+        <td>Rs <%= item.shipping_price %></td>
+        <td>Rs <%= item.price * item.quantity + item.shipping_price %></td>
       </tr>
     <% end %>
   </tbody>

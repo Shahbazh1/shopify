@@ -36,7 +36,7 @@
 
     <div class="sf-product-show-price">
       <% if @variants.any? %>
-        From <%= number_to_currency(@variants.minimum(:price)) %>
+        From <%= number_to_currency(@variants.minimum(:price), unit: "Rs ", precision: 0) %>
       <% end %>
     </div>
 
@@ -66,7 +66,7 @@
 
               <%= [variant.size, variant.color].compact.join(" / ") %>
               —
-              <%= number_to_currency(variant.price) %>
+              <%= number_to_currency(variant.price, unit: "Rs ", precision: 0) %>
 
               <% if variant.stock_quantity > 0 %>
                 (<%= variant.stock_quantity %> in stock)

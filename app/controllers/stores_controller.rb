@@ -1,4 +1,4 @@
-class StoresController < ApplicationController
+class StoresController < StoreBaseController
   before_action :authenticate_user!
   before_action :set_store, only: [:edit, :update, :destroy, :preview]
 

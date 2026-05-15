@@ -14,7 +14,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2, :facebook]
 
-  enum :role, { user: "user", admin: "admin" }
+  enum :role, { user: "member", admin: "admin", super_admin: "super_admin" }, default: "member"
 
   def self.from_omniauth(auth)
 

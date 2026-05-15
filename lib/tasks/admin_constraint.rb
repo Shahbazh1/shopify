@@ -1,10 +1,9 @@
-# lib/admin_constraint.rb
 
 class AdminConstraint
   def self.matches?(request)
     user = request.env["warden"]&.user(:user)
 
-    user&.role == "admin"
+    user&.role == "super_admin"
   end
 end
 

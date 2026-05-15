@@ -9,6 +9,16 @@ Rails.application.routes.draw do
     sessions: "customers/sessions"
   }
 
+    # Admin routes
+constraints AdminConstraint do
+    namespace :admin do
+      root "dashboard#index"
+      resources :users, only: [:index, :show, :destroy] do
+        resources :stores, only: [:show, :destroy]
+      end
+    end
+end
+
   # ── Storefront (subdomain-based) ─────────────────────────────────────────
   # Must come FIRST so subdomain requests are caught before anything else
   constraints StorefrontSubdomainConstraint do
@@ -84,13 +94,5 @@ Rails.application.routes.draw do
     resources :memberships, only: [:create, :destroy], as: :store_memberships
   end
 
-  # Admin routes
-constraints AdminConstraint do
-    namespace :admin do
-      root "dashboard#index"
-      resources :users, only: [:index, :show, :destroy] do
-        resources :stores, only: [:show, :destroy]
-      end
-    end
-end
+
 end

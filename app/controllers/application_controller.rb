@@ -25,7 +25,7 @@ end
   def after_sign_in_path_for(resource)
   case resource
   when User
-    if resource.admin?
+    if  resource.super_admin?
       admin_root_path
     else
       stores_path

@@ -26,7 +26,7 @@
         <tr>
           <th>Draft</th>
           <th>Date</th>
-          <th>Customer</th>
+          <th>UserId</th>
           <th>Status</th>
           <th>Items</th>
           <th>Total</th>
@@ -49,9 +49,9 @@
               <%= draft_order.created_at.strftime("%d %b %Y") %>
             </td>
 
-            <!-- Customer -->
+            <!-- UserId -->
             <td>
-              No customer
+              <%= draft_order.user_id %>
             </td>
 
             <!-- Status -->

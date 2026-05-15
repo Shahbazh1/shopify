@@ -8,7 +8,7 @@ module DraftOrders
 
     def call
       draft_order = @store.draft_orders.new(@params)
-      draft_order.user = @user
+      draft_order.user_id = @user.id if @user
 
       ActiveRecord::Base.transaction do
 

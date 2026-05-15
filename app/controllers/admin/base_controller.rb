@@ -1,13 +1,13 @@
 # app/controllers/admin/base_controller.rb
 class Admin::BaseController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_admin!
+  before_action :require_super_admin!
   layout "admin"
 
   private
 
-  def require_admin!
-    unless current_user.admin?
+  def require_super_admin!
+    unless current_user.super_admin?
       flash[:alert] = "You are not authorized to access this area."
       redirect_to root_path
     end
