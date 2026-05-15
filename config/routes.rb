@@ -1,3 +1,7 @@
+# config/routes.rb
+require_relative "../lib/tasks/storefront_subdomain_constraint"
+require_relative "../lib/tasks/admin_constraint"
+
 Rails.application.routes.draw do
   devise_for :customers,
   controllers: {

@@ -226,7 +226,6 @@
         <div><input type="checkbox"></div>
         <div>Title</div>
         <div>Products</div>
-        <div>Product conditions</div>
       </div>
 
       <% @collections.each do |collection| %>
@@ -248,11 +247,6 @@
     <div>
       <%= collection.products.count %>
     </div>
-
-    <div>
-      <!-- you can show conditions later -->
-    </div>
-
   </div>
 <% end %>
 
