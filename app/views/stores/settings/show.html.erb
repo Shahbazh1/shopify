@@ -1,0 +1,231 @@
+<%# app/views/stores/settings/show.html.erb %>
+
+<style>
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    font-family: Arial, sans-serif;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+
+  .card h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+    color: #333;
+  }
+
+  .input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .input:focus {
+    border-color: #3b82f6;
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    color: #fff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+  }
+
+  .btn-dark {
+    background: #111;
+    color: #fff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .btn-dark:hover {
+    background: #333;
+  }
+
+  .btn-danger {
+    color: #dc2626;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-danger:hover {
+    text-decoration: underline;
+  }
+
+  .error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  .members {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .member-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .member-item:last-child {
+    border-bottom: none;
+  }
+
+  .email {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .badge {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    width: fit-content;
+  }
+
+  .badge.admin {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+
+  .badge.user {
+    background: #f3f4f6;
+    color: #4b5563;
+  }
+
+  .add-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .add-form {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<% if flash[:alert] %>
+  <div class="error">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<% if flash[:notice] %>
+  <div style="background:#ecfdf5; color:#065f46; padding:10px; border-radius:10px; margin-bottom:12px;">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<div class="container">
+
+  <h1>Store Settings</h1>
+
+  <%# ── Store Name ───────────────────────────── %>
+  <section class="card">
+    <h2>General</h2>
+
+    <%= form_with model: @store, url: update_store_settings_path(@store), method: :patch do |f| %>
+
+      <% if @store.errors.any? %>
+        <div class="error">
+          <%= @store.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <div style="margin-bottom: 14px;">
+        <%= f.label :name, "Store Name" %><br>
+        <%= f.text_field :name, class: "input" %>
+      </div>
+
+      <%= f.submit "Save Changes", class: "btn-primary" %>
+    <% end %>
+  </section>
+
+  <%# ── Members ───────────────────────────── %>
+  <section class="card">
+    <h2>Team Members</h2>
+
+    <%= form_with model: @new_membership,
+                  url: store_memberships_path(@store),
+                  method: :post,
+                  class: "add-form" do |f| %>
+
+      <%= f.email_field :email,
+            placeholder: "colleague@email.com",
+            class: "input" %>
+
+      <%= f.submit "Add Member", class: "btn-dark" %>
+    <% end %>
+
+    <div class="members">
+      <% @memberships.each do |membership| %>
+        <div class="member-item">
+
+          <div>
+            <div class="email">
+              <%= membership.user.email %>
+            </div>
+
+            <div class="badge <%= membership.role == 'admin' ? 'admin' : 'user' %>">
+              <%= membership.role.capitalize %>
+            </div>
+          </div>
+
+          <% unless membership.user == current_user %>
+            <%= button_to "Remove",
+                  store_membership_path(@store, membership),
+                  method: :delete,
+                  class: "btn-danger",
+                  data: { turbo_confirm: "Remove #{membership.user.email} from this store?" } %>
+          <% end %>
+
+        </div>
+      <% end %>
+    </div>
+
+  </section>
+
+</div>

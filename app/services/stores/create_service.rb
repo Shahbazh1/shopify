@@ -6,11 +6,20 @@ module Stores
     end
 
     def call
-      store = @user.stores.new(@params)
+      store = @user.owned_stores.new(@params)
 
       if store.save
+
+        Membership.create!(
+          user: @user,
+          store: store,
+          role: "admin"
+        )
+
         { success: true, store: store }
       else
+        puts store.errors.full_messages
+
         { success: false, store: store }
       end
     end

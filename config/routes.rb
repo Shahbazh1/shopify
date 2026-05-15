@@ -75,6 +75,13 @@ Rails.application.routes.draw do
     resources :inventories, only: [:index, :show, :edit, :update]
     resources :discounts
     resources :themes, only: [:index, :show], as: :store_themes
+
+    # Settings
+    get    "/settings",         to: "stores/settings#show",           as: :store_settings
+    patch  "/settings",         to: "stores/settings#update",         as: :update_store_settings
+
+    # Member management (nested under settings)
+    resources :memberships, only: [:create, :destroy], as: :store_memberships
   end
 
   # Admin routes

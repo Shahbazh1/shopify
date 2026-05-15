@@ -86,3 +86,6 @@ gem "activestorage-cloudinary-service"
 
 # add the stripe gem for payment processing
 gem "stripe"
+
+# Gemfile
+gem "pundit"

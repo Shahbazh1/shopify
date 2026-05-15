@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_14_064652) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_15_070324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -136,7 +136,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_14_064652) do
     t.decimal "subtotal", precision: 10, scale: 2, default: "0.0"
     t.decimal "total_price", precision: 10, scale: 2, default: "0.0"
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["store_id"], name: "index_draft_orders_on_store_id"
+    t.index ["user_id"], name: "index_draft_orders_on_user_id"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "role", default: "member"
+    t.bigint "store_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["store_id"], name: "index_memberships_on_store_id"
+    t.index ["user_id", "store_id"], name: "index_memberships_on_user_id_and_store_id", unique: true
+    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -300,6 +313,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_14_064652) do
   add_foreign_key "draft_order_items", "product_variants"
   add_foreign_key "draft_order_items", "products"
   add_foreign_key "draft_orders", "stores"
+  add_foreign_key "draft_orders", "users"
+  add_foreign_key "memberships", "stores"
+  add_foreign_key "memberships", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "product_variants"
   add_foreign_key "order_items", "products"

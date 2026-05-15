@@ -1,7 +1,12 @@
 class Store < ApplicationRecord
   validates :slug, presence: true, uniqueness: true
   
-  belongs_to :user
+  belongs_to :owner,
+             class_name: "User",
+             foreign_key: :user_id
+
+  has_many :memberships, dependent: :destroy
+  has_many :users, through: :memberships
 
   has_many :products, dependent: :destroy
   has_many :orders, dependent: :destroy

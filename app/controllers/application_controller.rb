@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
   layout :layout_by_resource
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def layout_by_resource
   if devise_controller?
@@ -14,6 +16,11 @@ class ApplicationController < ActionController::Base
     "application"
   end
 end
+
+ def user_not_authorized
+    render plain: "You are not authorized to perform this action.",
+           status: :forbidden
+  end
 
   def after_sign_in_path_for(resource)
   case resource

@@ -16,7 +16,8 @@ class DraftOrdersController < StoreBaseController
   def create
     result = DraftOrders::CreateService.new(
       @store,
-      draft_order_params
+      draft_order_params,
+      user: current_user
     ).call
 
     @draft_order = result[:draft_order]

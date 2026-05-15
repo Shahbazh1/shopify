@@ -1,5 +1,13 @@
 class User < ApplicationRecord
-  has_many :stores, dependent: :destroy
+  has_many :owned_stores,
+         class_name: "Store",
+         foreign_key: :user_id,
+         dependent: :destroy
+
+  has_many :memberships, dependent: :destroy
+  has_many :stores, through: :memberships
+  has_many :draft_orders
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

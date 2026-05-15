@@ -1,12 +1,14 @@
 module DraftOrders
   class CreateService
-    def initialize(store, params)
+    def initialize(store, params, user: nil)
       @store = store
       @params = params
+      @user   = user
     end
 
     def call
       draft_order = @store.draft_orders.new(@params)
+      draft_order.user = @user
 
       ActiveRecord::Base.transaction do
 
