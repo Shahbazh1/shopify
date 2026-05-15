@@ -2,6 +2,13 @@ class ApplicationController < ActionController::Base
   include Pundit::Authorization
   layout :layout_by_resource
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  private
+
+  def record_not_found
+    redirect_to root_path, alert: "You are not authorized to access this store."
+  end
 
   def layout_by_resource
   if devise_controller?
