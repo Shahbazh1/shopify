@@ -1,7 +1,3 @@
-# config/routes.rb
-require_relative "../lib/tasks/storefront_subdomain_constraint"
-require_relative "../lib/tasks/admin_constraint"
-
 Rails.application.routes.draw do
   devise_for :customers,
   controllers: {
@@ -68,7 +64,6 @@ end
   scope "/stores/:store_id" do
     get "/home", to: "home#index", as: :store_home
 
-
     resources :draft_orders do
       member do
         post :send_invoice
@@ -85,14 +80,9 @@ end
     resources :inventories, only: [:index, :show, :edit, :update]
     resources :discounts
     resources :themes, only: [:index, :show], as: :store_themes
-
+    resources :memberships, only: [:create, :destroy], as: :store_memberships
     # Settings
     get    "/settings",         to: "stores/settings#show",           as: :store_settings
-    patch  "/settings",         to: "stores/settings#update",         as: :update_store_settings
-
-    # Member management (nested under settings)
-    resources :memberships, only: [:create, :destroy], as: :store_memberships
+    patch  "/settings",         to: "stores/settings#update",         as: :update_store_settings    
   end
-
-
 end

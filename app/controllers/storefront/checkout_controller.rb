@@ -11,7 +11,7 @@ class Storefront::CheckoutController < Storefront::BaseController
   @discount_result = Discounts::ApplyService.new(@store, @cart, nil).call
   @subtotal        = @discount_result[:subtotal]
   @order_discount  = @discount_result[:order_discount]
-  @shipping_price  = @discount_result[:shipping_discount] == :free ? 0 : 5.00
+  @shipping_price  = @discount_result[:shipping_discount] == :free ? 0 : 250.00
   @total           = [@subtotal + @shipping_price - @order_discount, 0].max
 end
 
