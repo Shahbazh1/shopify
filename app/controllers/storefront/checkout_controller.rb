@@ -84,6 +84,7 @@ end
     customer_email:       customer.email,
     success_url: storefront_checkout_success_url(host: request.host_with_port) + "?session_id={CHECKOUT_SESSION_ID}",
     cancel_url:  storefront_checkout_cancel_url(host: request.host_with_port),
+    currency:    @store.currency.downcase,
     metadata: {
       order_id: order.id,
       store_id: @store.id

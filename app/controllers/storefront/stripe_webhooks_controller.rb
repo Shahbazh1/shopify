@@ -51,11 +51,13 @@ class Storefront::StripeWebhooksController < ActionController::Base
     # CREATE PAYMENT RECORD
     # =========================
     Payment.create!(
-      order:          order,
-      amount:         session['amount_total'] / 100.0,
-      payment_method: 'stripe',
-      status:         'paid',
-      transaction_id: session['payment_intent']
+      order:             order,
+      amount:            session['amount_total'] / 100.0,
+      currency:          session['currency'],        
+      payment_method:    'stripe',
+      status:            'paid',
+      transaction_id:    session['payment_intent'],
+      stripe_session_id: session['id']                
     )
 
     # =========================
