@@ -10,14 +10,14 @@ Rails.application.routes.draw do
   }
 
     # Admin routes
-constraints AdminConstraint do
-    namespace :admin do
-      root "dashboard#index"
-      resources :users, only: [:index, :show, :destroy] do
-        resources :stores, only: [:show, :destroy]
+  constraints AdminConstraint do
+      namespace :admin do
+        root "dashboard#index"
+        resources :users, only: [:index, :show, :destroy] do
+         resources :stores, only: [:show, :destroy]
+        end
       end
-    end
-end
+  end
 
   # ── Storefront (subdomain-based) ─────────────────────────────────────────
   # Must come FIRST so subdomain requests are caught before anything else
@@ -85,7 +85,6 @@ end
     resources :discounts
     resources :themes, only: [:index, :show], as: :store_themes
     resources :memberships, only: [:create, :destroy], as: :store_memberships
-    # Settings
     get    "/settings",         to: "stores/settings#show",           as: :store_settings
     patch  "/settings",         to: "stores/settings#update",         as: :update_store_settings    
   end
