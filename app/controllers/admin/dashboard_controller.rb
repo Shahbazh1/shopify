@@ -1,4 +1,3 @@
-# app/controllers/admin/dashboard_controller.rb
 class Admin::DashboardController < Admin::BaseController
   def index
     @users       = User.includes(:stores).order(created_at: :desc)
