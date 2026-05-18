@@ -1,18 +1,22 @@
-# app/controllers/storefront/products_controller.rb
 class Storefront::ProductsController < Storefront::BaseController
+  before_action :set_product, only: :show
+
   def index
-    @products = @store.products
-                      .where(published_online_store: true)
+    @products = published_products
   end
 
   def show
-    @product  = @store.products.find_by!(slug: params[:slug])
     @variants = @product.product_variants
     @images   = @product.product_images
+  end
 
-  rescue ActiveRecord::RecordNotFound
-    render file: Rails.root.join("public/404.html"),
-           status: :not_found,
-           layout: false
+  private
+
+  def published_products
+    @store.products.where(published_online_store: true)
+  end
+
+  def set_product
+    @product = @store.products.find_by!(slug: params[:slug])
   end
 end
