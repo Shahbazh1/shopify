@@ -43,7 +43,8 @@ class DraftOrdersController < StoreBaseController
   def update
     result = DraftOrders::UpdateService.new(
       @draft_order,
-      draft_order_params
+      draft_order_params,
+      user: current_user
     ).call
 
     if result[:success]

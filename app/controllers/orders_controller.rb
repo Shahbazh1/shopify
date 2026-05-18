@@ -22,7 +22,8 @@ class OrdersController < StoreBaseController
   def update
     result = Orders::UpdateService.new(
       @order,
-      order_params
+      order_params,
+      current_user
     ).call
 
     @order = result[:order]
