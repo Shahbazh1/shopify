@@ -383,9 +383,9 @@
         <div class="price-range">
           <% prices = @product.product_variants.map(&:price).map(&:to_f) %>
           <% if prices.min == prices.max %>
-            $<%= sprintf("%.2f", prices.min) %>
+            Rs<%= sprintf("%.2f", prices.min) %>
           <% else %>
-            $<%= sprintf("%.2f", prices.min) %> – $<%= sprintf("%.2f", prices.max) %>
+            Rs<%= sprintf("%.2f", prices.min) %> – Rs<%= sprintf("%.2f", prices.max) %>
           <% end %>
         </div>
       <% end %>

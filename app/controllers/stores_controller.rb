@@ -30,6 +30,7 @@ class StoresController < StoreBaseController
   end
 
   def update
+    authorize @store, :destroy?
     result = Stores::UpdateService.new(@store, store_params).call
 
     @store = result[:store]
@@ -42,6 +43,7 @@ class StoresController < StoreBaseController
   end
 
   def destroy
+    authorize @store, :destroy?
     Stores::DestroyService.new(@store).call
     redirect_to stores_path, notice: "Store deleted successfully."
   end

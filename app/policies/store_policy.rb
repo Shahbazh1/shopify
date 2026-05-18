@@ -10,6 +10,10 @@ class StorePolicy < ApplicationPolicy
     admin_of_store?
   end
 
+  def destroy?
+    admin_of_store?
+  end
+
   private
 
   def admin_of_store?
