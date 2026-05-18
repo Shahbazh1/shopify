@@ -9,7 +9,6 @@ Rails.application.routes.draw do
     sessions: "customers/sessions"
   }
 
-    # Admin routes
   constraints AdminConstraint do
       namespace :admin do
         root "dashboard#index"
@@ -19,8 +18,7 @@ Rails.application.routes.draw do
       end
   end
 
-  # ── Storefront (subdomain-based) ─────────────────────────────────────────
-  # Must come FIRST so subdomain requests are caught before anything else
+
   constraints StorefrontSubdomainConstraint do
     scope module: :storefront do
       root  "home#index",             as: :storefront_root
@@ -46,25 +44,21 @@ Rails.application.routes.draw do
     end
   end
 
-  # ── Auth ──────────────────────────────────────────────────────────────────
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
-  # ── Default Urls ─────────────────────────────────────────────────────
   root "welcome#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
   post "/check_email", to: "auth_checks#check_email"
 
-  # Store management (create, list, delete stores)
   resources :stores do
     member do
-      get :preview   # "View Store" button → redirects to subdomain
+      get :preview   
     end
   end
 
-  # Everything inside this scope is prefixed with /stores/:store_id
   scope "/stores/:store_id" do
     get "/home", to: "home#index", as: :store_home
 

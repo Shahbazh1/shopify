@@ -7,7 +7,7 @@ module Orders
     end
 
     def call
-      @order.updated_by = @user
+      @order.updated_by_id = @user.id
 
       if @order.update(@params)
         {
