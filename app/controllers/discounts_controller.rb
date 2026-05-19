@@ -48,12 +48,6 @@ class DiscountsController < StoreBaseController
       :limit_one_per_customer,
       :start_date,
       :end_date,
-      product_discounts_attributes: [
-        :id, :product_id, :_destroy
-      ],
-      collection_discounts_attributes: [
-        :id, :collection_id, :_destroy
-      ]
     )
   end
 end

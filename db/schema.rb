@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_18_070432) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_18_180211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,15 +61,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_070432) do
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_carts_on_customer_id"
     t.index ["store_id"], name: "index_carts_on_store_id"
-  end
-
-  create_table "collection_discounts", force: :cascade do |t|
-    t.bigint "collection_id", null: false
-    t.datetime "created_at", null: false
-    t.bigint "discount_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["collection_id"], name: "index_collection_discounts_on_collection_id"
-    t.index ["discount_id"], name: "index_collection_discounts_on_discount_id"
   end
 
   create_table "collections", force: :cascade do |t|
@@ -213,15 +204,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_070432) do
     t.index ["product_id"], name: "index_product_collections_on_product_id"
   end
 
-  create_table "product_discounts", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "discount_id", null: false
-    t.bigint "product_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["discount_id"], name: "index_product_discounts_on_discount_id"
-    t.index ["product_id"], name: "index_product_discounts_on_product_id"
-  end
-
   create_table "product_images", force: :cascade do |t|
     t.string "alt_text"
     t.datetime "created_at", null: false
@@ -255,15 +237,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_070432) do
     t.datetime "updated_at", null: false
     t.index ["store_id", "slug"], name: "index_products_on_store_id_and_slug", unique: true
     t.index ["store_id"], name: "index_products_on_store_id"
-  end
-
-  create_table "refunds", force: :cascade do |t|
-    t.decimal "amount"
-    t.datetime "created_at", null: false
-    t.bigint "payment_id", null: false
-    t.text "reason"
-    t.datetime "updated_at", null: false
-    t.index ["payment_id"], name: "index_refunds_on_payment_id"
   end
 
   create_table "segments", force: :cascade do |t|
@@ -308,8 +281,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_070432) do
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "customers"
   add_foreign_key "carts", "stores"
-  add_foreign_key "collection_discounts", "collections"
-  add_foreign_key "collection_discounts", "discounts"
   add_foreign_key "collections", "stores"
   add_foreign_key "customers", "stores"
   add_foreign_key "discounts", "stores"
@@ -329,11 +300,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_18_070432) do
   add_foreign_key "payments", "orders"
   add_foreign_key "product_collections", "collections"
   add_foreign_key "product_collections", "products"
-  add_foreign_key "product_discounts", "discounts"
-  add_foreign_key "product_discounts", "products"
   add_foreign_key "product_images", "products"
   add_foreign_key "product_variants", "products"
   add_foreign_key "products", "stores"
-  add_foreign_key "refunds", "payments"
   add_foreign_key "stores", "users"
 end

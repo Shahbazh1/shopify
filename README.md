@@ -1,3 +1,6 @@
+<!-- stripe login url -->
+stripe listen --forward-to http://alibaba.localhost:3000/webhooks/stripe
+
 # README
 
 This README would normally document whatever steps are necessary to get the

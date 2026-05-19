@@ -20,8 +20,8 @@
         </div>
 
         <div style="display:flex; align-items:center; gap:24px;">
-          <span><%= item.quantity %> × <%= number_to_currency(variant.price) %></span>
-          <strong><%= number_to_currency(subtotal) %></strong>
+          <span><%= item.quantity %> × <%= number_to_currency(variant.price, unit: "Rs ") %></span>
+          <strong><%= number_to_currency(subtotal, unit: "Rs ") %></strong>
 
           <%= button_to storefront_cart_remove_path(item), 
                 method: :delete,
@@ -35,7 +35,7 @@
     <% end %>
 
     <div class="sf-cart-total">
-      Total: <%= number_to_currency(total) %>
+      Total: <%= number_to_currency(total, unit: "Rs ") %>
     </div>
 
     <%= link_to "Proceed to Checkout", storefront_checkout_path, class: "sf-btn sf-btn-dark" %>

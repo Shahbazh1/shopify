@@ -16,7 +16,7 @@ class Store < ApplicationRecord
   has_many :carts, dependent: :destroy
   has_many :discounts, dependent: :destroy
   has_many :draft_orders, dependent: :destroy
-
+  has_many :payments, through: :orders
 
   def generate_slug_and_domain
     return if name.blank?

@@ -7,5 +7,6 @@ class Customer < ApplicationRecord
 
   has_many :orders
   has_one :cart, dependent: :destroy
+  has_many :payments, through: :orders
 
 end
