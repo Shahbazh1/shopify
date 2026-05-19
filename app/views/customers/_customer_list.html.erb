@@ -1,4 +1,100 @@
-<%# app/views/customers/index.html.erb %>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="title">
+      👤 Customers
+    </div>
+
+    <div class="actions">
+      <button class="btn">Export</button>
+      <button class="btn">Import</button>
+      <button class="btn dark">Add customer</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-left">
+      <strong><%= @customers.size %> customer<%= "s" if @customers.size != 1 %></strong>
+      <span class="muted">100% of your customer base</span>
+    </div>
+
+    <div class="dropdown">⌄</div>
+  </div>
+
+
+  <!-- TABLE -->
+  <div class="table">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" class="checkbox"></th>
+          <th>Customer Id</th>
+          <th>Email </th>
+          <th>Orders</th>
+          <th>Amount spent</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <% if @customers.present? %>
+          <% @customers.each do |customer| %>
+
+            <% full_name = [customer.id].compact.join(" ") %>
+
+            <tr class="clickable-row" data-href="<%= (customer) %>">
+              <td><input type="checkbox" class="checkbox"></td>
+
+              <!-- NAME -->
+              <td class="customer-name">
+                <%= customer.id %>
+              </td>
+
+              <!-- EMAIL SUBSCRIPTION (STATIC since no column exists) -->
+              <td>
+                <span class="tag">
+                  <%= customer.email %>
+                </span>
+              </td>
+
+
+              <!-- ORDERS (NOT IN DB → STATIC) -->
+              <td>
+                <%= customer.orders.count %>
+              </td>
+
+              <!-- AMOUNT SPENT (NOT IN DB → STATIC) -->
+              <td class="muted">
+                Rs <%= customer.orders.sum(:total_price).to_f.round(2) %>
+              </td>
+            </tr>
+
+          <% end %>
+        <% else %>
+
+          <!-- fallback demo row -->
+          <tr>
+            <td><input type="checkbox" class="checkbox"></td>
+            <td class="customer-name">Susan Goff</td>
+            <td><span class="tag">Subscribed</span></td>
+            <td class="muted">Pakistan</td>
+            <td>0</td>
+            <td class="muted">Rs 0.00</td>
+          </tr>
+
+        <% end %>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    Learn more about customers
+  </div>
+
+</div>
 
 <style>
   * {
@@ -180,104 +276,6 @@
   background: #f9fafb;
 }
 </style>
-
-<div class="page">
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="title">
-      👤 Customers
-    </div>
-
-    <div class="actions">
-      <button class="btn">Export</button>
-      <button class="btn">Import</button>
-      <button class="btn dark">Add customer</button>
-    </div>
-  </div>
-
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stats-left">
-      <strong><%= @customers.size %> customer<%= "s" if @customers.size != 1 %></strong>
-      <span class="muted">100% of your customer base</span>
-    </div>
-
-    <div class="dropdown">⌄</div>
-  </div>
-
-
-  <!-- TABLE -->
-  <div class="table">
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox" class="checkbox"></th>
-          <th>Customer Id</th>
-          <th>Email </th>
-          <th>Orders</th>
-          <th>Amount spent</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <% if @customers.present? %>
-          <% @customers.each do |customer| %>
-
-            <% full_name = [customer.id].compact.join(" ") %>
-
-            <tr class="clickable-row" data-href="<%= (customer) %>">
-              <td><input type="checkbox" class="checkbox"></td>
-
-              <!-- NAME -->
-              <td class="customer-name">
-                <%= customer.id %>
-              </td>
-
-              <!-- EMAIL SUBSCRIPTION (STATIC since no column exists) -->
-              <td>
-                <span class="tag">
-                  <%= customer.email %>
-                </span>
-              </td>
-
-
-              <!-- ORDERS (NOT IN DB → STATIC) -->
-              <td>
-                <%= customer.orders.count %>
-              </td>
-
-              <!-- AMOUNT SPENT (NOT IN DB → STATIC) -->
-              <td class="muted">
-                Rs <%= customer.orders.sum(:total_price).to_f.round(2) %>
-              </td>
-            </tr>
-
-          <% end %>
-        <% else %>
-
-          <!-- fallback demo row -->
-          <tr>
-            <td><input type="checkbox" class="checkbox"></td>
-            <td class="customer-name">Susan Goff</td>
-            <td><span class="tag">Subscribed</span></td>
-            <td class="muted">Pakistan</td>
-            <td>0</td>
-            <td class="muted">Rs 0.00</td>
-          </tr>
-
-        <% end %>
-
-      </tbody>
-    </table>
-  </div>
-
-  <div class="footer-note">
-    Learn more about customers
-  </div>
-
-</div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

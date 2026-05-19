@@ -1,6 +1,6 @@
 <%= form_with model: @collection, url: collection_path(@store, @collection), method: :patch, local: true do |f| %>
 
-<div class="page-wrapper">
+  <div class="page-wrapper">
 
   <!-- LEFT SIDE -->
   <div class="main-content">
@@ -76,15 +76,15 @@
     </div>
 
   </div>
-</div>
+  </div>
 
-<!-- FOOTER -->
-<div class="footer">
+  <!-- FOOTER -->
+  <div class="footer">
   <%= f.submit @collection.persisted? ? "Update collection" : "Save collection", class: "btn-primary" %>
-</div>
+  </div>
 
-<!-- HIDDEN INPUTS -->
-<div id="hidden-products">
+  <!-- HIDDEN INPUTS -->
+  <div id="hidden-products">
 
   <% @collection.product_collections.each_with_index do |pc, index| %>
     <input
@@ -93,10 +93,10 @@
       value="<%= pc.product_id %>">
   <% end %>
 
-</div>
+  </div>
 
-<!-- MODAL -->
-<div id="productModal" class="modal hidden">
+  <!-- MODAL -->
+  <div id="productModal" class="modal hidden">
   <div class="modal-box">
 
     <div class="modal-header">
@@ -124,7 +124,7 @@
     </div>
 
   </div>
-</div>
+  </div>
 
 <% end %>
 

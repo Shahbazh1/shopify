@@ -4,23 +4,25 @@
 
   <div class="edit-card">
 
-<%= form_with model: @order, url: order_path(@store, @order), method: :patch, local: true, html: { multipart: true } do |f| %>
+    <%= form_with model: @order, url: order_path(@store, @order), method: :patch, local: true, html: { multipart: true } do |f| %>
 
-<div class="field">
-  <%= f.label :fulfillment_status %>
-  <%= f.select :fulfillment_status,
-        ["pending", "processing", "shipped", "delivered"],
-        {},
-        class: "status-select" %>
-</div>
+    <div class="field">
+        <%= f.label :fulfillment_status %>
+        <%= f.select :fulfillment_status,
+          ["pending", "processing", "shipped", "delivered"],
+          {},
+          class: "status-select"
+         %>
+    </div>
 
-<div class="field">
-  <%= f.label :order_status %>
-  <%= f.select :order_status,
+    <div class="field">
+      <%= f.label :order_status %>
+      <%= f.select :order_status,
         ["pending", "confirmed", "completed", "cancelled"],
         {},
-        class: "status-select" %>
-</div>
+        class: "status-select"
+       %>
+    </div>
 
       <div class="actions">
         <%= f.submit "Update Order",

@@ -1,3 +1,28 @@
+
+<div class="inventory-edit-page">
+
+  <div class="inventory-edit-card">
+
+    <h1 class="inventory-edit-title">Edit Inventory</h1>
+
+    <%= form_with model: @variant,
+          url: inventory_path(@store, @variant),
+          method: :patch do |f| %>
+
+      <div class="form-group">
+        <label>Stock Quantity</label>
+
+        <%= f.number_field :stock_quantity %>
+      </div>
+
+      <%= f.submit "Update Inventory", class: "submit-btn" %>
+
+    <% end %>
+
+  </div>
+
+</div>
+
 <style>
   .inventory-edit-page {
     background: #f6f6f7;
@@ -66,27 +91,3 @@
     background: #006e52;
   }
 </style>
-
-<div class="inventory-edit-page">
-
-  <div class="inventory-edit-card">
-
-    <h1 class="inventory-edit-title">Edit Inventory</h1>
-
-    <%= form_with model: @variant,
-          url: inventory_path(@store, @variant),
-          method: :patch do |f| %>
-
-      <div class="form-group">
-        <label>Stock Quantity</label>
-
-        <%= f.number_field :stock_quantity %>
-      </div>
-
-      <%= f.submit "Update Inventory", class: "submit-btn" %>
-
-    <% end %>
-
-  </div>
-
-</div>

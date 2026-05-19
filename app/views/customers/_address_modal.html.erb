@@ -1,10 +1,103 @@
-<%# app/views/customers/_address_modal.html.erb
-    Rendered inside new.html.erb — shares the parent form's `f` builder
-    via `fields_for`, so all inputs are named:
-      customer[customer_address_attributes][field_name]
-    Rails will pass these through accepts_nested_attributes_for and
-    save/update the CustomerAddress record automatically.
-%>
+<div class="addr-overlay" id="address-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="addr-modal-title">
+  <div class="addr-modal">
+
+    <%# Header %>
+    <div class="addr-modal-header">
+      <h2 id="addr-modal-title">Add default address</h2>
+      <button type="button" class="addr-close-btn" onclick="closeAddressModal()" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <%# Body — direct f.* helpers, all map to flat columns on the customers table %>
+    <div class="addr-modal-body">
+
+      <%# :country → customers.country %>
+      <div class="addr-field">
+        <%= f.label :country, "Country/region" %>
+        <div class="addr-select-wrap">
+          <%= f.select :country,
+                options_for_select([
+                  ["Pakistan",             "PK"],
+                  ["United States",        "US"],
+                  ["United Kingdom",       "GB"],
+                  ["India",                "IN"],
+                  ["United Arab Emirates", "AE"],
+                  ["Saudi Arabia",         "SA"],
+                  ["Australia",            "AU"],
+                  ["Canada",               "CA"],
+                  ["Germany",              "DE"],
+                  ["France",               "FR"],
+                  ["Turkey",               "TR"],
+                ], @customer.country || "PK"),
+                {},
+                { id: "addr_country_select", onchange: "updateAddressFlag(this)" } %>
+        </div>
+      </div>
+
+      <%# :first_name / :last_name → customers.first_name / last_name %>
+      <div class="addr-row-2">
+        <div class="addr-field">
+          <%= f.label :first_name, "First name" %>
+          <%= f.text_field :first_name, autocomplete: "given-name" %>
+        </div>
+        <div class="addr-field">
+          <%= f.label :last_name, "Last name" %>
+          <%= f.text_field :last_name, autocomplete: "family-name" %>
+        </div>
+      </div>
+
+      <%# :company → customers.company %>
+      <div class="addr-field">
+        <%= f.label :company, "Company" %>
+        <%= f.text_field :company, autocomplete: "organization" %>
+      </div>
+
+      <%# :address → customers.address (text column) %>
+      <div class="addr-field">
+        <%= f.label :address, "Address" %>
+        <div class="addr-search-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+          </svg>
+          <%= f.text_field :address, placeholder: "", autocomplete: "street-address" %>
+        </div>
+      </div>
+
+      <%# :apartment → customers.apartment %>
+      <div class="addr-field">
+        <%= f.label :apartment, "Apartment, suite, etc" %>
+        <%= f.text_field :apartment, autocomplete: "address-line2" %>
+      </div>
+
+      <%# :city / :postal_code → customers.city / customers.postal_code %>
+      <div class="addr-row-2">
+        <div class="addr-field">
+          <%= f.label :city, "City" %>
+          <%= f.text_field :city, autocomplete: "address-level2" %>
+        </div>
+        <div class="addr-field">
+          <%= f.label :postal_code, "Postal code" %>
+          <%= f.text_field :postal_code, autocomplete: "postal-code" %>
+        </div>
+      </div>
+
+      <%# :is_default → customers.is_default (boolean) — hidden, always true when address filled %>
+      <%= f.hidden_field :is_default, value: true %>
+
+    </div><%# /addr-modal-body %>
+
+    <%# Footer — Cancel just closes; Save submits the whole page form %>
+    <div class="addr-modal-footer">
+      <button type="button" class="addr-btn addr-btn-cancel" onclick="closeAddressModal()">Cancel</button>
+      <button type="button" class="addr-btn addr-btn-save"   onclick="saveAddressModal()">Save</button>
+    </div>
+
+  </div><%# /addr-modal %>
+</div><%# /addr-overlay %>
+
 
 <style>
   /* ── Overlay ── */
@@ -203,107 +296,6 @@
   }
   .addr-btn-save:hover { background: #3a3a3a; }
 </style>
-
-<%# ── Overlay (toggled via JS) ── %>
-<div class="addr-overlay" id="address-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="addr-modal-title">
-  <div class="addr-modal">
-
-    <%# Header %>
-    <div class="addr-modal-header">
-      <h2 id="addr-modal-title">Add default address</h2>
-      <button type="button" class="addr-close-btn" onclick="closeAddressModal()" aria-label="Close">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
-
-    <%# Body — direct f.* helpers, all map to flat columns on the customers table %>
-    <div class="addr-modal-body">
-
-      <%# :country → customers.country %>
-      <div class="addr-field">
-        <%= f.label :country, "Country/region" %>
-        <div class="addr-select-wrap">
-          <%= f.select :country,
-                options_for_select([
-                  ["Pakistan",             "PK"],
-                  ["United States",        "US"],
-                  ["United Kingdom",       "GB"],
-                  ["India",                "IN"],
-                  ["United Arab Emirates", "AE"],
-                  ["Saudi Arabia",         "SA"],
-                  ["Australia",            "AU"],
-                  ["Canada",               "CA"],
-                  ["Germany",              "DE"],
-                  ["France",               "FR"],
-                  ["Turkey",               "TR"],
-                ], @customer.country || "PK"),
-                {},
-                { id: "addr_country_select", onchange: "updateAddressFlag(this)" } %>
-        </div>
-      </div>
-
-      <%# :first_name / :last_name → customers.first_name / last_name %>
-      <div class="addr-row-2">
-        <div class="addr-field">
-          <%= f.label :first_name, "First name" %>
-          <%= f.text_field :first_name, autocomplete: "given-name" %>
-        </div>
-        <div class="addr-field">
-          <%= f.label :last_name, "Last name" %>
-          <%= f.text_field :last_name, autocomplete: "family-name" %>
-        </div>
-      </div>
-
-      <%# :company → customers.company %>
-      <div class="addr-field">
-        <%= f.label :company, "Company" %>
-        <%= f.text_field :company, autocomplete: "organization" %>
-      </div>
-
-      <%# :address → customers.address (text column) %>
-      <div class="addr-field">
-        <%= f.label :address, "Address" %>
-        <div class="addr-search-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
-          </svg>
-          <%= f.text_field :address, placeholder: "", autocomplete: "street-address" %>
-        </div>
-      </div>
-
-      <%# :apartment → customers.apartment %>
-      <div class="addr-field">
-        <%= f.label :apartment, "Apartment, suite, etc" %>
-        <%= f.text_field :apartment, autocomplete: "address-line2" %>
-      </div>
-
-      <%# :city / :postal_code → customers.city / customers.postal_code %>
-      <div class="addr-row-2">
-        <div class="addr-field">
-          <%= f.label :city, "City" %>
-          <%= f.text_field :city, autocomplete: "address-level2" %>
-        </div>
-        <div class="addr-field">
-          <%= f.label :postal_code, "Postal code" %>
-          <%= f.text_field :postal_code, autocomplete: "postal-code" %>
-        </div>
-      </div>
-
-      <%# :is_default → customers.is_default (boolean) — hidden, always true when address filled %>
-      <%= f.hidden_field :is_default, value: true %>
-
-    </div><%# /addr-modal-body %>
-
-    <%# Footer — Cancel just closes; Save submits the whole page form %>
-    <div class="addr-modal-footer">
-      <button type="button" class="addr-btn addr-btn-cancel" onclick="closeAddressModal()">Cancel</button>
-      <button type="button" class="addr-btn addr-btn-save"   onclick="saveAddressModal()">Save</button>
-    </div>
-
-  </div><%# /addr-modal %>
-</div><%# /addr-overlay %>
 
 <script>
   /* Country → flag emoji map */

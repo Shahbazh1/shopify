@@ -1,5 +1,3 @@
-<!-- app/views/discounts/new.html.erb -->
-
 <%= form_with model: @discount, url: discounts_path, method: :post do |f| %>
   <%= f.hidden_field :discount_type, value: @discount_type %>
   <!-- Replace the old hidden inputs with this container -->

@@ -1,3 +1,61 @@
+<div class="customers-page">
+  <!-- Page Title -->
+  <div class="page-header">
+    <div class="page-title">
+    
+    <!-- Icon -->
+    <span class="page-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 1a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7m-2 3.5a2 2 0 1 1 3.999-.001 2 2 0 0 1-3.999.001"></path>
+        <path fill-rule="evenodd" d="M13.484 12.227a6.274 6.274 0 0 0-10.968 0l-.437.786a1.338 1.338 0 0 0 1.17 1.987h9.502a1.338 1.338 0 0 0 1.17-1.987zm-9.657.728a4.775 4.775 0 0 1 8.346 0l.302.545h-8.95z"></path>
+      </svg>
+    </span>
+
+    <!-- Title -->
+    <h2>Customers</h2>
+    </div>
+  </div>
+
+  <!-- Main Card -->
+  <div class="card hero">
+    <div class="hero-content">
+      
+      <!-- Left -->
+      <div class="hero-text">
+        <h3>Everything customers-related in one place</h3>
+        <p>
+          Manage customer details, see customer order history, and group customers into segments.
+        </p>
+
+        <div class="actions">
+          <%= link_to "Add customer", "#", class: "btn primary" %>
+          <%= link_to "Import customers", "#", class: "btn secondary" %>
+        </div>
+      </div>
+
+      <!-- Right Image -->
+      <div class="hero-image">
+        <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/empty-state-customers-8bd2f4d3e8b0.svg" alt="Customers">
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Bottom Section -->
+    <div class="sub-section">
+      <div>
+        <h4>Get customers with apps</h4>
+        <p>
+          Grow your customer list by adding a lead capture form to your store and marketing.
+        </p>
+      </div>
+
+      <%= link_to "See app recommendations", "#", class: "btn secondary" %>
+    </div>
+  </div>
+</div>
+
 <style>
 .customers-page {
   background: #f1f1f1;
@@ -142,60 +200,3 @@
   fill: currentColor;
 }
 </style>
-<div class="customers-page">
-  <!-- Page Title -->
-  <div class="page-header">
-  <div class="page-title">
-    
-    <!-- Icon -->
-    <span class="page-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M8 1a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7m-2 3.5a2 2 0 1 1 3.999-.001 2 2 0 0 1-3.999.001"></path>
-        <path fill-rule="evenodd" d="M13.484 12.227a6.274 6.274 0 0 0-10.968 0l-.437.786a1.338 1.338 0 0 0 1.17 1.987h9.502a1.338 1.338 0 0 0 1.17-1.987zm-9.657.728a4.775 4.775 0 0 1 8.346 0l.302.545h-8.95z"></path>
-      </svg>
-    </span>
-
-    <!-- Title -->
-    <h2>Customers</h2>
-  </div>
-</div>
-
-  <!-- Main Card -->
-  <div class="card hero">
-    <div class="hero-content">
-      
-      <!-- Left -->
-      <div class="hero-text">
-        <h3>Everything customers-related in one place</h3>
-        <p>
-          Manage customer details, see customer order history, and group customers into segments.
-        </p>
-
-        <div class="actions">
-          <%= link_to "Add customer", "#", class: "btn primary" %>
-          <%= link_to "Import customers", "#", class: "btn secondary" %>
-        </div>
-      </div>
-
-      <!-- Right Image -->
-      <div class="hero-image">
-        <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/empty-state-customers-8bd2f4d3e8b0.svg" alt="Customers">
-      </div>
-    </div>
-
-    <!-- Divider -->
-    <div class="divider"></div>
-
-    <!-- Bottom Section -->
-    <div class="sub-section">
-      <div>
-        <h4>Get customers with apps</h4>
-        <p>
-          Grow your customer list by adding a lead capture form to your store and marketing.
-        </p>
-      </div>
-
-      <%= link_to "See app recommendations", "#", class: "btn secondary" %>
-    </div>
-  </div>
-</div>

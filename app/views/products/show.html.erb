@@ -1,3 +1,123 @@
+<div class="product-page">
+
+  <%# Breadcrumb %>
+  <div class="breadcrumb">
+    Products <span>›</span> <%= @product.category %> <span>›</span> <%= @product.title %>
+  </div>
+
+  <%# Hero layout: images + info %>
+  <div class="product-layout">
+
+    <%# Left: Images %>
+    <div class="product-images">
+      <div class="main-image-slot">
+        <% if @product.product_images.any? %>
+          <img src="<%= @product.product_images.first.image_url %>" alt="<%= @product.title %>">
+        <% else %>
+          <div class="no-image-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span>No images uploaded</span>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @product.product_images.count > 1 %>
+        <div class="image-thumbnails">
+          <% @product.product_images.each do |img| %>
+            <img src="<%= img.image_url %>" alt="<%= @product.title %>">
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Right: Product info %>
+    <div class="product-info">
+      <div class="product-meta">
+        <% if @product.category.present? %>
+          <span class="category-badge"><%= @product.category %></span>
+        <% end %>
+        <span class="status-badge <%= @product.status.to_s.downcase %>">
+          <%= @product.status %>
+        </span>
+      </div>
+
+      <h1 class="product-title"><%= @product.title %></h1>
+
+      <% if @product.product_variants.any? %>
+        <div class="price-range">
+          <% prices = @product.product_variants.map(&:price).map(&:to_f) %>
+          <% if prices.min == prices.max %>
+            Rs<%= sprintf("%.2f", prices.min) %>
+          <% else %>
+            Rs<%= sprintf("%.2f", prices.min) %> – Rs<%= sprintf("%.2f", prices.max) %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="divider"></div>
+
+      <p class="product-description"><%= @product.description %></p>
+    </div>
+
+  </div>
+
+  <%# Variants table %>
+  <div class="section-block">
+    <div class="section-header">
+      <h2 class="section-title">Variants</h2>
+      <% if @product.product_variants.any? %>
+        <span class="variant-count"><%= @product.product_variants.count %> variants</span>
+      <% end %>
+    </div>
+
+    <% if @product.product_variants.any? %>
+      <table class="variants-table">
+        <thead>
+          <tr>
+            <th>Color</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @product.product_variants.each do |v| %>
+            <tr>
+              <td>
+                <span class="color-swatch">
+                  <span class="swatch-dot" style="background: <%= v.color.to_s.downcase %>;"></span>
+                  <%= v.color %>
+                </span>
+              </td>
+              <td><span class="size-pill"><%= v.size %></span></td>
+              <td class="price-cell">$<%= sprintf("%.2f", v.price.to_f) %></td>
+              <td>
+                <span class="stock-cell">
+                  <% stock = v.stock_quantity.to_i %>
+                  <span class="stock-dot <%= stock > 10 ? 'in-stock' : stock > 0 ? 'low-stock' : 'no-stock' %>"></span>
+                  <%= v.stock_quantity %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+        </svg>
+        <p>No variants available</p>
+      </div>
+    <% end %>
+  </div>
+
+</div>
+
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -330,123 +450,3 @@
     }
   }
 </style>
-
-<div class="product-page">
-
-  <%# Breadcrumb %>
-  <div class="breadcrumb">
-    Products <span>›</span> <%= @product.category %> <span>›</span> <%= @product.title %>
-  </div>
-
-  <%# Hero layout: images + info %>
-  <div class="product-layout">
-
-    <%# Left: Images %>
-    <div class="product-images">
-      <div class="main-image-slot">
-        <% if @product.product_images.any? %>
-          <img src="<%= @product.product_images.first.image_url %>" alt="<%= @product.title %>">
-        <% else %>
-          <div class="no-image-placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <span>No images uploaded</span>
-          </div>
-        <% end %>
-      </div>
-
-      <% if @product.product_images.count > 1 %>
-        <div class="image-thumbnails">
-          <% @product.product_images.each do |img| %>
-            <img src="<%= img.image_url %>" alt="<%= @product.title %>">
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-
-    <%# Right: Product info %>
-    <div class="product-info">
-      <div class="product-meta">
-        <% if @product.category.present? %>
-          <span class="category-badge"><%= @product.category %></span>
-        <% end %>
-        <span class="status-badge <%= @product.status.to_s.downcase %>">
-          <%= @product.status %>
-        </span>
-      </div>
-
-      <h1 class="product-title"><%= @product.title %></h1>
-
-      <% if @product.product_variants.any? %>
-        <div class="price-range">
-          <% prices = @product.product_variants.map(&:price).map(&:to_f) %>
-          <% if prices.min == prices.max %>
-            Rs<%= sprintf("%.2f", prices.min) %>
-          <% else %>
-            Rs<%= sprintf("%.2f", prices.min) %> – Rs<%= sprintf("%.2f", prices.max) %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <div class="divider"></div>
-
-      <p class="product-description"><%= @product.description %></p>
-    </div>
-
-  </div>
-
-  <%# Variants table %>
-  <div class="section-block">
-    <div class="section-header">
-      <h2 class="section-title">Variants</h2>
-      <% if @product.product_variants.any? %>
-        <span class="variant-count"><%= @product.product_variants.count %> variants</span>
-      <% end %>
-    </div>
-
-    <% if @product.product_variants.any? %>
-      <table class="variants-table">
-        <thead>
-          <tr>
-            <th>Color</th>
-            <th>Size</th>
-            <th>Price</th>
-            <th>Stock</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @product.product_variants.each do |v| %>
-            <tr>
-              <td>
-                <span class="color-swatch">
-                  <span class="swatch-dot" style="background: <%= v.color.to_s.downcase %>;"></span>
-                  <%= v.color %>
-                </span>
-              </td>
-              <td><span class="size-pill"><%= v.size %></span></td>
-              <td class="price-cell">$<%= sprintf("%.2f", v.price.to_f) %></td>
-              <td>
-                <span class="stock-cell">
-                  <% stock = v.stock_quantity.to_i %>
-                  <span class="stock-dot <%= stock > 10 ? 'in-stock' : stock > 0 ? 'low-stock' : 'no-stock' %>"></span>
-                  <%= v.stock_quantity %>
-                </span>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <div class="empty-state">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
-        </svg>
-        <p>No variants available</p>
-      </div>
-    <% end %>
-  </div>
-
-</div>

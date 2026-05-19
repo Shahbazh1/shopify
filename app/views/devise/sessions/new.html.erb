@@ -1,3 +1,105 @@
+<div class="login-container">
+
+  <!-- Logo -->
+  <div class="logo">
+    <%= image_tag(
+      "https://shopify-assets.shopifycdn.com/shopifycloud/identity/assets/logo/shopify_icon-3ec3196fc21ccd335e623091378b9da827ad0032b2e987dcd2fe6cfc32cd3c5c.svg",
+      alt: "Shopify"
+    ) %>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <h1>Log in</h1>
+    <p>Continue to Shopify</p>
+
+    <%= form_with url: session_path(resource_name), local: true do |f| %>
+
+      <div class="form-group">
+        <%= f.label :email, "Email", class: "form-label" %>
+        <%= f.email_field :email,
+              placeholder: "Enter email",
+              autofocus: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Password", class: "form-label" %>
+        <div class="password-wrapper">
+          <%= f.password_field :password,
+                placeholder: "Enter password",
+                id: "user_password_login" %>
+          <button type="button" class="toggle-password" 
+                  onclick="togglePassword('user_password_login', this)">
+            👁
+          </button>
+        </div>
+        <%= link_to "Forgot password?", new_user_password_path, class: "forgot-link" %>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+        <%= f.check_box :remember_me, id: "remember_me" %>
+        <%= f.label :remember_me, "Remember me", 
+              style: "font-size:13px; color:#333; cursor:pointer;" %>
+      </div>
+
+      <%= f.submit "Log in", class: "btn-primary" %>
+
+    <% end %>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <!-- Passkey Button -->
+    <%= button_tag type: "button", class: "btn-secondary" do %>
+      <span>👤</span> Sign in with passkey
+    <% end %>
+
+    <!-- Social Login -->
+    <div class="social-grid">
+
+      <!-- Apple -->
+      <%= button_to "#", class: "btn-social" do %>
+        <%= image_tag "https://shopify-assets.shopifycdn.com/shopifycloud/identity/assets/external/apple-7ddeaf08016f8cb19bed914ba94ecdca365c63c275340ec1c4d037f58e68bc04.svg",
+                      alt: "Apple" %>
+      <% end %>
+
+      <!-- Facebook -->
+      <%= button_to user_facebook_omniauth_authorize_path,data: { turbo: false },
+              method: :post,
+              class: "btn-social" do %>
+  <%= image_tag "https://www.svgrepo.com/show/452196/facebook-1.svg", alt: "Facebook" %>
+<% end %>
+
+      <!-- Google -->
+      <%= button_to user_google_oauth2_omniauth_authorize_path,data: { turbo: false },
+              method: :post,
+              class: "btn-social" do %>
+  <%= image_tag "https://www.svgrepo.com/show/355037/google.svg", alt: "Google" %>
+<% end %>
+
+    </div>
+
+    <div class="footer-links">
+      New to Shopify?
+      <%= link_to "Get started →", new_registration_path(resource_name) %>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="legal-footer">
+    <%= link_to "Need Help?", "#", class: "help-link" %>
+
+    <p class="terms-text">
+      By continuing, you agree to the
+      <%= link_to "Terms of Service", "#", style: "color:inherit" %>
+      and
+      <%= link_to "Privacy Policy", "#", style: "color:inherit" %>.
+    </p>
+  </div>
+
+</div>
+
 <style>
   /* Reset & Base Styles */
   * {
@@ -267,108 +369,6 @@ input[type="email"],
     }
   }
 </style>
-
-<div class="login-container">
-
-  <!-- Logo -->
-  <div class="logo">
-    <%= image_tag(
-      "https://shopify-assets.shopifycdn.com/shopifycloud/identity/assets/logo/shopify_icon-3ec3196fc21ccd335e623091378b9da827ad0032b2e987dcd2fe6cfc32cd3c5c.svg",
-      alt: "Shopify"
-    ) %>
-  </div>
-
-  <!-- Card -->
-  <div class="card">
-    <h1>Log in</h1>
-    <p>Continue to Shopify</p>
-
-    <%= form_with url: session_path(resource_name), local: true do |f| %>
-
-      <div class="form-group">
-        <%= f.label :email, "Email", class: "form-label" %>
-        <%= f.email_field :email,
-              placeholder: "Enter email",
-              autofocus: true %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :password, "Password", class: "form-label" %>
-        <div class="password-wrapper">
-          <%= f.password_field :password,
-                placeholder: "Enter password",
-                id: "user_password_login" %>
-          <button type="button" class="toggle-password" 
-                  onclick="togglePassword('user_password_login', this)">
-            👁
-          </button>
-        </div>
-        <%= link_to "Forgot password?", new_user_password_path, class: "forgot-link" %>
-      </div>
-
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-        <%= f.check_box :remember_me, id: "remember_me" %>
-        <%= f.label :remember_me, "Remember me", 
-              style: "font-size:13px; color:#333; cursor:pointer;" %>
-      </div>
-
-      <%= f.submit "Log in", class: "btn-primary" %>
-
-    <% end %>
-
-    <div class="divider">
-      <span>or</span>
-    </div>
-
-    <!-- Passkey Button -->
-    <%= button_tag type: "button", class: "btn-secondary" do %>
-      <span>👤</span> Sign in with passkey
-    <% end %>
-
-    <!-- Social Login -->
-    <div class="social-grid">
-
-      <!-- Apple -->
-      <%= button_to "#", class: "btn-social" do %>
-        <%= image_tag "https://shopify-assets.shopifycdn.com/shopifycloud/identity/assets/external/apple-7ddeaf08016f8cb19bed914ba94ecdca365c63c275340ec1c4d037f58e68bc04.svg",
-                      alt: "Apple" %>
-      <% end %>
-
-      <!-- Facebook -->
-      <%= button_to user_facebook_omniauth_authorize_path,data: { turbo: false },
-              method: :post,
-              class: "btn-social" do %>
-  <%= image_tag "https://www.svgrepo.com/show/452196/facebook-1.svg", alt: "Facebook" %>
-<% end %>
-
-      <!-- Google -->
-      <%= button_to user_google_oauth2_omniauth_authorize_path,data: { turbo: false },
-              method: :post,
-              class: "btn-social" do %>
-  <%= image_tag "https://www.svgrepo.com/show/355037/google.svg", alt: "Google" %>
-<% end %>
-
-    </div>
-
-    <div class="footer-links">
-      New to Shopify?
-      <%= link_to "Get started →", new_registration_path(resource_name) %>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="legal-footer">
-    <%= link_to "Need Help?", "#", class: "help-link" %>
-
-    <p class="terms-text">
-      By continuing, you agree to the
-      <%= link_to "Terms of Service", "#", style: "color:inherit" %>
-      and
-      <%= link_to "Privacy Policy", "#", style: "color:inherit" %>.
-    </p>
-  </div>
-
-</div>
 
 <script>
   function togglePassword(fieldId, btn) {

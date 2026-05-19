@@ -1,3 +1,51 @@
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="header">
+    <h2>Good afternoon, let's get started.</h2>
+  </div>
+
+  <!-- Main Card -->
+  <div class="card">
+
+    <!-- Store Name -->
+    <div class="card-header">
+      <h3>Add store name ✏️</h3>
+    </div>
+
+    <!-- Top Grid -->
+    <div class="grid-2">
+
+      <!-- Product -->
+      <div class="box">
+        <div class="image-placeholder"></div>
+        <h4>Add your first product</h4>
+        <p>
+          Start by adding a product and a few key details.
+          Not ready? <a href="#">Start with a sample product</a>
+        </p>
+        <div class="actions">
+          <%= link_to "Add product", new_product_path, class: "btn primary" %>
+          <%= link_to "Import", "#", class: "btn secondary" %>
+        </div>
+      </div>
+
+      <!-- Customize Store -->
+      <div class="box">
+        <div class="image-placeholder"></div>
+        <h4>Customize your online store</h4>
+        <p>
+          Choose or generate a custom theme, then add your logo, colors, and images.
+        </p>
+    <%= link_to "Customize Theme", store_themes_path(store_id: params[:store_id]), class: "secondary" %>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
 <style>
 body {
   background: #f6f6f7;
@@ -306,52 +354,311 @@ input {
   }
 }
 </style>
+<style>
+body {
+  background: #f6f6f7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+}
 
-<div class="dashboard">
+.dashboard {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
 
-  <!-- Header -->
-  <div class="header">
-    <h2>Good afternoon, let's get started.</h2>
-  </div>
+/* Header */
+.header h2 {
+  font-weight: 600;
+  margin-bottom: 15px;
+}
 
-  <!-- Main Card -->
-  <div class="card">
+.search-bar {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  border: 1px solid #e1e3e5;
+}
 
-    <!-- Store Name -->
-    <div class="card-header">
-      <h3>Add store name ✏️</h3>
-    </div>
+.search-bar input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
 
-    <!-- Top Grid -->
-    <div class="grid-2">
+.icons span {
+  margin-left: 10px;
+  cursor: pointer;
+}
 
-      <!-- Product -->
-      <div class="box">
-        <div class="image-placeholder"></div>
-        <h4>Add your first product</h4>
-        <p>
-          Start by adding a product and a few key details.
-          Not ready? <a href="#">Start with a sample product</a>
-        </p>
-        <div class="actions">
-          <%= link_to "Add product", new_product_path, class: "btn primary" %>
-          <%= link_to "Import", "#", class: "btn secondary" %>
-        </div>
-      </div>
+.suggestions button {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin-right: 8px;
+  cursor: pointer;
+}
 
-      <!-- Customize Store -->
-      <div class="box">
-        <div class="image-placeholder"></div>
-        <h4>Customize your online store</h4>
-        <p>
-          Choose or generate a custom theme, then add your logo, colors, and images.
-        </p>
-    <%= link_to "Customize Theme", store_themes_path(store_id: params[:store_id]), class: "secondary" %>
-      </div>
+/* Card */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 1px solid #e1e3e5;
+}
 
-    </div>
+.card-header {
+  margin-bottom: 20px;
+}
 
-  </div>
+/* Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
 
-</div>
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
 
+/* Boxes */
+.box {
+  border-radius: 10px;
+  padding: 15px;
+  background: #fafafa;
+}
+
+.small-box {
+  border-radius: 10px;
+  padding: 15px;
+  background: #fafafa;
+}
+
+.image-placeholder {
+  height: 120px;
+  background: #eaeaea;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+.primary {
+  background: #000;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.secondary {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.link {
+  background: none;
+  border: none;
+  color: #555;
+  margin-left: 10px;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+/* Misc */
+.payment-icons span {
+  margin-right: 10px;
+}
+
+.flag {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.price {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+input {
+  width: 100%;
+  padding: 6px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.shipping-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+}
+
+/* Keep content grouped */
+.box-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Flag + Country */
+.shipping-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shipping-info img {
+  object-fit: cover;
+  border: 1px solid #ccc;
+  width: 48px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+/* Improve button placement */
+.shipping-box .secondary {
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+.payment-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.payment-icons img {
+  width: 40px;
+  height: 26px;
+  object-fit: contain;
+
+  border-radius: 6px;
+  border: 1px solid #e1e3e5;
+  background: #fff;
+
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  padding: 3px;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .dashboard {
+    padding: 15px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .icons {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  .header h2 {
+    font-size: 18px;
+  }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .icons {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .suggestions button {
+    width: 100%;
+  }
+
+  .payment-icons {
+    flex-wrap: wrap;
+  }
+
+  .small-box,
+  .box {
+    padding: 12px;
+  }
+
+  input {
+    font-size: 14px;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .header h2 {
+    font-size: 16px;
+  }
+
+  .icons span {
+    font-size: 14px;
+  }
+
+  .payment-icons img {
+    width: 32px;
+    height: 22px;
+  }
+}
+</style>

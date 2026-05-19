@@ -1,3 +1,126 @@
+<!-- HEADER -->
+<div class="header">
+  <div class="title">
+    <%= @customer.first_name %> <%= @customer.last_name %>
+  </div>
+
+  <div style="display:flex; gap:8px;">
+    <%= link_to "Edit", edit_customer_path(@store, @customer), class: "btn" %>
+    <%= link_to "Delete",
+      customer_path(@store,@customer),
+      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+      class: "btn btn-danger"
+    %>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- LEFT SIDE -->
+  <div>
+
+    <!-- STATS ROW (STATIC + PARTIAL DYNAMIC) -->
+    <div class="stats">
+      <div class="stat">
+        <div class="value">Rs 0.00</div>
+        <div class="label">Amount spent</div>
+      </div>
+
+      <div class="stat">
+        <div class="value"><%= @customer.orders.count %></div>
+        <div class="label">Orders</div>
+      </div>
+
+      <div class="stat">
+        <div class="value"><%= @customer.created_at.strftime("%b %d") %></div>
+        <div class="label">Customer since</div>
+      </div>
+
+      <div class="stat">
+        <div class="value">—</div>
+        <div class="label">RFM group</div>
+      </div>
+    </div>
+
+    <!-- LAST ORDER -->
+    <div class="card">
+      <h3>Last order placed</h3>
+
+      <% if @customer.orders.any? %>
+        <p class="small">
+          Last order: #<%= @customer.orders.last.id %>
+        </p>
+      <% else %>
+        <p class="small empty">This customer hasn’t placed any orders yet</p>
+        <button class="btn">Create order</button>
+      <% end %>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="card">
+      <h3>Timeline</h3>
+      <p class="small empty">No activity yet</p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div>
+
+    <!-- CUSTOMER INFO -->
+    <div class="card side-card">
+      <h4>Customer</h4>
+
+      <div class="small">
+        <strong>Contact</strong><br>
+        <%= @customer.email || "No email" %><br>
+        <%= @customer.phone || "No phone" %>
+      </div>
+
+      <hr style="margin:10px 0;">
+
+      <div class="small">
+        <strong>Default address</strong><br>
+
+        <% if @customer.address.present? %>
+          <%= @customer.address %><br>
+          <%= @customer.city %>, Pakistan
+        <% else %>
+          <span class="empty">No address</span>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="card side-card">
+      <h4>Marketing</h4>
+      <span class="tag">Email</span>
+      <span class="tag">SMS</span>
+    </div>
+
+    <!-- TAX -->
+    <div class="card side-card">
+      <h4>Tax details</h4>
+      <p class="small">Collect tax: Yes</p>
+    </div>
+
+    <!-- STORE CREDIT -->
+    <div class="card side-card">
+      <h4>Store credit</h4>
+      <p class="small">None</p>
+    </div>
+
+    <!-- TAGS -->
+    <div class="card side-card">
+      <h4>Tags</h4>
+      <span class="tag">—</span>
+    </div>
+
+
+  </div>
+
+</div>
+
 <%# app/views/customers/show.html.erb %>
 
 <style>
@@ -151,126 +274,3 @@
     font-style: italic;
   }
 </style>
-
-<!-- HEADER -->
-<div class="header">
-  <div class="title">
-    <%= @customer.first_name %> <%= @customer.last_name %>
-  </div>
-
-  <div style="display:flex; gap:8px;">
-    <%= link_to "Edit", edit_customer_path(@store, @customer), class: "btn" %>
-    <%= link_to "Delete",
-      customer_path(@store,@customer),
-      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-      class: "btn btn-danger"
-    %>
-  </div>
-</div>
-
-<div class="container">
-
-  <!-- LEFT SIDE -->
-  <div>
-
-    <!-- STATS ROW (STATIC + PARTIAL DYNAMIC) -->
-    <div class="stats">
-      <div class="stat">
-        <div class="value">Rs 0.00</div>
-        <div class="label">Amount spent</div>
-      </div>
-
-      <div class="stat">
-        <div class="value"><%= @customer.orders.count %></div>
-        <div class="label">Orders</div>
-      </div>
-
-      <div class="stat">
-        <div class="value"><%= @customer.created_at.strftime("%b %d") %></div>
-        <div class="label">Customer since</div>
-      </div>
-
-      <div class="stat">
-        <div class="value">—</div>
-        <div class="label">RFM group</div>
-      </div>
-    </div>
-
-    <!-- LAST ORDER -->
-    <div class="card">
-      <h3>Last order placed</h3>
-
-      <% if @customer.orders.any? %>
-        <p class="small">
-          Last order: #<%= @customer.orders.last.id %>
-        </p>
-      <% else %>
-        <p class="small empty">This customer hasn’t placed any orders yet</p>
-        <button class="btn">Create order</button>
-      <% end %>
-    </div>
-
-    <!-- TIMELINE -->
-    <div class="card">
-      <h3>Timeline</h3>
-      <p class="small empty">No activity yet</p>
-    </div>
-
-  </div>
-
-  <!-- RIGHT SIDE -->
-  <div>
-
-    <!-- CUSTOMER INFO -->
-    <div class="card side-card">
-      <h4>Customer</h4>
-
-      <div class="small">
-        <strong>Contact</strong><br>
-        <%= @customer.email || "No email" %><br>
-        <%= @customer.phone || "No phone" %>
-      </div>
-
-      <hr style="margin:10px 0;">
-
-      <div class="small">
-        <strong>Default address</strong><br>
-
-        <% if @customer.address.present? %>
-          <%= @customer.address %><br>
-          <%= @customer.city %>, Pakistan
-        <% else %>
-          <span class="empty">No address</span>
-        <% end %>
-      </div>
-    </div>
-
-    <!-- MARKETING -->
-    <div class="card side-card">
-      <h4>Marketing</h4>
-      <span class="tag">Email</span>
-      <span class="tag">SMS</span>
-    </div>
-
-    <!-- TAX -->
-    <div class="card side-card">
-      <h4>Tax details</h4>
-      <p class="small">Collect tax: Yes</p>
-    </div>
-
-    <!-- STORE CREDIT -->
-    <div class="card side-card">
-      <h4>Store credit</h4>
-      <p class="small">None</p>
-    </div>
-
-    <!-- TAGS -->
-    <div class="card side-card">
-      <h4>Tags</h4>
-      <span class="tag">—</span>
-    </div>
-
-
-  </div>
-
-</div>

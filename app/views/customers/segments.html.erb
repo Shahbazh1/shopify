@@ -8,6 +8,60 @@
     { name: "Returning customers", customer_percentage: 45, created_at: Date.new(2024, 1, 5) }
   ]
 %>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="title">
+      <span class="icon">🗂️</span> Segments
+    </h1>
+    <%= link_to 'Create segment', "#", class: "btn-create" %>
+  </div>
+
+  <!-- Search -->
+  <div class="search-bar">
+    <input type="text" placeholder="Search segments" />
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" /></th>
+          <th>Name</th>
+          <th>Last activity</th>
+          <th>Created by</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @segments.each do |segment| %>
+          <tr>
+            <td><input type="checkbox" /></td>
+            <td><%= segment[:name] %></td>
+            <td>Created on <%= segment[:created_at].strftime("%B %-d, %Y") %></td>
+            <td>
+              <div class="created-by">
+                <span class="shopify-icon">🛍️</span>
+                <span class="shopify-text">Shopify</span>
+              </div>
+            </td>
+            <td class="actions">
+              <button class="btn-actions">⋮</button>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <%= link_to 'Learn more about segments', '#', class: "footer-link" %>
+  </div>
+</div>
+
 <style>
 /* Container */
 .container {
@@ -136,55 +190,3 @@ th input {
   text-decoration: underline;
 }
 </style>
-<div class="container">
-  <!-- Header -->
-  <div class="header">
-    <h1 class="title">
-      <span class="icon">🗂️</span> Segments
-    </h1>
-    <%= link_to 'Create segment', "#", class: "btn-create" %>
-  </div>
-
-  <!-- Search -->
-  <div class="search-bar">
-    <input type="text" placeholder="Search segments" />
-  </div>
-
-  <!-- Table -->
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox" /></th>
-          <th>Name</th>
-          <th>Last activity</th>
-          <th>Created by</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @segments.each do |segment| %>
-          <tr>
-            <td><input type="checkbox" /></td>
-            <td><%= segment[:name] %></td>
-            <td>Created on <%= segment[:created_at].strftime("%B %-d, %Y") %></td>
-            <td>
-              <div class="created-by">
-                <span class="shopify-icon">🛍️</span>
-                <span class="shopify-text">Shopify</span>
-              </div>
-            </td>
-            <td class="actions">
-              <button class="btn-actions">⋮</button>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <%= link_to 'Learn more about segments', '#', class: "footer-link" %>
-  </div>
-</div>

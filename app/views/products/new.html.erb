@@ -1,3 +1,222 @@
+<%= form_with model: @product, url: products_path(@store, @product), local: true do |f| %>
+<div class="page-wrapper">
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <span>○</span>
+    <span class="sep">›</span>
+    <a href="#"><%= @product.new_record? ? "Add product" : "Edit product" %></a>
+  </nav>
+
+  <div class="layout">
+    <!-- ════ LEFT COLUMN ════ -->
+    <div class="left-col">
+
+      <!-- Title -->
+      <div class="card">
+        <div class="card-body">
+          <label for="product-title">Title</label>
+          <input type="text" id="product-title" name="product[title]"
+                 placeholder="Short sleeve t shirt"
+                 value="<%= @product.title %>" />
+
+          <div style="margin-top:14px;">
+            <label>Description</label>
+            <div class="rte-wrapper">
+              <div class="rte-toolbar">
+                <select>
+                  <option>Paragraph</option>
+                  <option>Heading 1</option>
+                  <option>Heading 2</option>
+                </select>
+                <div class="rte-sep"></div>
+                <button class="rte-btn bold" title="Bold">B</button>
+                <button class="rte-btn italic" title="Italic">I</button>
+                <button class="rte-btn underline" title="Underline">U</button>
+                <button class="rte-btn" title="Strikethrough" style="text-decoration:line-through;">S</button>
+                <div class="rte-sep"></div>
+                <button class="rte-btn" title="Font color" style="position:relative;">
+                  <span style="font-weight:700;font-size:12px;border-bottom:2px solid #202223;padding-bottom:1px;">A</span>
+                </button>
+                <div class="rte-sep"></div>
+                <button class="rte-btn" title="Align">☰</button>
+                <div class="rte-sep"></div>
+                <button class="rte-btn" title="Link">🔗</button>
+                <button class="rte-btn" title="Image">🖼</button>
+                <button class="rte-btn" title="Table">⊞</button>
+                <button class="rte-btn" title="Emoji">☺</button>
+                <button class="rte-btn" title="More">···</button>
+                <div class="rte-sep"></div>
+                <button class="rte-btn" title="Source code" style="font-family:monospace;">&lt;/&gt;</button>
+              </div>
+              <div class="rte-body" contenteditable="true" id="rte-body-content"><%= raw @product.description %></div>
+              <input type="hidden" name="product[description]" id="description-input">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media -->
+      <div class="card">
+        <div class="card-body">
+          <label>Media</label>
+
+          <input type="file" id="image-input" multiple hidden accept="image/*">
+
+          <div class="media-drop" onclick="document.getElementById('image-input').click()">
+            <div class="media-drop-row">
+              <button type="button" class="media-btn">Upload new</button>
+            </div>
+            <p class="media-hint">Click to upload images</p>
+          </div>
+
+          <% if @product.product_images.any? %>
+            <div id="existing-images" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+              <% @product.product_images.each_with_index do |image, index| %>
+                <div class="existing-image" style="position:relative; width:80px;">
+                  <img src="<%= image.image_url %>" width="80" height="80" style="object-fit:cover; border-radius:6px; border:1px solid #d1d5db;" alt="<%= image.alt_text.presence || @product.title %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][id]" value="<%= image.id %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][image_url]" value="<%= image.image_url %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][alt_text]" value="<%= image.alt_text.presence || 'Product image' %>">
+                  <input type="hidden" name="product[product_images_attributes][<%= index %>][_destroy]" value="false">
+                  <button type="button" onclick="removeExistingImage(this)" style="position:absolute; top:4px; right:4px; border:none; background:rgba(0,0,0,0.5); color:#fff; border-radius:50%; width:20px; height:20px; cursor:pointer;">×</button>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <!-- New image preview area -->
+          <div id="preview" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;"></div>
+        </div>
+      </div>
+
+      <!-- Category -->
+      <div class="card">
+        <div class="card-body">
+          <label>Category</label>
+          <select name="product[category]">
+            <option value="" <%= @product.category.blank? ? 'selected' : '' %>>Choose a product category</option>
+            <option value="clothing"            <%= @product.category == 'clothing'             ? 'selected' : '' %>>Clothing</option>
+            <option value="electronics"         <%= @product.category == 'electronics'          ? 'selected' : '' %>>Electronics</option>
+            <option value="home_garden"         <%= @product.category == 'home_garden'          ? 'selected' : '' %>>Home & Garden</option>
+            <option value="beauty_personal_care"<%= @product.category == 'beauty_personal_care' ? 'selected' : '' %>>Beauty & Personal Care</option>
+            <option value="sports_outdoors"     <%= @product.category == 'sports_outdoors'      ? 'selected' : '' %>>Sports & Outdoors</option>
+            <option value="toys_games"          <%= @product.category == 'toys_games'           ? 'selected' : '' %>>Toys & Games</option>
+            <option value="food_beverages"      <%= @product.category == 'food_beverages'       ? 'selected' : '' %>>Food & Beverages</option>
+            <option value="books_stationery"    <%= @product.category == 'books_stationery'     ? 'selected' : '' %>>Books & Stationery</option>
+            <option value="automotive"          <%= @product.category == 'automotive'           ? 'selected' : '' %>>Automotive</option>
+            <option value="health_wellness"     <%= @product.category == 'health_wellness'      ? 'selected' : '' %>>Health & Wellness</option>
+            <option value="fashion_accessories" <%= @product.category == 'fashion_accessories'  ? 'selected' : '' %>>Fashion Accessories</option>
+            <option value="footwear"            <%= @product.category == 'footwear'             ? 'selected' : '' %>>Footwear</option>
+            <option value="jewelry"             <%= @product.category == 'jewelry'              ? 'selected' : '' %>>Jewelry</option>
+            <option value="furniture"           <%= @product.category == 'furniture'            ? 'selected' : '' %>>Furniture</option>
+          </select>
+          <p class="hint">Determines tax rates and adds metafields to improve search, filters, and cross-channel sales</p>
+        </div>
+      </div>
+
+      <!-- Variants -->
+      <div class="card">
+        <div class="card-body">
+          <span class="card-title" style="display:block;margin-bottom:10px;">Variants</span>
+
+          <table class="qty-table" id="variant-table">
+            <thead>
+              <tr>
+                <th>Color</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Stock</th>
+              </tr>
+            </thead>
+            <tbody id="variant-body">
+              <% if @product.product_variants.any? %>
+                <% @product.product_variants.each_with_index do |variant, index| %>
+                  <tr>
+                    <% if variant.persisted? %>
+                      <input type="hidden" name="product[product_variants_attributes][<%= index %>][id]" value="<%= variant.id %>">
+                    <% end %>
+                    <td><input type="text" name="product[product_variants_attributes][<%= index %>][color]"
+                               placeholder="Color" value="<%= variant.color %>"></td>
+                    <td><input type="text" name="product[product_variants_attributes][<%= index %>][size]"
+                               placeholder="Size" value="<%= variant.size %>"></td>
+                    <td><input type="number" name="product[product_variants_attributes][<%= index %>][price]"
+                               step="0.01" value="<%= variant.price %>"></td>
+                    <td><input type="number" name="product[product_variants_attributes][<%= index %>][stock_quantity]"
+                               value="<%= variant.stock_quantity %>"></td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr>
+                  <td><input type="text" name="product[product_variants_attributes][0][color]" placeholder="Red"></td>
+                  <td><input type="text" name="product[product_variants_attributes][0][size]" placeholder="M"></td>
+                  <td><input type="number" name="product[product_variants_attributes][0][price]" step="0.01"></td>
+                  <td><input type="number" name="product[product_variants_attributes][0][stock_quantity]"></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+          <button type="button" class="add-link" onclick="addVariantRow()">
+            <span class="plus">⊕</span>
+            Add Variant
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /left-col -->
+
+    <!-- ════ RIGHT COLUMN ════ -->
+    <div class="right-col">
+
+      <!-- Status -->
+      <div class="card status-card">
+        <div class="card-body">
+          <label>Status</label>
+          <select name="product[status]">
+            <option value="active"   <%= @product.status == 'active'   ? 'selected' : '' %>>Active</option>
+            <option value="draft"    <%= @product.status == 'draft'    ? 'selected' : '' %>>Draft</option>
+            <option value="archived" <%= @product.status == 'archived' ? 'selected' : '' %>>Archived</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Publishing -->
+      <div class="card">
+        <div class="card-body">
+
+          <div class="publishing-row">
+            <span class="card-title">Publishing</span>
+            <span class="sync-icon" onclick="togglePublishing()">⇄</span>
+          </div>
+
+          <div class="channel-row">
+            <div class="channel-pill" id="online-pill">
+              <span class="dot"></span>
+              Online Store
+            </div>
+            <div class="channel-pill" id="pos-pill">
+              Point of Sale
+            </div>
+          </div>
+
+          <input type="hidden" name="product[published_online_store]" id="online-input"
+                 value="<%= @product.published_online_store.nil? ? 'true' : @product.published_online_store %>">
+          <input type="hidden" name="product[published_pos]" id="pos-input"
+                 value="<%= @product.published_pos || 'false' %>">
+
+        </div>
+      </div>
+
+    </div><!-- /right-col -->
+  </div><!-- /layout -->
+</div>
+
+<div style="margin-top:20px; display:flex; justify-content:center;">
+  <%= f.submit(@product.new_record? ? "Add Product" : "Update Product", class: "primary-btn") %>
+</div>
+<% end %>
+
 <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -480,225 +699,6 @@
       background: #006e52;
     }
 </style>
-
-<%= form_with model: @product, url: products_path(@store, @product), local: true do |f| %>
-<div class="page-wrapper">
-
-  <!-- Breadcrumb -->
-  <nav class="breadcrumb">
-    <span>○</span>
-    <span class="sep">›</span>
-    <a href="#"><%= @product.new_record? ? "Add product" : "Edit product" %></a>
-  </nav>
-
-  <div class="layout">
-    <!-- ════ LEFT COLUMN ════ -->
-    <div class="left-col">
-
-      <!-- Title -->
-      <div class="card">
-        <div class="card-body">
-          <label for="product-title">Title</label>
-          <input type="text" id="product-title" name="product[title]"
-                 placeholder="Short sleeve t shirt"
-                 value="<%= @product.title %>" />
-
-          <div style="margin-top:14px;">
-            <label>Description</label>
-            <div class="rte-wrapper">
-              <div class="rte-toolbar">
-                <select>
-                  <option>Paragraph</option>
-                  <option>Heading 1</option>
-                  <option>Heading 2</option>
-                </select>
-                <div class="rte-sep"></div>
-                <button class="rte-btn bold" title="Bold">B</button>
-                <button class="rte-btn italic" title="Italic">I</button>
-                <button class="rte-btn underline" title="Underline">U</button>
-                <button class="rte-btn" title="Strikethrough" style="text-decoration:line-through;">S</button>
-                <div class="rte-sep"></div>
-                <button class="rte-btn" title="Font color" style="position:relative;">
-                  <span style="font-weight:700;font-size:12px;border-bottom:2px solid #202223;padding-bottom:1px;">A</span>
-                </button>
-                <div class="rte-sep"></div>
-                <button class="rte-btn" title="Align">☰</button>
-                <div class="rte-sep"></div>
-                <button class="rte-btn" title="Link">🔗</button>
-                <button class="rte-btn" title="Image">🖼</button>
-                <button class="rte-btn" title="Table">⊞</button>
-                <button class="rte-btn" title="Emoji">☺</button>
-                <button class="rte-btn" title="More">···</button>
-                <div class="rte-sep"></div>
-                <button class="rte-btn" title="Source code" style="font-family:monospace;">&lt;/&gt;</button>
-              </div>
-              <div class="rte-body" contenteditable="true" id="rte-body-content"><%= raw @product.description %></div>
-              <input type="hidden" name="product[description]" id="description-input">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Media -->
-      <div class="card">
-        <div class="card-body">
-          <label>Media</label>
-
-          <input type="file" id="image-input" multiple hidden accept="image/*">
-
-          <div class="media-drop" onclick="document.getElementById('image-input').click()">
-            <div class="media-drop-row">
-              <button type="button" class="media-btn">Upload new</button>
-            </div>
-            <p class="media-hint">Click to upload images</p>
-          </div>
-
-          <% if @product.product_images.any? %>
-            <div id="existing-images" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-              <% @product.product_images.each_with_index do |image, index| %>
-                <div class="existing-image" style="position:relative; width:80px;">
-                  <img src="<%= image.image_url %>" width="80" height="80" style="object-fit:cover; border-radius:6px; border:1px solid #d1d5db;" alt="<%= image.alt_text.presence || @product.title %>">
-                  <input type="hidden" name="product[product_images_attributes][<%= index %>][id]" value="<%= image.id %>">
-                  <input type="hidden" name="product[product_images_attributes][<%= index %>][image_url]" value="<%= image.image_url %>">
-                  <input type="hidden" name="product[product_images_attributes][<%= index %>][alt_text]" value="<%= image.alt_text.presence || 'Product image' %>">
-                  <input type="hidden" name="product[product_images_attributes][<%= index %>][_destroy]" value="false">
-                  <button type="button" onclick="removeExistingImage(this)" style="position:absolute; top:4px; right:4px; border:none; background:rgba(0,0,0,0.5); color:#fff; border-radius:50%; width:20px; height:20px; cursor:pointer;">×</button>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-
-          <!-- New image preview area -->
-          <div id="preview" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;"></div>
-        </div>
-      </div>
-
-      <!-- Category -->
-      <div class="card">
-        <div class="card-body">
-          <label>Category</label>
-          <select name="product[category]">
-            <option value="" <%= @product.category.blank? ? 'selected' : '' %>>Choose a product category</option>
-            <option value="clothing"            <%= @product.category == 'clothing'             ? 'selected' : '' %>>Clothing</option>
-            <option value="electronics"         <%= @product.category == 'electronics'          ? 'selected' : '' %>>Electronics</option>
-            <option value="home_garden"         <%= @product.category == 'home_garden'          ? 'selected' : '' %>>Home & Garden</option>
-            <option value="beauty_personal_care"<%= @product.category == 'beauty_personal_care' ? 'selected' : '' %>>Beauty & Personal Care</option>
-            <option value="sports_outdoors"     <%= @product.category == 'sports_outdoors'      ? 'selected' : '' %>>Sports & Outdoors</option>
-            <option value="toys_games"          <%= @product.category == 'toys_games'           ? 'selected' : '' %>>Toys & Games</option>
-            <option value="food_beverages"      <%= @product.category == 'food_beverages'       ? 'selected' : '' %>>Food & Beverages</option>
-            <option value="books_stationery"    <%= @product.category == 'books_stationery'     ? 'selected' : '' %>>Books & Stationery</option>
-            <option value="automotive"          <%= @product.category == 'automotive'           ? 'selected' : '' %>>Automotive</option>
-            <option value="health_wellness"     <%= @product.category == 'health_wellness'      ? 'selected' : '' %>>Health & Wellness</option>
-            <option value="fashion_accessories" <%= @product.category == 'fashion_accessories'  ? 'selected' : '' %>>Fashion Accessories</option>
-            <option value="footwear"            <%= @product.category == 'footwear'             ? 'selected' : '' %>>Footwear</option>
-            <option value="jewelry"             <%= @product.category == 'jewelry'              ? 'selected' : '' %>>Jewelry</option>
-            <option value="furniture"           <%= @product.category == 'furniture'            ? 'selected' : '' %>>Furniture</option>
-          </select>
-          <p class="hint">Determines tax rates and adds metafields to improve search, filters, and cross-channel sales</p>
-        </div>
-      </div>
-
-      <!-- Variants -->
-      <div class="card">
-        <div class="card-body">
-          <span class="card-title" style="display:block;margin-bottom:10px;">Variants</span>
-
-          <table class="qty-table" id="variant-table">
-            <thead>
-              <tr>
-                <th>Color</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Stock</th>
-              </tr>
-            </thead>
-            <tbody id="variant-body">
-              <% if @product.product_variants.any? %>
-                <% @product.product_variants.each_with_index do |variant, index| %>
-                  <tr>
-                    <% if variant.persisted? %>
-                      <input type="hidden" name="product[product_variants_attributes][<%= index %>][id]" value="<%= variant.id %>">
-                    <% end %>
-                    <td><input type="text" name="product[product_variants_attributes][<%= index %>][color]"
-                               placeholder="Color" value="<%= variant.color %>"></td>
-                    <td><input type="text" name="product[product_variants_attributes][<%= index %>][size]"
-                               placeholder="Size" value="<%= variant.size %>"></td>
-                    <td><input type="number" name="product[product_variants_attributes][<%= index %>][price]"
-                               step="0.01" value="<%= variant.price %>"></td>
-                    <td><input type="number" name="product[product_variants_attributes][<%= index %>][stock_quantity]"
-                               value="<%= variant.stock_quantity %>"></td>
-                  </tr>
-                <% end %>
-              <% else %>
-                <tr>
-                  <td><input type="text" name="product[product_variants_attributes][0][color]" placeholder="Red"></td>
-                  <td><input type="text" name="product[product_variants_attributes][0][size]" placeholder="M"></td>
-                  <td><input type="number" name="product[product_variants_attributes][0][price]" step="0.01"></td>
-                  <td><input type="number" name="product[product_variants_attributes][0][stock_quantity]"></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-
-          <button type="button" class="add-link" onclick="addVariantRow()">
-            <span class="plus">⊕</span>
-            Add Variant
-          </button>
-        </div>
-      </div>
-
-    </div><!-- /left-col -->
-
-    <!-- ════ RIGHT COLUMN ════ -->
-    <div class="right-col">
-
-      <!-- Status -->
-      <div class="card status-card">
-        <div class="card-body">
-          <label>Status</label>
-          <select name="product[status]">
-            <option value="active"   <%= @product.status == 'active'   ? 'selected' : '' %>>Active</option>
-            <option value="draft"    <%= @product.status == 'draft'    ? 'selected' : '' %>>Draft</option>
-            <option value="archived" <%= @product.status == 'archived' ? 'selected' : '' %>>Archived</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Publishing -->
-      <div class="card">
-        <div class="card-body">
-
-          <div class="publishing-row">
-            <span class="card-title">Publishing</span>
-            <span class="sync-icon" onclick="togglePublishing()">⇄</span>
-          </div>
-
-          <div class="channel-row">
-            <div class="channel-pill" id="online-pill">
-              <span class="dot"></span>
-              Online Store
-            </div>
-            <div class="channel-pill" id="pos-pill">
-              Point of Sale
-            </div>
-          </div>
-
-          <input type="hidden" name="product[published_online_store]" id="online-input"
-                 value="<%= @product.published_online_store.nil? ? 'true' : @product.published_online_store %>">
-          <input type="hidden" name="product[published_pos]" id="pos-input"
-                 value="<%= @product.published_pos || 'false' %>">
-
-        </div>
-      </div>
-
-    </div><!-- /right-col -->
-  </div><!-- /layout -->
-</div>
-
-<div style="margin-top:20px; display:flex; justify-content:center;">
-  <%= f.submit(@product.new_record? ? "Add Product" : "Update Product", class: "primary-btn") %>
-</div>
-<% end %>
 
 <script>
   // ── Variant rows ──

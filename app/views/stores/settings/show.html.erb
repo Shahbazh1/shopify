@@ -1,3 +1,86 @@
+<% if flash[:alert] %>
+  <div class="error">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<% if flash[:notice] %>
+  <div style="background:#ecfdf5; color:#065f46; padding:10px; border-radius:10px; margin-bottom:12px;">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<div class="container">
+
+  <h1>Store Settings</h1>
+
+  <%# ── Store Name ───────────────────────────── %>
+  <section class="card">
+    <h2>General</h2>
+
+    <%= form_with model: @store, url: update_store_settings_path(@store), method: :patch do |f| %>
+
+      <% if @store.errors.any? %>
+        <div class="error">
+          <%= @store.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <div style="margin-bottom: 14px;">
+        <%= f.label :name, "Store Name" %><br>
+        <%= f.text_field :name, class: "input" %>
+      </div>
+
+      <%= f.submit "Save Changes", class: "btn-primary" %>
+    <% end %>
+  </section>
+
+  <%# ── Members ───────────────────────────── %>
+  <section class="card">
+    <h2>Team Members</h2>
+
+    <%= form_with model: @new_membership,
+                  url: store_memberships_path(@store),
+                  method: :post,
+                  class: "add-form" do |f| %>
+
+      <%= f.email_field :email,
+            placeholder: "colleague@email.com",
+            class: "input" %>
+
+      <%= f.submit "Add Member", class: "btn-dark" %>
+    <% end %>
+
+    <div class="members">
+      <% @memberships.each do |membership| %>
+        <div class="member-item">
+
+          <div>
+            <div class="email">
+              <%= membership.user.email %>
+            </div>
+
+            <div class="badge <%= membership.role == 'admin' ? 'admin' : 'user' %>">
+              <%= membership.role.capitalize %>
+            </div>
+          </div>
+
+          <% unless membership.user == current_user %>
+            <%= button_to "Remove",
+                  store_membership_path(@store, membership),
+                  method: :delete,
+                  class: "btn-danger",
+                  data: { turbo_confirm: "Remove #{membership.user.email} from this store?" } %>
+          <% end %>
+
+        </div>
+      <% end %>
+    </div>
+
+  </section>
+
+</div>
+
 <%# app/views/stores/settings/show.html.erb %>
 
 <style>
@@ -146,86 +229,3 @@
     }
   }
 </style>
-
-<% if flash[:alert] %>
-  <div class="error">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
-
-<% if flash[:notice] %>
-  <div style="background:#ecfdf5; color:#065f46; padding:10px; border-radius:10px; margin-bottom:12px;">
-    <%= flash[:notice] %>
-  </div>
-<% end %>
-
-<div class="container">
-
-  <h1>Store Settings</h1>
-
-  <%# ── Store Name ───────────────────────────── %>
-  <section class="card">
-    <h2>General</h2>
-
-    <%= form_with model: @store, url: update_store_settings_path(@store), method: :patch do |f| %>
-
-      <% if @store.errors.any? %>
-        <div class="error">
-          <%= @store.errors.full_messages.to_sentence %>
-        </div>
-      <% end %>
-
-      <div style="margin-bottom: 14px;">
-        <%= f.label :name, "Store Name" %><br>
-        <%= f.text_field :name, class: "input" %>
-      </div>
-
-      <%= f.submit "Save Changes", class: "btn-primary" %>
-    <% end %>
-  </section>
-
-  <%# ── Members ───────────────────────────── %>
-  <section class="card">
-    <h2>Team Members</h2>
-
-    <%= form_with model: @new_membership,
-                  url: store_memberships_path(@store),
-                  method: :post,
-                  class: "add-form" do |f| %>
-
-      <%= f.email_field :email,
-            placeholder: "colleague@email.com",
-            class: "input" %>
-
-      <%= f.submit "Add Member", class: "btn-dark" %>
-    <% end %>
-
-    <div class="members">
-      <% @memberships.each do |membership| %>
-        <div class="member-item">
-
-          <div>
-            <div class="email">
-              <%= membership.user.email %>
-            </div>
-
-            <div class="badge <%= membership.role == 'admin' ? 'admin' : 'user' %>">
-              <%= membership.role.capitalize %>
-            </div>
-          </div>
-
-          <% unless membership.user == current_user %>
-            <%= button_to "Remove",
-                  store_membership_path(@store, membership),
-                  method: :delete,
-                  class: "btn-danger",
-                  data: { turbo_confirm: "Remove #{membership.user.email} from this store?" } %>
-          <% end %>
-
-        </div>
-      <% end %>
-    </div>
-
-  </section>
-
-</div>

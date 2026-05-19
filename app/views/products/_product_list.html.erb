@@ -1,3 +1,138 @@
+<div class="page">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar-title">
+        <!-- Tag/label icon matching Shopify's Products icon -->
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M11.293 1.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-6-6A1 1 0 0 1 4 9V3a1 1 0 0 1 1-1h6.293zM5.5 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="currentColor"/>
+        </svg>
+        Products
+      </div>
+
+      <div class="topbar-actions">
+        <button class="btn btn-secondary">Export</button>
+        <button class="btn btn-secondary">Import</button>
+        <button class="btn btn-more">
+          More actions
+          <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"/>
+          </svg>
+        </button>
+        <%= link_to new_product_path, class: "btn btn-primary" do %>
+          Add product
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Main card -->
+    <div class="card">
+
+      <!-- Search / filter row -->
+      <div class="search-row">
+        <span class="tab-all">
+          All
+          <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 8l5 5 5-5H5z"/>
+          </svg>
+        </span>
+
+        <div class="search-input-wrap">
+          <!-- Magnifier -->
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.5 3a5.5 5.5 0 1 0 3.476 9.69l3.667 3.667a.75.75 0 1 0 1.06-1.06l-3.666-3.667A5.5 5.5 0 0 0 8.5 3zm-4 5.5a4 4 0 1 1 8 0 4 4 0 0 1-8 0z" fill="currentColor"/>
+          </svg>
+          <input class="search-input" type="text" placeholder="Search and filter" />
+        </div>
+
+        <!-- Column toggle -->
+        <div class="col-toggle">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="4" width="4" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="8" y="4" width="4" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="13" y="4" width="4" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox" class="cb" /></th>
+            <th class="col-product">Product</th>
+            <th>Inventory</th>
+            <th>Category</th>
+            <th>Publish online status</th>
+            <th>Product type</th>
+            <th>Vendor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.each do |product| %>
+           <tr class="clickable-row" data-href="<%= edit_product_path(@store, product) %>">
+             <td><input type="checkbox" class="cb" /></td>
+
+             <td>
+               <div class="product-cell">
+                 <div class="product-thumb">
+                   <% if product.product_images.any? && product.product_images.first.image_url.present? %>
+                     <%= image_tag product.product_images.first.image_url, width: 38, height: 38, alt: product.title %>
+                   <% else %>
+                     <!-- Placeholder -->
+                     <svg viewBox="0 0 20 20" fill="none">
+                       <rect x="2" y="2" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                       <circle cx="7" cy="7" r="1.5" stroke="currentColor" stroke-width="1.2"/>
+                       <path d="M2 13l4-4 3 3 2-2 5 5" stroke="currentColor" stroke-width="1.2"/>
+                     </svg>
+                   <% end %>
+                 </div>
+
+                 <span class="product-name">
+                   <%= product.title || "Untitled Product" %>
+                 </span>
+               </div>
+             </td>
+
+             <td>
+               <% if product.product_variants.any? %>
+               <%= product.product_variants.sum(:stock_quantity) %> in stock for 
+               <%= product.product_variants.count %> variant(s)
+               <% else %>
+                 0 in stock
+               <% end %>
+             </td>
+
+             <td>
+               <%= product.category || "Uncategorized" %>
+             </td>
+
+             <td>
+               <span class="badge badge-active">
+                 <%= product.published_online_store? ? "Published" : "Not published" %>
+               </span>
+             </td>
+
+             <td>
+               <%= product.category || "-" %>
+             </td>
+
+             <td>
+               <%= product.store&.name || "My Store" %>
+             </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <!-- Learn more -->
+      <div class="learn-more">
+        <a href="#">Learn more about products</a>
+      </div>
+
+    </div><!-- /card -->
+  </div><!-- /page -->
+
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -274,146 +409,6 @@
     }
   </style>
 
-  <div class="page">
-
-    <!-- Top bar -->
-    <div class="topbar">
-      <div class="topbar-title">
-        <!-- Tag/label icon matching Shopify's Products icon -->
-        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M11.293 1.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-6-6A1 1 0 0 1 4 9V3a1 1 0 0 1 1-1h6.293zM5.5 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="currentColor"/>
-        </svg>
-        Products
-      </div>
-
-      <div class="topbar-actions">
-        <button class="btn btn-secondary">Export</button>
-        <button class="btn btn-secondary">Import</button>
-        <button class="btn btn-more">
-          More actions
-          <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"/>
-          </svg>
-        </button>
-        <%= link_to new_product_path, class: "btn btn-primary" do %>
-  Add product
-<% end %>
-      </div>
-    </div>
-
-    <!-- Main card -->
-    <div class="card">
-
-      <!-- Search / filter row -->
-      <div class="search-row">
-        <span class="tab-all">
-          All
-          <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 8l5 5 5-5H5z"/>
-          </svg>
-        </span>
-
-        <div class="search-input-wrap">
-          <!-- Magnifier -->
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.5 3a5.5 5.5 0 1 0 3.476 9.69l3.667 3.667a.75.75 0 1 0 1.06-1.06l-3.666-3.667A5.5 5.5 0 0 0 8.5 3zm-4 5.5a4 4 0 1 1 8 0 4 4 0 0 1-8 0z" fill="currentColor"/>
-          </svg>
-          <input class="search-input" type="text" placeholder="Search and filter" />
-        </div>
-
-        <!-- Column toggle -->
-        <div class="col-toggle">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="4" width="4" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
-            <rect x="8" y="4" width="4" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
-            <rect x="13" y="4" width="4" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Table -->
-      <table>
-        <thead>
-          <tr>
-            <th><input type="checkbox" class="cb" /></th>
-            <th class="col-product">Product</th>
-            <th>Inventory</th>
-            <th>Category</th>
-            <th>Publish online status</th>
-            <th>Product type</th>
-            <th>Vendor</th>
-          </tr>
-        </thead>
-        <tbody>
-  <% products.each do |product| %>
-    <tr class="clickable-row" data-href="<%= edit_product_path(@store, product) %>">
-      <td><input type="checkbox" class="cb" /></td>
-
-      <!-- Product -->
-      <td>
-        <div class="product-cell">
-          <div class="product-thumb">
-            <% if product.product_images.any? && product.product_images.first.image_url.present? %>
-              <%= image_tag product.product_images.first.image_url, width: 38, height: 38, alt: product.title %>
-            <% else %>
-              <!-- Placeholder -->
-              <svg viewBox="0 0 20 20" fill="none">
-                <rect x="2" y="2" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                <circle cx="7" cy="7" r="1.5" stroke="currentColor" stroke-width="1.2"/>
-                <path d="M2 13l4-4 3 3 2-2 5 5" stroke="currentColor" stroke-width="1.2"/>
-              </svg>
-            <% end %>
-          </div>
-
-          <span class="product-name">
-            <%= product.title || "Untitled Product" %>
-          </span>
-        </div>
-      </td>
-
-      <!-- Inventory -->
-      <td>
-  <% if product.product_variants.any? %>
-    <%= product.product_variants.sum(:stock_quantity) %> in stock for 
-    <%= product.product_variants.count %> variant(s)
-  <% else %>
-    0 in stock
-  <% end %>
-</td>
-
-      <!-- Category -->
-      <td>
-        <%= product.category || "Uncategorized" %>
-      </td>
-
-      <!-- Publish online status -->
-      <td>
-        <span class="badge badge-active">
-          <%= product.published_online_store? ? "Published" : "Not published" %>
-        </span>
-      </td>
-
-      <!-- Product Type (use category) -->
-<td>
-  <%= product.category || "-" %>
-</td>
-
-<!-- Vendor (use store name) -->
-<td>
-  <%= product.store&.name || "My Store" %>
-</td>
-    </tr>
-  <% end %>
-</tbody>
-      </table>
-
-      <!-- Learn more -->
-      <div class="learn-more">
-        <a href="#">Learn more about products</a>
-      </div>
-
-    </div><!-- /card -->
-  </div><!-- /page -->
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

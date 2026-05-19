@@ -1,3 +1,46 @@
+<div class="products-page">
+  <h2 class="page-title">Products</h2>
+
+  <!-- Add Products कार्ड -->
+  <div class="card">
+    <div class="card-content">
+      <div class="text-section">
+        <h3>Add your products</h3>
+        <p>Start by stocking your store with products your customers will love</p>
+
+        <div class="actions">
+          <%= link_to "Add product", new_product_path, class: "btn primary" %>
+          <%= link_to "Import", "#", class: "btn secondary" %>
+        </div>
+      </div>
+
+      <div class="image-section">
+        <div class="placeholder-card">
+          <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/onboarding-product-template-f32b13b51d86.svg" alt="Add product">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Find Products कार्ड -->
+  <div class="card">
+    <div class="card-content">
+      <div class="text-section">
+        <h3>Find new products</h3>
+        <p>Install a sourcing app to find products to sell without holding inventory</p>
+
+        <div class="actions">
+          <%= link_to "Discover products to sell", "#", class: "btn secondary" %>
+        </div>
+      </div>
+
+      <div class="image-section collage">
+        <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/product-collage-4dda06f416aa.png" alt="Product collage">
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
 .products-page {
   padding: 32px;
@@ -112,46 +155,3 @@
   opacity: 0.95;
 }
 </style>
-
-<div class="products-page">
-  <h2 class="page-title">Products</h2>
-
-  <!-- Add Products कार्ड -->
-  <div class="card">
-    <div class="card-content">
-      <div class="text-section">
-        <h3>Add your products</h3>
-        <p>Start by stocking your store with products your customers will love</p>
-
-        <div class="actions">
-          <%= link_to "Add product", new_product_path, class: "btn primary" %>
-          <%= link_to "Import", "#", class: "btn secondary" %>
-        </div>
-      </div>
-
-      <div class="image-section">
-        <div class="placeholder-card">
-          <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/onboarding-product-template-f32b13b51d86.svg" alt="Add product">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Find Products कार्ड -->
-  <div class="card">
-    <div class="card-content">
-      <div class="text-section">
-        <h3>Find new products</h3>
-        <p>Install a sourcing app to find products to sell without holding inventory</p>
-
-        <div class="actions">
-          <%= link_to "Discover products to sell", "#", class: "btn secondary" %>
-        </div>
-      </div>
-
-      <div class="image-section collage">
-        <img src="https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/product-collage-4dda06f416aa.png" alt="Product collage">
-      </div>
-    </div>
-  </div>
-</div>

@@ -1,3 +1,42 @@
+<div class="inventory-detail-page">
+
+  <div class="inventory-card">
+
+    <h1 class="inventory-title">Inventory Details</h1>
+
+    <div class="product-name">
+      <%= @variant.product.title %>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Variant</span>
+      <span class="value">
+        <%= [@variant.size, @variant.color]
+              .compact
+              .join(" / ") %>
+      </span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Price</span>
+      <span class="value">
+        <%= number_to_currency(@variant.price) %>
+      </span>
+    </div>
+
+    <div class="info-row">
+      <span class="label">Stock</span>
+      <span class="value">
+        <span class="badge">
+          <%= @variant.stock_quantity %>
+        </span>
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
 <style>
   .inventory-detail-page {
     background: #f6f6f7;
@@ -61,42 +100,3 @@
     font-weight: 600;
   }
 </style>
-
-<div class="inventory-detail-page">
-
-  <div class="inventory-card">
-
-    <h1 class="inventory-title">Inventory Details</h1>
-
-    <div class="product-name">
-      <%= @variant.product.title %>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Variant</span>
-      <span class="value">
-        <%= [@variant.size, @variant.color]
-              .compact
-              .join(" / ") %>
-      </span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Price</span>
-      <span class="value">
-        <%= number_to_currency(@variant.price) %>
-      </span>
-    </div>
-
-    <div class="info-row">
-      <span class="label">Stock</span>
-      <span class="value">
-        <span class="badge">
-          <%= @variant.stock_quantity %>
-        </span>
-      </span>
-    </div>
-
-  </div>
-
-</div>
